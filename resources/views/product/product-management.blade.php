@@ -37,6 +37,8 @@
 	<a href="#" class="profile">
 	</a>
 </nav>
+
+
 			<main>		
 				<div class="head-title">
 					<div class="left">
