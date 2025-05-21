@@ -94,5 +94,10 @@ class ProductController extends Controller
     return redirect()->route('product.management')->with('success', 'Product updated (dummy).');
 
 }
+    public function destroy($id)
+{
+    // Sementara cuma untuk testing, karena data masih dummy
+    return redirect()->route('product.management')->with('success', 'Product deleted (dummy).');
 
+}
 }
