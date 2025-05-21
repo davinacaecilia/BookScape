@@ -1,20 +1,21 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LandingController;
-use App\Http\Controllers\RegisterController;
-use App\Http\Controllers\Homecontroller;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\UserController;
 
-Route::get('login', function () {
-    return view('login');
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+Route::get('/register', [AuthController::class, 'showRegister']);
+
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout']);
+
+Route::middleware(['auth', 'is_admin'])->group(function () {
+    Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
 });
 
-Route::get('/', [LandingController::class, 'index'])->name('welcome');
-Route::post('/login', [LandingController::class, 'login'])->name('login');
-// Route::post('/logout', [LandingController::class, 'logout'])->name('logout');
-Route::get('/register', [LandingController::class, 'showRegistrationForm'])->name('register');
-Route::post('/register', [LandingController::class, 'register']);
-Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-Route::post('/register', [RegisterController::class, 'register']);
-Route::get('/home', [HomeController::class,'home'])->name('home');
-
+Route::middleware(['auth', 'is_user'])->group(function () {
+    Route::get('/user/dashboard', [UserController::class, 'index'])->name('user.dashboard');
+    
+});

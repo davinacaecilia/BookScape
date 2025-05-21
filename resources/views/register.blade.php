@@ -66,7 +66,7 @@
 
         <!-- Register Button -->
         <button type="submit" class="auth-button">
-          <span class="auth-button-text">SING UP</span>
+          <span class="auth-button-text">SIGN UP</span>
         </button>
       </form>
 
