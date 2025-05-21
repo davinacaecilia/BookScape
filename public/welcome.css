@@ -1,0 +1,186 @@
+/* Base Styles */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Calibri', sans-serif;
+  overflow: hidden;
+}
+
+.welcomepage {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+/* Background Elements */
+.books-library-shelves-138556-1280-x-720-1 {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+}
+
+.ellipse-1 {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(112, 52, 2, 0.6) 0%, rgba(0, 0, 0, 0.7) 100%);
+  z-index: -1;
+}
+
+/* Hide unnecessary rectangles */
+.rectangle-8,
+.rectangle-9 {
+  display: none;
+}
+
+/* Logo Container */
+.logo-container {
+  position: absolute;
+  margin-top: -20%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Logo Icon */
+.logo-icon i {
+  font-size: 20rem;
+  color: white;
+  line-height: 1;
+  position: absolute;
+  top: 0%;
+  left: 50%;
+  transform: translate(-50%, -200px); 
+  padding-top: 1rem;
+}
+
+/* App Title */
+.app-title {
+  font-size: 5rem;
+  font-weight: 700;
+  color:#ffcba0;
+  margin-top: -1.5rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  letter-spacing: 1px;
+  font-family: 'Anton', sans-serif;
+ transform: translateY(150px);
+}
+.tagline {
+  font-size: 1.1rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: visible; 
+  text-overflow: unset; 
+  color: #ffcba0;
+  font-family: 'Anton', sans-serif;
+  position: relative;
+  top: -40px;
+ left: 5px;
+  max-width: none; 
+   transform: translateY(80px);
+}
+
+
+
+/* Auth Buttons */
+.auth-buttons {
+  position: absolute;
+  bottom: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  width: 100%;
+  max-width: 500px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 30px;
+}
+
+/* Button Styles */
+.btn-login,
+.btn-signup {
+  padding: 15px 40px;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  text-align: center;
+  min-width: 150px;
+}
+
+.btn-login {
+  background: transparent;
+  color: white;
+  border: 2px solid white;
+   transform: translateY(-60px);
+}
+
+.btn-login:hover {
+  background: #e0b48a;
+  transform: translateY(-50px);
+}
+
+.btn-signup {
+  background: transparent;
+  color: white;
+  border: 2px solid white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transform: translateY(-60px);
+}
+
+.btn-signup:hover {
+  background: #e0b48a;
+  transform: translateY(-50px);
+}
+
+.btn-text {
+  pointer-events: none; /* Makes the div inside clickable */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .logo-icon i {
+    font-size: 200px;
+  }
+
+  .app-title {
+    font-size: 2.5rem;
+    margin-top: -15px;
+  }
+
+  .tagline {
+    font-size: 1.5rem;
+    top: 55%;
+  }
+
+  .button-group {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .btn-login,
+  .btn-signup {
+    width: 80%;
+    padding: 12px;
+  }
+
+  .auth-buttons {
+    bottom: 10%;
+  }
+}
