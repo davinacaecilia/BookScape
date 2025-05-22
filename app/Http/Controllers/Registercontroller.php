@@ -10,16 +10,16 @@ use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {
-   public function showRegistrationForm()
-{
-    return view('register'); 
-}
+    public function showRegisterForm()
+    {
+        return view('auth.register');
+    }
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
+            'password' => 'required|string|min:6|confirmed',
         ]);
 
         if ($validator->fails()) {
@@ -30,9 +30,9 @@ class RegisterController extends Controller
 
         event(new Registered($user = $this->create($request->all())));
 
-        auth()->login($user);
+        // jangan auto-login user
 
-        return redirect($this->redirectPath());
+        return redirect()->route('login')->with('success', 'Account successfully created. Please log in.');
     }
 
     protected function create(array $data)

@@ -1,9 +1,12 @@
 <?php
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+
 class LandingController extends Controller
 {
-     public function index()
+    public function index()
     {
         return view('welcome');
     }
@@ -12,7 +15,7 @@ class LandingController extends Controller
      * Handle login request.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function login(Request $request)
     {
@@ -35,7 +38,7 @@ class LandingController extends Controller
      * Handle logout request.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function logout(Request $request)
     {
@@ -59,7 +62,7 @@ class LandingController extends Controller
      * Handle registration request.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function register(Request $request)
     {
