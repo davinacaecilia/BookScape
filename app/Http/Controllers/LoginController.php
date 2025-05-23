@@ -29,9 +29,9 @@ class LoginController extends Controller
             if ($user->user_level == 0) {
                 // Admin
                 return redirect()->route('admin.dashboard');
-            } else {
+            } else if ($user->user_level == 1){
                 // User biasa
-                return redirect()->route('dashboard');
+                return redirect()->route('home');
             }
         }
 

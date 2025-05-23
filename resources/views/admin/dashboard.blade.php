@@ -42,7 +42,7 @@
 				<li>
 					<i class='bx bxs-group'></i>
 					<span class="text">
-						<h3>2834</h3>
+						<h3>{{ $userCount }}</h3>
 						<p>Users</p>
 					</span>
 				</li>

@@ -9,37 +9,37 @@
     </a>
   <ul class="side-menu top">
     <li class="{{ Request::is('dashboard') ? 'active' : '' }}">
-      <a href="{{ url('dashboard') }}">
+      <a href="{{ route('admin.dashboard') }}">
         <i class='bx bxs-dashboard'></i>
         <span class="text">Dashboard</span>
       </a>
     </li>
     <li class="{{ Request::is('orders') ? 'active' : '' }}">
-      <a href="{{ url('orders') }}">
+      <a href="{{ route('admin.orders') }}">
         <i class='bx bxs-shopping-bag-alt'></i>
         <span class="text">Orders</span>
       </a>
     </li>
     <li class="{{ Request::is('message') ? 'active' : '' }}">
-      <a href="{{ url('message') }}">
+      <a href="{{ route('admin.message') }}">
         <i class='bx bxs-message-dots'></i>
         <span class="text">Message</span>
       </a>
     </li>
     <li class="{{ Request::is('product-management') ? 'active' : '' }}">
-      <a href="{{ url('product-management') }}">
+      <a href="{{ route('product.management') }}">
         <i class='bx bxs-cart-add'></i>
         <span class="text">Product Management</span>
       </a>
     </li>
  <li class="{{ Request::is('user-management') ? 'active' : '' }}">
-    <a href="{{ url('user-management') }}">
+    <a href="{{ route('user.management') }}">
         <i class='bx bx-user'></i>
         <span class="text">User Management</span>
         </a>
     </li>
     <li>
-      <a href="{{ url('logout') }}" class="logout">
+      <a href="{{ route('logout') }}" class="logout">
         <i class='bx bxs-log-out-circle'></i>
         <span class="text">Logout</span>
       </a>

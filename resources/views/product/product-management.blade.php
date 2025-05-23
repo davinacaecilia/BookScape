@@ -56,11 +56,11 @@
 			<div class="product-list">
 				@foreach ($products as $product)
 				<div class="product">
-						<img src="{{ $product['cover'] }}" alt="{{ $product['title'] }}" />
-						<h4>{{ $product['title'] }}</h4>
-						<p>Rp {{ number_format($product['price'], 0, ',', '.') }}</p>
+						<img src="{{ asset('storage/sampul/' . $product->gambar_sampul) }}" alt="{{ $product['judul_buku'] }}" />
+						<h4>{{ $product['judul_buku'] }}</h4>
+						<p>Rp {{ $product['harga'] }}</p>
 						<div class="action-buttons">
-							<form action="{{ route('product.edit', $loop->iteration) }}" method="GET">
+							<form action="{{ route('product.edit', $product->id) }}" method="GET">
 								<button type="submit" class="btn-update">
 										<i class='bx bx-update'></i> Edit
 								</button>

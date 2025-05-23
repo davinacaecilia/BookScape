@@ -72,7 +72,7 @@
 									{{ $user->password }}
 								</td>
 								<td style="padding: 10px; border: 1px solid #ccc;">{{ $user->user_level}}</td>
-								<td style="padding: 10px; border: 1px solid #ccc;">{{ $user->created_at->format('d M Y') }}
+								<td style="padding: 10px; border: 1px solid #ccc;">{{ $user->created_at }}
 								</td>
 							</tr>
 						@endforeach

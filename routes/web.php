@@ -7,10 +7,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProductController;
 
 use App\Http\Controllers\LandingController;
-use App\Http\Controllers\Homecontroller;
 
 Route::get('/', [LandingController::class, 'index'])->name('landing');
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -21,24 +19,24 @@ Route::post('/register', [RegisterController::class, 'register']);
 
 Route::middleware('auth')->group(function () {
     // dashboard
-    Route::get('/dashboard', [UserController::class, 'showDashboard'])->name('dashboard');
-    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/home', [UserController::class, 'showHome'])->name('home');
+    Route::get('/dashboard', [AdminController::class, 'showDashboard'])->name('admin.dashboard');
     Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 
     // admin views
-    Route::get('/message', fn() => view('admin.message'));
-    Route::get('/orders', fn() => view('admin.orders'));
-
-    // product management
-    Route::get('/product/create', [ProductController::class, 'create'])->name('product.create');
-    Route::post('/product/store', [ProductController::class, 'store'])->name('product.store');
-    Route::get('/product-management', [ProductController::class, 'index'])->name('product.management');
-    Route::get('/product/{id}/edit', [ProductController::class, 'edit'])->name('product.edit');
-    Route::put('/product/{id}/update', [ProductController::class, 'update'])->name('product.update');
-    Route::delete('/product/{id}/delete', [ProductController::class, 'destroy'])->name('product.destroy');
+    Route::get('/orders', [AdminController::class, 'listOrders'])->name('admin.orders');
+    Route::get('/message', [AdminController::class, 'listMessage'])->name('admin.message');
+    
+    //product management
+    Route::get('/product-management', [AdminController::class, 'listProduct'])->name('product.management');
+    Route::get('/product-management/create', [AdminController::class, 'addProduct'])->name('product.create');
+    Route::post('/product-management/store', [AdminController::class, 'storeProduct'])->name('product.store');
+    Route::get('/product-management/edit/{id}', [AdminController::class, 'editProduct'])->name('product.edit');
+    Route::put('/product-management/update/{id}', [AdminController::class, 'updateProduct'])->name('product.update');
+    Route::delete('/product-management/delete/{id}', [AdminController::class, 'destroyProduct'])->name('product.destroy');
 
     // user management
-    Route::get('/user-management', [AdminController::class, 'listUsers']);
+    Route::get('/user-management', [AdminController::class, 'listUsers'])->name('user.management');
 });
 
 //Route untuk list produk di hlmn user (punya jeilta)

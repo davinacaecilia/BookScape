@@ -15,4 +15,5 @@ class Buku extends Model
         return $this->belongsToMany(Genre::class);
     }
 
+
 }
