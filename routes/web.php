@@ -33,7 +33,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/product-management/store', [AdminController::class, 'storeProduct'])->name('product.store');
     Route::get('/product-management/edit/{id}', [AdminController::class, 'editProduct'])->name('product.edit');
     Route::put('/product-management/update/{id}', [AdminController::class, 'updateProduct'])->name('product.update');
-    Route::delete('/product-management/delete/{id}', [AdminController::class, 'destroyProduct'])->name('product.destroy');
+    Route::delete('/product-management/delete/{id}', [AdminController::class, 'deleteProduct'])->name('product.destroy');
 
     // user management
     Route::get('/user-management', [AdminController::class, 'listUsers'])->name('user.management');
