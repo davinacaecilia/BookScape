@@ -50,7 +50,6 @@ class AdminController extends Controller
             'stock' => 'required|integer'
         ]);
 
-        // Simpan gambar
          if ($request->hasFile('gambar_sampul')) {
             $file = $request->file('gambar_sampul');
             $filename = $file->hashName();
@@ -59,7 +58,6 @@ class AdminController extends Controller
             $filename = null;
         }
 
-        // Simpan buku
         $buku = Buku::create([
             'judul_buku' => $validated['judul_buku'],
             'penulis_buku' => $validated['penulis_buku'],
@@ -97,14 +95,11 @@ class AdminController extends Controller
 
         $buku = Buku::findOrFail($id);
 
-        // Jika ada gambar baru diupload
         if ($request->hasFile('gambar_sampul')) {
-            // Hapus gambar lama dari storage
             if ($buku->gambar_sampul && Storage::disk('public')->exists('sampul/' . $buku->gambar_sampul)) {
                 Storage::disk('public')->delete('sampul/' . $buku->gambar_sampul);
             }
 
-            // Simpan gambar baru
             $file = $request->file('gambar_sampul');
             $filename = $file->hashName();
             $file->storeAs('sampul', $filename, 'public');
@@ -112,7 +107,6 @@ class AdminController extends Controller
             $buku->gambar_sampul = $filename;
         }
 
-        // Update data buku
         $buku->update([
             'judul_buku' => $validated['judul_buku'],
             'penulis_buku' => $validated['penulis_buku'],
