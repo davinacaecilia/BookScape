@@ -34,46 +34,49 @@
 @section('content')
     <h1>Add New Product</h1>
 
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <form action="{{ route('product.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
-        <label for="title">Book Title:</label>
-        <input type="text" name="title" id="title" placeholder="Enter book title" required>
+        <label for="judul_buku">Book Title:</label>
+        <input type="text" name="judul_buku" id="judul_buku" placeholder="Enter book title" required>
 
-        <label for="author">Author:</label>
-        <input type="text" name="author" id="author" placeholder="Enter author name" required>
+        <label for="penulis_buku">Author:</label>
+        <input type="text" name="penulis_buku" id="penulis_buku" placeholder="Enter author name" required>
 
         <label for="genre">Genre:</label>
-        <select name="genre" id="genre" required>
-            <option value="" disabled selected>Select genre</option>
-            <option value="Romance">Romance</option>
-            <option value="Fantacy">Fantacy</option>
-            <option value="Horor">Horor</option>
-            <option value="Mystery">Mystery</option>
-            <option value="Sci-Fi">Sci-Fi</option>
-            <option value="Comedy">Comedy</option>
-            <option value="Drama">Drama</option>
-            <option value="Thiller">Thiller</option>
-        </select>
+            @foreach ($genres as $genre)
+                <div class="form-check form-check-inline">
+                    <label>
+                        <input type="checkbox" name="genres[]" value="{{ $genre->id }}">
+                        {{ $genre->genre }}
+                    </label>
+                </div>
+            @endforeach
 
-        <label for="price">Price (Rp):</label>
-        <input type="number" name="price" id="price" placeholder="example: 50000" required>
+        <label for="harga">Price (Rp):</label>
+        <input type="number" name="harga" id="harga" placeholder="example: 50000" required>
 
         <label for="stock">Stock:</label>
         <input type="number" name="stock" id="stock" placeholder="example: 20" min="0" required>
 
-        <label for="cover">Book Cover:</label>
-        <input type="file" name="cover" id="cover" accept="image/*">
+        <label for="gambar_sampul">Book Cover:</label>
+        <input type="file" name="gambar_sampul" id="gambar_sampul">
 
-        <label for="description">Book Description:</label>
-        <textarea name="description" id="description" placeholder="Write a short description about the book..."></textarea>
+        <label for="sinposis">Book Description:</label>
+        <textarea name="sinopsis" id="sinopsis" placeholder="Write a short description about the book..."></textarea>
 
         <button type="submit">Publish</button>
     </form>
-
-    <form action="{{ route('product.store') }}" method="POST" enctype="multipart/form-data">
-    @csrf
-    <button type="button" onclick="window.location='{{ url('/product-management') }}'">Back</button>
 </form>
 
 @endsection
