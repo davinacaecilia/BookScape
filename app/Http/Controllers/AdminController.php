@@ -26,14 +26,14 @@ class AdminController extends Controller
 
     public function listProduct() {
         $products = Buku::all();
-        return view('product.product-management', [
+        return view('admin.product-management', [
             'products' => $products
         ]);
     }
 
     public function addProduct() {
         $genres = Genre::all();
-        return view('product.product-create', [
+        return view('admin.product-create', [
             'genres' => $genres
         ]); 
     }
@@ -75,7 +75,7 @@ class AdminController extends Controller
     public function editProduct(Request $request) {
         $products = Buku::find($request->id);
         $genres = Genre::all();
-        return view('product.edit', [
+        return view('admin.product-edit', [
             'products' => $products,
             'genres' => $genres
         ]);

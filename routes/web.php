@@ -18,15 +18,14 @@ Route::get('/register', [RegisterController::class, 'showRegisterForm'])->name('
 Route::post('/register', [RegisterController::class, 'register']);
 
 Route::middleware('auth')->group(function () {
-    // dashboard
+    // auth
     Route::get('/home', [UserController::class, 'showHome'])->name('home');
     Route::get('/dashboard', [AdminController::class, 'showDashboard'])->name('admin.dashboard');
     Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 
     // admin views
     Route::get('/orders', [AdminController::class, 'listOrders'])->name('admin.orders');
-    Route::get('/message', [AdminController::class, 'listMessage'])->name('admin.message');
-    
+    Route::get('/message', [AdminController::class, 'listMessage'])->name('admin.message');  
     //product management
     Route::get('/product-management', [AdminController::class, 'listProduct'])->name('product.management');
     Route::get('/product-management/create', [AdminController::class, 'addProduct'])->name('product.create');
@@ -34,7 +33,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/product-management/edit/{id}', [AdminController::class, 'editProduct'])->name('product.edit');
     Route::put('/product-management/update/{id}', [AdminController::class, 'updateProduct'])->name('product.update');
     Route::delete('/product-management/delete/{id}', [AdminController::class, 'deleteProduct'])->name('product.destroy');
-
     // user management
     Route::get('/user-management', [AdminController::class, 'listUsers'])->name('user.management');
 });

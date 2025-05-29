@@ -1,4 +1,4 @@
-@extends('product.AddProduct-Layout')
+@extends('admin.product-create-layout')
 
 @section('title', 'Add Product')
 
@@ -54,14 +54,14 @@
         <input type="text" name="penulis_buku" id="penulis_buku" placeholder="Enter author name" required>
 
         <label for="genre">Genre:</label>
-            @foreach ($genres as $genre)
-                <div class="form-check form-check-inline">
-                    <label>
-                        <input type="checkbox" name="genres[]" value="{{ $genre->id }}">
-                        {{ $genre->genre }}
-                    </label>
-                </div>
-            @endforeach
+        @foreach ($genres as $genre)
+            <div class="form-check form-check-inline">
+                <label>
+                    <input type="checkbox" name="genres[]" value="{{ $genre->id }}">
+                    {{ $genre->genre }}
+                </label>
+            </div>
+        @endforeach
 
         <label for="harga">Price (Rp):</label>
         <input type="number" name="harga" id="harga" placeholder="example: 50000" required>
