@@ -245,57 +245,6 @@ body {
   transform: translateX(5px);
 }
 
-/* Categories */
-.categories {
-  padding: 4rem 5%;
-  background: var(--white);
-}
-
-.categories h2 {
-  font-size: 2.2rem;
-  margin-bottom: 2rem;
-  color: var(--secondary);
-  font-family: "Anton", sans-serif;
-  letter-spacing: 1px;
-  text-align: center;
-}
-
-.category-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 1.5rem;
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-.category-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: var(--gray);
-  padding: 2rem 1rem;
-  border-radius: 15px;
-  text-decoration: none;
-  color: var(--secondary);
-  transition: all 0.3s ease;
-}
-
-.category-card:hover {
-  background: var(--primary);
-  transform: translateY(-5px);
-}
-
-.category-card i {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-}
-
-.category-card span {
-  font-weight: 600;
-  font-size: 1.1rem;
-}
-
 /* Footer */
 .home-footer {
   background: var(--secondary);
@@ -513,19 +462,16 @@ body {
     height: 50px;
   }
 }
-/* Style dasar ikon keranjang */
 .shopping-cart {
   position: relative;
   display: inline-block;
   padding: 0.5rem;
   margin-left: 1rem;
-
   color: #ffffff;
   font-size: 1.5rem;
   text-decoration: none;
   line-height: 1;
   cursor: pointer;
-
   border-radius: 50%;
   transition: all 0.3s ease;
 }
@@ -544,33 +490,30 @@ body {
   position: absolute;
   top: 0;
   right: 0;
-  transform: translate(10%);
-  
+  border-radius: 50%;
+  width: 1.25rem;
+  height: 1.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  
-  width: 1.2rem;
-  height: 1.2rem;
-  background-color: #ff4757;
-  color: #ffffff;
   font-size: 0.65rem;
   font-weight: bold;
-  
-  border: 2px solid #2c3e50;
-  border-radius: 50%;
-  
+  transform: translate(25%, -25%);
   transition: all 0.2s ease-in-out;
 }
 
-
-
 /* Efek hover */
 .shopping-cart:hover {
-  background-color: rgba(255, 255, 255, 0.15);
-  animation: bounce 0.5s ease;
+  background-color: white;
+  color: #333;
+  animation: shake 0.5s ease;
 }
 
+/* Efek hover pada badge */
+.shopping-cart:hover .cart-count {
+  border-color: white;
+  transform: translate(25%, -25%) scale(1.1);
+}
 /* Style dasar ikon notifikasi */
 .notification-icon {
   position: relative;
@@ -595,12 +538,11 @@ body {
   height: 1.5em;
 }
 
-/* Badge notifikasi */
+
 .notification-badge {
   position: absolute;
   top: 0;
   right: 0;
-  background-color: #ff4757;
   color: white;
   border-radius: 50%;
   width: 1.25rem;
@@ -610,7 +552,6 @@ body {
   justify-content: center;
   font-size: 0.65rem;
   font-weight: bold;
-  border: 2px solid #2c3e50;
   transform: translate(25%, -25%);
   transition: all 0.2s ease;
 }
@@ -743,7 +684,7 @@ body {
   background-color: transparent;
   border: 1px solid #57606f;
   color: #ffffff;
-
+  margin-left: 20px;
 
 }
 
@@ -792,5 +733,173 @@ body {
     flex-direction: column;
     gap: 0.8rem;
     align-items: flex-start;
+  }
+}
+
+/* Categories Section */
+.categories {
+  padding: 3rem 2rem;
+  background-color: #f9f9f9;
+}
+
+.categories2 {
+  padding: 3rem 2rem;
+  background-color: #f9f9f9;
+}
+
+.categories h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  color: #2c3e50;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  margin-left: 286px;
+}
+
+.category-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem 1rem;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+  color: #333;
+  transition: all 0.3s ease;
+ 
+
+}
+
+.category-grid2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 1.2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  margin-left: 286px;
+}
+
+.category-card2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.7rem 1rem;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+  color: #333;
+  transition: all 0.3s ease;
+}
+.category-icon2 img {
+    width: 80%;
+    height: 80%;
+    object-fit: cover;
+    border-radius: 50%;
+    color: #000000;
+    object-fit: contain; 
+}
+
+.category-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.category-card2:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+.category-icon {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0f7ff;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+}
+
+
+.category-icon2 {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0f7ff;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+  
+}
+.category-icon i {
+  font-size: 2rem;
+  color: #000000;
+}
+
+.category-icon2 i {
+  font-size: 2rem;
+  color: #000000;
+  font-size: 24px;
+  display: inline-block;
+}
+
+
+.category-name {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: #2c3e50;
+
+}
+
+.category-name2 {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: #2c3e50;
+
+}
+
+.book-count {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .category-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+
+  .category-grid2 {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+  
+  .category-card {
+    padding: 1rem 0.5rem;
+  }
+  
+   
+  .category-card2 {
+    padding: 1rem 0.5rem;
+  }
+  
+  .category-icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  
+  .category-icon2 i {
+    font-size: 1.5rem;
   }
 }
