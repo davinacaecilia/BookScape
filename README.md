@@ -1,13 +1,11 @@
 # BookScape
 
-## Authors
-
 Kelompok 5 :
-- **Putri Sahara Tampubolon** - 241402015 - *Provided README Template*
-- **Anggun Dwikasih Mahrani** - 241402018 - *Provided README Template*
-- **Dhaifina Raiqa Zahira** - 241402036 - *Provided README Template*
-- **Davina Caecilia Marpaung** - 241402076 - *Provided README Template*
-- **Jelita Amy Syafira Rangkuti** - 241402114 - *Provided README Template*
+- **Putri Sahara Tampubolon** - 241402015 - *Frontend Landing Page, Halaman Login, Halaman Registrasi, Halaman Home User*
+- **Anggun Dwikasih Mahrani** - 241402018 - *Frontend Halaman Admin*
+- **Dhaifina Raiqa Zahira** - 241402036 - *Backend Auth User*
+- **Davina Caecilia Marpaung** - 241402076 - *Backend CRUD Product Buku*
+- **Jelita Amy Syafira Rangkuti** - 241402114 - *Frontend User Halaman List Buku, Preview Buku, History Pemesanan, Cart, Payment*
 
 ## About BookScape
 
@@ -84,7 +82,7 @@ Jalankan server
 
 ### Running Website
 
-Untuk mengakses halaman pengguna, silahkan Sign Up terlebih dahulu dengan mengisi form registrasi yang tersedia. Setelah itu melakukan Sign Up, Anda dapat Sign In untuk mengakses halaman pengguna.
+Untuk mengakses halaman pengguna, silahkan Sign Up terlebih dahulu dengan mengisi form registrasi yang tersedia. Setelah melakukan Sign Up, Anda dapat seterusnya melakukan Sign In untuk mengakses halaman pengguna dengan akun yang sama.
 
 Untuk mengakses halaman admin, silahkan jalankan perintah berikut di terminal
 
