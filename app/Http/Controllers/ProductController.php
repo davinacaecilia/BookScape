@@ -8,27 +8,30 @@ use Illuminate\Support\Facades\DB;
 class ProductController extends Controller
 {
     // Method untuk nampilin halaman product management
-    public function index()
+public function index()
 {
-    // Data dummy
     $products = [
         [
             'title' => 'Sample Book 1',
             'author' => 'Author 1',
+            'genre' => 'Romance',
+            'stock' => 10,
             'price' => 50000,
             'cover' => asset('img/Screenshot 2025-05-19 110152.png'),
-
         ],
         [
             'title' => 'Sample Book 2',
             'author' => 'Author 2',
+            'genre' => 'Fantasy',
+            'stock' => 25,
             'price' => 75000,
-            'cover' => asset('img/Screenshot 2025-05-15 132219.png')
+            'cover' => asset('img/Screenshot 2025-05-15 132219.png'),
         ],
     ];
 
     return view('product.product-management', compact('products'));
 }
+
 
 
     public function create()
@@ -65,6 +68,7 @@ class ProductController extends Controller
             'author' => 'Author 1',
             'genre' => 'Romance',
             'price' => 50000,
+            'stock' => 10,
             'cover' => 'public/Screenshot 2025-05-19 110152.png',
             'description' => 'Deskripsi 1',
         ],
@@ -73,6 +77,7 @@ class ProductController extends Controller
             'author' => 'Author 2',
             'genre' => 'Fantacy',
             'price' => 75000,
+            'stock' => 25,
             'cover' => 'https://via.placeholder.com/150',
             'description' => 'Deskripsi 2',
         ],

@@ -8,6 +8,8 @@
 	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet' />
 	<!-- My CSS -->
 	<link rel="stylesheet" href="{{ asset('css/style.css') }}" />
+	<link rel="stylesheet" href="{{ asset('css/pagination.css') }}" />
+
 	
 	<title>Product Management</title>
 </head>
@@ -55,6 +57,7 @@
 							<th style="padding: 10px; border: 1px solid #ccc;">Name</th>
 							<th style="padding: 10px; border: 1px solid #ccc;">Email</th>
 							<th style="padding: 10px; border: 1px solid #ccc;">Hash Password</th>
+							<th style="padding: 10px; border: 1px solid #ccc;">User Level</th>
 							<th style="padding: 10px; border: 1px solid #ccc;">Registered At</th>
 						</tr>
 					</thead>
@@ -77,6 +80,10 @@
 		</main>
 	</section>
 
+<!-- Pagination di paling bawah -->
+	<div id="pagination" class="pagination-container"></div>
+
+	<script src="{{ asset('script/script.js') }}"></script>
+	<script src="{{ asset('script/pagination.js') }}"></script>
 </body>
-<script src="{{ asset('script/script.js') }}"></script>
 </html>

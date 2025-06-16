@@ -3,6 +3,7 @@
 @section('title', 'Add Product')
 
 @section('head')
+    <link rel="stylesheet" href="{{ asset('css/arrow.css') }}" />
 <style>
     .stars {
         display: flex;
@@ -28,10 +29,28 @@
     .stars label {
         order: 1;
     }
+    .genre-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem 1rem;
+    margin-bottom: 1rem;
+    }
+    .genre-grid label {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
 </style>
 @endsection
 
 @section('content')
+<button type="button" class="back-arrow" onclick="window.location='{{ url('/product-management') }}'">
+        <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9.707 14.707a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 111.414 1.414L6.414 9H17a1 1 0 110 2H6.414l3.293 3.293a1 1 0 010 1.414z"/>
+        </svg>
+        Back
+    </button>
+
     <h1>Add New Product</h1>
 
     <form action="{{ route('product.store') }}" method="POST" enctype="multipart/form-data">
@@ -44,17 +63,17 @@
         <input type="text" name="author" id="author" placeholder="Enter author name" required>
 
         <label for="genre">Genre:</label>
-        <select name="genre" id="genre" required>
-            <option value="" disabled selected>Select genre</option>
-            <option value="Romance">Romance</option>
-            <option value="Fantacy">Fantacy</option>
-            <option value="Horor">Horor</option>
-            <option value="Mystery">Mystery</option>
-            <option value="Sci-Fi">Sci-Fi</option>
-            <option value="Comedy">Comedy</option>
-            <option value="Drama">Drama</option>
-            <option value="Thiller">Thiller</option>
-        </select>
+        <div id="genre" class="genre-grid">
+            <label><input type="checkbox" name="genre[]" value="Romance"> Romance</label>
+            <label><input type="checkbox" name="genre[]" value="Fantacy"> Fantacy</label>
+            <label><input type="checkbox" name="genre[]" value="Horor"> Horor</label>
+            <label><input type="checkbox" name="genre[]" value="Mystery"> Mystery</label>
+            <label><input type="checkbox" name="genre[]" value="Sci-Fi"> Sci-Fi</label>
+            <label><input type="checkbox" name="genre[]" value="Comedy"> Comedy</label>
+            <label><input type="checkbox" name="genre[]" value="Drama"> Drama</label>
+            <label><input type="checkbox" name="genre[]" value="Thiller"> Thiller</label><br>
+        </div>
+
 
         <label for="price">Price (Rp):</label>
         <input type="number" name="price" id="price" placeholder="example: 50000" required>
@@ -73,7 +92,7 @@
 
     <form action="{{ route('product.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
-    <button type="button" onclick="window.location='{{ url('/product-management') }}'">Back</button>
-</form>
+    </form>
 
+{{-- </section> --}} {{-- Ini baris komentar penutup section content --}}
 @endsection

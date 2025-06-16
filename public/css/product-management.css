@@ -1,7 +1,17 @@
-{
-    font-family: 'Inter', sans-serif;
-    margin: 0;
+/*
+    CATATAN PENTING:
+    - Properti font-family dan margin pada body DI SINI bisa menimpa setting di style.css utama
+      jika file ini dimuat setelah style.css utama.
+    - Ada duplikasi .btn-add di kode yang Anda berikan, saya biarkan sesuai aslinya.
+*/
+
+/* Global Reset (bisa jadi redundant jika sudah ada di style.css) */
+body {
+    font-family: 'Inter', sans-serif; /* Perhatian: Bisa menimpa font dari style.css utama */
+    margin: 0; /* Perhatian: Bisa menimpa margin dari style.css utama */
 }
+
+/* Header (Jika ini adalah header spesifik untuk halaman product-management saja) */
 .header {
     display: flex;
     justify-content: space-between;
@@ -14,37 +24,54 @@
     font-size: 1.5rem;
     margin: 0;
 }
+
+/* Product Grid Layout */
 .product-list {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-    padding: 2rem;
+    /* Auto-fill untuk responsif, minmax untuk kontrol ukuran */
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px; /* Jarak antar kartu */
+    padding: 40px; /* Padding di sekitar grid */
 }
+
+/* Product Cards */
 .product {
     border: 1px solid #e1e1e1;
     border-radius: 8px;
     padding: 1rem;
     background: #fff;
     text-align: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden; /* Penting untuk gambar dan konten yang melebihi batas */
+    transition: transform 0.2s ease; /* Efek hover yang bagus */
+
+    /* --- PROPERTI UNTUK UKURAN KARTU YANG SAMA --- */
+    height: 450px; /* Tetapkan tinggi yang sama untuk semua kartu. SESUAIKAN NILAI INI jika perlu! */
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-between; /* Mendistribusikan konten secara vertikal */
+    /* --- AKHIR PROPERTI PENTING --- */
 }
+
 .product img {
     max-width: 100%;
-    height: auto;
+    /* Penting: Tetapkan tinggi gambar agar tidak menyebabkan perbedaan tinggi kartu */
+    height: 200px; /* Sesuaikan tinggi gambar agar sesuai dengan desain Anda */
+    object-fit: cover; /* Penting: Memastikan gambar mengisi ruang tanpa terdistorsi */
     border-radius: 4px;
+    margin-bottom: 0.5rem; /* Beri sedikit jarak di bawah gambar */
 }
+
 .product h4 {
     margin: 0.5rem 0;
     font-size: 1rem;
 }
 .product p {
-    margin: 0.25rem 0;
+    margin: 4px 0;
     font-size: 0.9rem;
-    color: #7f8c8d;
+    color: #555;
 }
+
 .product button {
     margin-top: 0.5rem;
     padding: 0.5rem 1rem;
@@ -64,7 +91,7 @@
     display: flex;
     justify-content: center;
     gap: 0.5rem;
-    margin-top: 0.75rem;
+    margin-top: auto; /* Penting: Dorong tombol ke bawah dalam flex container */
     flex-wrap: wrap;
 }
 
@@ -103,7 +130,7 @@
     transition: background 0.3s;
     color: #fff;
     text-decoration: none;
-    font-size: 0.875rem; 
+    font-size: 0.875rem;
     font-weight: normal;
     background-color: #8B0000;
 }
@@ -120,29 +147,29 @@
     background-color: #5C0000; /* merah coklat gelap */
 }
 
-
+/* Duplikasi .btn-add dari kode yang Anda berikan, saya biarkan di sini */
 .btn-add {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background-color: #8B5E3C; /* coklat medium */
-  color: #fff;
-  padding: 10px 20px;
-  font-weight: 600;
-  font-size: 16px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(139, 94, 60, 0.4);
-  text-decoration: none;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #8B5E3C; /* coklat medium */
+    color: #fff;
+    padding: 10px 20px;
+    font-weight: 600;
+    font-size: 16px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(139, 94, 60, 0.4);
+    text-decoration: none;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .btn-add:hover {
-  background-color: #6B4A2E; /* coklat lebih gelap */
-  box-shadow: 0 6px 12px rgba(107, 74, 46, 0.6);
-  color: #fff;
+    background-color: #6B4A2E; /* coklat lebih gelap */
+    box-shadow: 0 6px 12px rgba(107, 74, 46, 0.6);
+    color: #fff;
 }
 
 .btn-add:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(139, 94, 60, 0.7);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(139, 94, 60, 0.7);
 }

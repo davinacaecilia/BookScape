@@ -8,16 +8,19 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return view('admin.dashboard');
 });
 Route::get('/product-management', function () {
     return view('product.product-management');
 });
-Route::get('/message', function () {
-    return view('admin.message');
-});
+Route::get('/admin/ratings', function () {
+    return view('admin.ratings'); 
+})->name('admin.ratings');
 Route::get('/orders', function () {
     return view('admin.orders');
+});
+Route::get('/users', function () {
+    return view('admin.user-management');
 });
 // Ini Untuk Folder Product
 Route::get('/product/create', [ProductController::class, 'create'])->name('product.create'); // Add Product
@@ -36,4 +39,15 @@ Route::delete('/product/{id}/delete', function ($id) {
 
 // User Mnagement
 Route::get('/user-management', [AdminController::class, 'listUsers']);
+// Route detail order baru
+Route::get('/orders/{id}', function ($id) {
+    // nanti di sini bisa ambil data order sesuai $id dari DB kalau sudah backend
+    return view('admin.detail-order', ['orderId' => $id]);
+})->name('orders.detail');
+// Reply Message 
+Route::get('/admin/reply-message', function () {
+    return view('admin.reply-message');
+})->name('reply.form');
+
+
 
