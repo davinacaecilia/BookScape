@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,6 +12,7 @@
 
 	<title>Dashboard</title>
 </head>
+
 <body>
 
 	@include('partial.sidebar')
@@ -24,29 +26,28 @@
 				<div class="left">
 					<h1>Dashboard</h1>
 					<ul class="breadcrumb">
-							<li><a href="#">Dashboard</a></li>
-						</ul>
+						<li><a href="#">Dashboard</a></li>
 					</ul>
 				</div>
 			</div>
 
 			<ul class="box-info">
 				<li>
-					<i class='bx bxs-calendar-check' ></i>
+					<i class='bx bxs-calendar-check'></i>
 					<span class="text">
 						<h3>1020</h3>
 						<p>Orders</p>
 					</span>
 				</li>
 				<li>
-					<i class='bx bxs-group' ></i>
+					<i class='bx bxs-group'></i>
 					<span class="text">
-						<h3>2834</h3>
+						<h3>{{ $userCount }}</h3>
 						<p>Users</p>
 					</span>
 				</li>
 				<li>
-					<i class='bx bxs-dollar-circle' ></i>
+					<i class='bx bxs-dollar-circle'></i>
 					<span class="text">
 						<h3>IDR 6000.000k</h3>
 						<p>Products</p>
@@ -117,7 +118,6 @@
 		<!-- MAIN -->
 	</section>
 	<!-- CONTENT -->
-	
 
 
 <!-- Pagination di paling bawah -->

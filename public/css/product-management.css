@@ -1,14 +1,7 @@
-/*
-    CATATAN PENTING:
-    - Properti font-family dan margin pada body DI SINI bisa menimpa setting di style.css utama
-      jika file ini dimuat setelah style.css utama.
-    - Ada duplikasi .btn-add di kode yang Anda berikan, saya biarkan sesuai aslinya.
-*/
 
-/* Global Reset (bisa jadi redundant jika sudah ada di style.css) */
-body {
-    font-family: 'Inter', sans-serif; /* Perhatian: Bisa menimpa font dari style.css utama */
-    margin: 0; /* Perhatian: Bisa menimpa margin dari style.css utama */
+* {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
 }
 
 /* Header (Jika ini adalah header spesifik untuk halaman product-management saja) */
