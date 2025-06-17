@@ -1,4 +1,4 @@
-@extends('product.AddProduct-Layout')
+@extends('admin.product-create-layout')
 
 @section('title', 'Detail Order')
 
@@ -120,7 +120,7 @@
         </ul>
     </div>
     <div>
-       <div>
+    <div>
     <label>Total Price (incl. shipping):</label>
     <input type="text" value="Rp 300.000" readonly>
 </div>

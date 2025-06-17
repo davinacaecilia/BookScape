@@ -37,7 +37,7 @@
         </a>
     </li>
     <li>
-      <a href="{{ route('logout') }}" class="logout"  onclick="return confirm('Are You Sure Want to Log Out?');">>
+      <a href="{{ route('logout') }}" class="logout"  onclick="return confirm('Are You Sure Want to Log Out?');">
         <i class='bx bxs-log-out-circle'></i>
         <span class="text">Logout</span>
       </a>
