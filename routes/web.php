@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\Homecontroller;
+use App\Http\Controllers\ProfileController;
 
 Route::get('login', function () {
     return view('login');
@@ -17,4 +18,9 @@ Route::post('/register', [LandingController::class, 'register']);
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [RegisterController::class, 'register']);
 Route::get('/home', [HomeController::class,'home'])->name('home');
-
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/logout', [ProfileController::class, 'logout'])->name('logout');
+});

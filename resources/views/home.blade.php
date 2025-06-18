@@ -6,6 +6,9 @@
     <title>BookScape - Home</title>
     <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="./home.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 <body>
   <div class="home-container">
@@ -26,13 +29,53 @@
   <div class="cart-icon-container">
     <a href="#" class="cart-icon">
       <i class='bx bx-cart'></i>
-     <a href="#" class="notification-icon">
-    <i class='bx bx-bell'></i>
-    <a href="#" class="profile-icon">
+    <div class="profile-container">
+    <a href="#" class="pr le-icon profile-toggle" onclick="toggleDropdown(event)">
       <i class='bx bx-user'></i>
     </a>
-  </div>
-</nav>
+    <div class="profile-dropdown" id="profileDropdown">
+      <div class="sidebar-scrollable">
+        <hr class="full-divider"/>
+        <ul>
+          <li>
+          <a href="{{ route('profile.index') }}">
+            <i class='bx bx-user'></i> My Profile
+        </a>
+        </li>
+          <li><a href="#"><i class='bx bx-cart'></i> History Order</a></li>
+         <li><a href="#" onclick="confirmLogout()"><i class='bx bx-log-out'></i> Logout</a></li>
+      <script>
+      function confirmLogout() {
+    Swal.fire({
+        title: 'Logout',
+        text: 'Apakah Anda yakin ingin logout?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, Logout',
+        cancelButtonText: 'Batal'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire(
+                'Berhasil Logout!',
+                'Anda telah berhasil logout.',
+                'success'
+            ).then(() => {
+                window.location.href = '/login';
+            });
+        }
+    });
+}
+        </script>
+        </ul>
+        <hr class="full-divider"/>
+      </div>
+          </div>
+        </div>
+      </a>
+      </div>
+          </a>
+        </div>
+      </nav>
   
     <!-- Hero Section -->
     <section class="hero">
@@ -53,115 +96,59 @@
   <div class="books-grid">
     <!-- Book 1 -->
     <div class="book-card book-card-1">
-      <img class="book-cover book-cover-1" src="{{ asset('img\the-hunger-games-514.png') }}" alt="The Hunger Games">
+      <img class="book-cover book-cover-1" src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg" alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
       <div class="book-info">
-        <div class="book-genre">Dystopian</div>
-        <h3>The Hunger Games</h3>
-        <p class="book-author">Suzanne Collins</p>
-        <div class="rating">
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bx-star'></i>
-          <span>4.0</span>
-        </div>
-        <div class="book-price">
-          <span class="current-price">Rp.100.000</span>
-          <span class="original-price">Rp.150.000</span>
-        </div>
-        <button class="add-to-cart">Add to Cart</button>
+        <h2 class="book-title">Skripsick</h2>
+         <p class="book-genre">Comedy</p>
+        <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
+        <a href="#" class="add-to-cart-button">Add to Cart</a>
       </div>
-    </div>
+    </div>
+
     
     <!-- Book 2 -->
     <div class="book-card book-card-2">
-      <img class="book-cover book-cover-2" src="{{ asset('img\the-hunger-games-514.png') }}" alt="Harry Potter">
+     <img class="book-cover book-cover-1" src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg" alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
       <div class="book-info">
-        <div class="book-genre">Fantasy</div>
-        <h3>Harry Potter</h3>
-        <p class="book-author">J.K. Rowling</p>
-        <div class="rating">
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star-half'></i>
-          <span>4.5</span>
-        </div>
-        <div class="book-price">
-          <span class="current-price">Rp.150.000</span>
-        </div>
-        <button class="add-to-cart">Add to Cart</button>
+        <h2 class="book-title">Skripsick</h2>
+         <p class="book-genre">Comedy</p>
+        <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
+        <a href="#" class="add-to-cart-button">Add to Cart</a>
       </div>
-    </div>
+    </div>
     
     <!-- Book 3 -->
     <div class="book-card book-card-3">
-      <img class="book-cover book-cover-3" src="{{ asset('img\the-hunger-games-514.png') }}" alt="Dune">
+      <img class="book-cover book-cover-1" src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg" alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
       <div class="book-info">
-        <div class="book-genre">Sci-Fi</div>
-        <h3>Dune</h3>
-        <p class="book-author">Frank Herbert</p>
-        <div class="rating">
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bx-star'></i>
-          <span>4.0</span>
-        </div>
-        <div class="book-price">
-          <span class="current-price">Rp.100.000</span>
-          <span class="original-price">Rp.150.000</span>
-        </div>
-        <button class="add-to-cart">Add to Cart</button>
+        <h2 class="book-title">Skripsick</h2>
+         <p class="book-genre">Comedy</p>
+        <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
+        <a href="#" class="add-to-cart-button">Add to Cart</a>
       </div>
-    </div>
+    </div>
 
     <!-- Book 4 -->
     <div class="book-card book-card-4">
-      <img class="book-cover book-cover-4" src="{{ asset('img\the-hunger-games-514.png') }}" alt="UI UX">
+     <img class="book-cover book-cover-1" src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg" alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
       <div class="book-info">
-        <div class="book-genre">Design</div>
-        <h3>UI UX</h3>
-        <p class="book-author">Frank Herbert</p>
-        <div class="rating">
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bx-star'></i>
-          <span>4.0</span>
-        </div>
-        <div class="book-price">
-          <span class="current-price">Rp.150.000</span>
-        </div>
-        <button class="add-to-cart">Add to Cart</button>
+        <h2 class="book-title">Skripsick</h2>
+         <p class="book-genre">Comedy</p>
+        <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
+        <a href="#" class="add-to-cart-button">Add to Cart</a>
       </div>
-    </div>
+    </div>
 
     <!-- Book 5 -->
     <div class="book-card book-card-4">
-      <img class="book-cover book-cover-4" src="{{ asset('img\the-hunger-games-514.png') }}" alt="UI UX">
+     <img class="book-cover book-cover-1" src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg" alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
       <div class="book-info">
-        <div class="book-genre">Design</div>
-        <h3>UI UX</h3>
-        <p class="book-author">Frank Herbert</p>
-        <div class="rating">
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bx-star'></i>
-          <span>4.0</span>
-        </div>
-        <div class="book-price">
-          <span class="current-price">Rp.150.000</span>
-        </div>
-        <button class="add-to-cart">Add to Cart</button>
+        <h2 class="book-title">Skripsick</h2>
+         <p class="book-genre">Comedy</p>
+        <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
+        <a href="#" class="add-to-cart-button">Add to Cart</a>
       </div>
-    </div>
+    </div>
 </div>
 <a href="#" class="view-all">View All  <i class='bx bx-chevron-right'></i></a>
 </div>
@@ -173,116 +160,58 @@
      <h2>New Arrival</h2>
   <div class="books-grid">
     <div class="book-card book-card-1">
-      <img class="book-cover book-cover-1" src="{{ asset('img\the-hunger-games-514.png') }}" alt="The Hunger Games">
+   <img class="book-cover book-cover-1" src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg" alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
       <div class="book-info">
-        <div class="book-genre">Dystopian</div>
-        <h3>The Hunger Games</h3>
-        <p class="book-author">Suzanne Collins</p>
-        <div class="rating">
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bx-star'></i>
-          <span>4.0</span>
-        </div>
-        <div class="book-price">
-          <span class="current-price">Rp.100.000</span>
-          <span class="original-price">Rp.150.000</span>
-        </div>
-        <button class="add-to-cart">Add to Cart</button>
+        <h2 class="book-title">Skripsick</h2>
+         <p class="book-genre">Comedy</p>
+        <p class="book-price">Rp.40.00,00 <span class="rating">⭐ 4.5</span></p>
+        <a href="#" class="add-to-cart-button">Add to Cart</a>
       </div>
-    </div>
+    </div>
     
     <!-- Book 2 -->
     <div class="book-card book-card-2">
-      <img class="book-cover book-cover-2" src="{{ asset('img\the-hunger-games-514.png') }}" alt="Harry Potter">
+     <img class="book-cover book-cover-1" src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg" alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
       <div class="book-info">
-        <div class="book-genre">Fantasy</div>
-        <h3>Harry Potter</h3>
-        <p class="book-author">J.K. Rowling</p>
-        <div class="rating">
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star-half'></i>
-          <span>4.5</span>
-        </div>
-        <div class="book-price">
-          <span class="current-price">Rp.150.000</span>
-        </div>
-        <button class="add-to-cart">Add to Cart</button>
+        <h2 class="book-title">Skripsick</h2>
+         <p class="book-genre">Comedy</p>
+        <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
+        <a href="#" class="add-to-cart-button">Add to Cart</a>
       </div>
-    </div>
+    </div>
     
     <!-- Book 3 -->
     <div class="book-card book-card-3">
-      <img class="book-cover book-cover-3" src="{{ asset('img\the-hunger-games-514.png') }}" alt="Dune">
+      <img class="book-cover book-cover-1" src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg" alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
       <div class="book-info">
-        <div class="book-genre">Sci-Fi</div>
-        <h3>Dune</h3>
-        <p class="book-author">Frank Herbert</p>
-        <div class="rating">
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bx-star'></i>
-          <span>4.0</span>
-        </div>
-        <div class="book-price">
-          <span class="current-price">Rp.100.000</span>
-          <span class="original-price">Rp.150.000</span>
-        </div>
-        <button class="add-to-cart">Add to Cart</button>
+        <h2 class="book-title">Skripsick</h2>
+         <p class="book-genre">Comedy</p>
+        <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
+        <a href="#" class="add-to-cart-button">Add to Cart</a>
       </div>
-    </div>
+    </div>
 
     <!-- Book 4 -->
     <div class="book-card book-card-4">
-      <img class="book-cover book-cover-4" src="{{ asset('img\the-hunger-games-514.png') }}" alt="UI UX">
+     <img class="book-cover book-cover-1" src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg" alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
       <div class="book-info">
-        <div class="book-genre">Design</div>
-        <h3>UI UX</h3>
-        <p class="book-author">Frank Herbert</p>
-        <div class="rating">
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bx-star'></i>
-          <span>4.0</span>
-        </div>
-        <div class="book-price">
-          <span class="current-price">Rp.150.000</span>
-        </div>
-        <button class="add-to-cart">Add to Cart</button>
+        <h2 class="book-title">Skripsick</h2>
+         <p class="book-genre">Comedy</p>
+        <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
+        <a href="#" class="add-to-cart-button">Add to Cart</a>
       </div>
-    </div>
+    </div>
 
     <!-- Book 5 -->
     <div class="book-card book-card-5">
-      <img class="book-cover book-cover-5" src="{{ asset('img\the-hunger-games-514.png') }}" alt="Yuk Coding">
+       <img class="book-cover book-cover-1" src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg" alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
       <div class="book-info">
-        <div class="book-genre">Programming</div>
-        <h3>Yuk Coding</h3>
-        <p class="book-author">Frank Herbert</p>
-        <div class="rating">
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bx-star'></i>
-          <span>4.0</span>
-        </div>
-        <div class="book-price">
-          <span class="current-price">Rp.100.000</span>
-          <span class="original-price">Rp.150.000</span>
-        </div>
-        <button class="add-to-cart">Add to Cart</button>
+        <h2 class="book-title">Skripsick</h2>
+         <p class="book-genre">Comedy</p>
+        <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
+        <a href="#" class="add-to-cart-button">Add to Cart</a>
       </div>
-    </div>
+    </div>
     </div>
    </div>
     </section>
@@ -293,116 +222,58 @@
   <div class="books-grid">
     <!-- Best seller -->
     <div class="book-card book-card-1">
-      <img class="book-cover book-cover-1" src="{{ asset('img\the-hunger-games-514.png') }}" alt="The Hunger Games">
+   <img class="book-cover book-cover-1" src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg" alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
       <div class="book-info">
-        <div class="book-genre">Dystopian</div>
-        <h3>The Hunger Games</h3>
-        <p class="book-author">Suzanne Collins</p>
-        <div class="rating">
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bx-star'></i>
-          <span>4.0</span>
-        </div>
-        <div class="book-price">
-          <span class="current-price">Rp.100.000</span>
-          <span class="original-price">Rp.150.000</span>
-        </div>
-        <button class="add-to-cart">Add to Cart</button>
+        <h2 class="book-title">Skripsick</h2>
+         <p class="book-genre">Comedy</p>
+        <p class="book-price">Rp.40.00,00 <span class="rating">⭐ 4.5</span></p>
+        <a href="#" class="add-to-cart-button">Add to Cart</a>
       </div>
-    </div>
+    </div>
     
     <!-- Book 2 -->
     <div class="book-card book-card-2">
-      <img class="book-cover book-cover-2" src="{{ asset('img\the-hunger-games-514.png') }}" alt="Harry Potter">
+     <img class="book-cover book-cover-1" src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg" alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
       <div class="book-info">
-        <div class="book-genre">Fantasy</div>
-        <h3>Harry Potter</h3>
-        <p class="book-author">J.K. Rowling</p>
-        <div class="rating">
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star-half'></i>
-          <span>4.5</span>
-        </div>
-        <div class="book-price">
-          <span class="current-price">Rp.150.000</span>
-        </div>
-        <button class="add-to-cart">Add to Cart</button>
+        <h2 class="book-title">Skripsick</h2>
+         <p class="book-genre">Comedy</p>
+        <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
+        <a href="#" class="add-to-cart-button">Add to Cart</a>
       </div>
-    </div>
+    </div>
     
     <!-- Book 3 -->
     <div class="book-card book-card-3">
-      <img class="book-cover book-cover-3" src="{{ asset('img\the-hunger-games-514.png') }}" alt="Dune">
+      <img class="book-cover book-cover-1" src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg" alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
       <div class="book-info">
-        <div class="book-genre">Sci-Fi</div>
-        <h3>Dune</h3>
-        <p class="book-author">Frank Herbert</p>
-        <div class="rating">
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bx-star'></i>
-          <span>4.0</span>
-        </div>
-        <div class="book-price">
-          <span class="current-price">Rp.100.000</span>
-          <span class="original-price">Rp.150.000</span>
-        </div>
-        <button class="add-to-cart">Add to Cart</button>
+        <h2 class="book-title">Skripsick</h2>
+         <p class="book-genre">Comedy</p>
+        <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
+        <a href="#" class="add-to-cart-button">Add to Cart</a>
       </div>
-    </div>
+    </div>
 
     <!-- Book 4 -->
     <div class="book-card book-card-4">
-      <img class="book-cover book-cover-4" src="{{ asset('img\the-hunger-games-514.png') }}" alt="UI UX">
+     <img class="book-cover book-cover-1" src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg" alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
       <div class="book-info">
-        <div class="book-genre">Design</div>
-        <h3>UI UX</h3>
-        <p class="book-author">Frank Herbert</p>
-        <div class="rating">
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bx-star'></i>
-          <span>4.0</span>
-        </div>
-        <div class="book-price">
-          <span class="current-price">Rp.150.000</span>
-        </div>
-        <button class="add-to-cart">Add to Cart</button>
+        <h2 class="book-title">Skripsick</h2>
+         <p class="book-genre">Comedy</p>
+        <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
+        <a href="#" class="add-to-cart-button">Add to Cart</a>
       </div>
-    </div>
+    </div>
 
     <!-- Book 5 -->
     <div class="book-card book-card-5">
-      <img class="book-cover book-cover-5" src="{{ asset('img\the-hunger-games-514.png') }}" alt="Yuk Coding">
+       <img class="book-cover book-cover-1" src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg" alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
       <div class="book-info">
-        <div class="book-genre">Programming</div>
-        <h3>Yuk Coding</h3>
-        <p class="book-author">Frank Herbert</p>
-        <div class="rating">
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bx-star'></i>
-          <span>4.0</span>
-        </div>
-        <div class="book-price">
-          <span class="current-price">Rp.100.000</span>
-          <span class="original-price">Rp.150.000</span>
-        </div>
-        <button class="add-to-cart">Add to Cart</button>
+        <h2 class="book-title">Skripsick</h2>
+         <p class="book-genre">Comedy</p>
+        <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
+        <a href="#" class="add-to-cart-button">Add to Cart</a>
       </div>
-    </div>
+    </div>
     </div>
    </div>
     </section>
@@ -412,116 +283,58 @@
   <div class="books-grid">
     <!-- Best seller -->
     <div class="book-card book-card-1">
-      <img class="book-cover book-cover-1" src="{{ asset('img\the-hunger-games-514.png') }}" alt="The Hunger Games">
+   <img class="book-cover book-cover-1" src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg" alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
       <div class="book-info">
-        <div class="book-genre">Dystopian</div>
-        <h3>The Hunger Games</h3>
-        <p class="book-author">Suzanne Collins</p>
-        <div class="rating">
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bx-star'></i>
-          <span>4.0</span>
-        </div>
-        <div class="book-price">
-          <span class="current-price">Rp.100.000</span>
-          <span class="original-price">Rp.150.000</span>
-        </div>
-        <button class="add-to-cart">Add to Cart</button>
+        <h2 class="book-title">Skripsick</h2>
+         <p class="book-genre">Comedy</p>
+        <p class="book-price">Rp.40.00,00 <span class="rating">⭐ 4.5</span></p>
+        <a href="#" class="add-to-cart-button">Add to Cart</a>
       </div>
-    </div>
+    </div>
     
     <!-- Book 2 -->
     <div class="book-card book-card-2">
-      <img class="book-cover book-cover-2" src="{{ asset('img\the-hunger-games-514.png') }}" alt="Harry Potter">
+     <img class="book-cover book-cover-1" src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg" alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
       <div class="book-info">
-        <div class="book-genre">Fantasy</div>
-        <h3>Harry Potter</h3>
-        <p class="book-author">J.K. Rowling</p>
-        <div class="rating">
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star-half'></i>
-          <span>4.5</span>
-        </div>
-        <div class="book-price">
-          <span class="current-price">Rp.150.000</span>
-        </div>
-        <button class="add-to-cart">Add to Cart</button>
+        <h2 class="book-title">Skripsick</h2>
+         <p class="book-genre">Comedy</p>
+        <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
+        <a href="#" class="add-to-cart-button">Add to Cart</a>
       </div>
-    </div>
+    </div>
     
     <!-- Book 3 -->
     <div class="book-card book-card-3">
-      <img class="book-cover book-cover-3" src="{{ asset('img\the-hunger-games-514.png') }}" alt="Dune">
+      <img class="book-cover book-cover-1" src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg" alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
       <div class="book-info">
-        <div class="book-genre">Sci-Fi</div>
-        <h3>Dune</h3>
-        <p class="book-author">Frank Herbert</p>
-        <div class="rating">
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bx-star'></i>
-          <span>4.0</span>
-        </div>
-        <div class="book-price">
-          <span class="current-price">Rp.100.000</span>
-          <span class="original-price">Rp.150.000</span>
-        </div>
-        <button class="add-to-cart">Add to Cart</button>
+        <h2 class="book-title">Skripsick</h2>
+         <p class="book-genre">Comedy</p>
+        <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
+        <a href="#" class="add-to-cart-button">Add to Cart</a>
       </div>
-    </div>
+    </div>
 
     <!-- Book 4 -->
     <div class="book-card book-card-4">
-      <img class="book-cover book-cover-4" src="{{ asset('img\the-hunger-games-514.png') }}" alt="UI UX">
+     <img class="book-cover book-cover-1" src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg" alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
       <div class="book-info">
-        <div class="book-genre">Design</div>
-        <h3>UI UX</h3>
-        <p class="book-author">Frank Herbert</p>
-        <div class="rating">
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bx-star'></i>
-          <span>4.0</span>
-        </div>
-        <div class="book-price">
-          <span class="current-price">Rp.150.000</span>
-        </div>
-        <button class="add-to-cart">Add to Cart</button>
+        <h2 class="book-title">Skripsick</h2>
+         <p class="book-genre">Comedy</p>
+        <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
+        <a href="#" class="add-to-cart-button">Add to Cart</a>
       </div>
-    </div>
+    </div>
 
     <!-- Book 5 -->
     <div class="book-card book-card-5">
-      <img class="book-cover book-cover-5" src="{{ asset('img\the-hunger-games-514.png') }}" alt="Yuk Coding">
+       <img class="book-cover book-cover-1" src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg" alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
       <div class="book-info">
-        <div class="book-genre">Programming</div>
-        <h3>Yuk Coding</h3>
-        <p class="book-author">Frank Herbert</p>
-        <div class="rating">
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bxs-star'></i>
-          <i class='bx bx-star'></i>
-          <span>4.0</span>
-        </div>
-        <div class="book-price">
-          <span class="current-price">Rp.100.000</span>
-          <span class="original-price">Rp.150.000</span>
-        </div>
-        <button class="add-to-cart">Add to Cart</button>
+        <h2 class="book-title">Skripsick</h2>
+         <p class="book-genre">Comedy</p>
+        <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
+        <a href="#" class="add-to-cart-button">Add to Cart</a>
       </div>
-    </div>
+    </div>
     </div>
    </div>
    <a href="#" class="view-all">View All  <i class='bx bx-chevron-right'></i></a>
@@ -569,14 +382,14 @@
 
 
 
-    <!-- Sci-Fi -->
+    <!-- Sci  -->
      <section class="categories2">
   <div class="category-grid2">
     <a href="#" class="category-card">
       <div class="category-icon">
         <i class='bx bx-planet'></i>
       </div>
-      <span class="category-name">Sci-Fi</span>
+      <span class="category-name">Sci </span>
     </a>
 
     <!-- Fantasy -->
@@ -624,5 +437,21 @@
       </div>
     </footer>
   </div>
+  <script>
+function toggleDropdown(event) {
+  event.preventDefault(); 
+  const dropdown = document.getElementById('profileDropdown');
+  dropdown.classList.toggle('show');
+}
+document.addEventListener('click', function(event) {
+  const dropdown = document.getElementById('profileDropdown');
+  const toggleButton = document.querySelector('.profile-toggle');
+  
+  if (!toggleButton.contains(event.target) && !dropdown.contains(event.target)) {
+    dropdown.classList.remove('show');
+  }
+});
+</script>
 </body>
+
 </html>
