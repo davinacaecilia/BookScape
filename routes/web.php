@@ -11,9 +11,6 @@ use App\Http\Controllers\LandingController;
 use App\Http\Controllers\Homecontroller;
 use App\Http\Controllers\ProfileController;
 
-Route::get('login', function () {
-    return view('login');
-});
 
 Route::get('/', [LandingController::class, 'index'])->name('welcome');
 Route::post('/login', [LandingController::class, 'login'])->name('login');
