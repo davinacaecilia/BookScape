@@ -9,7 +9,7 @@
 	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet' />
 	<!-- My CSS -->
 	<link rel="stylesheet" href="{{ asset('css/style.css') }}" />
-
+	<link rel="stylesheet" href="{{ asset('css/pagination.css') }}" />
 	<title>Product Management</title>
 </head>
 
@@ -83,7 +83,10 @@
 		</main>
 	</section>
 
-</body>
-<script src="{{ asset('script/script.js') }}"></script>
+<!-- Pagination di paling bawah -->
+	<div id="pagination" class="pagination-container"></div>
 
+	<script src="{{ asset('script/script.js') }}"></script>
+	<script src="{{ asset('script/pagination.js') }}"></script>
+</body>
 </html>
