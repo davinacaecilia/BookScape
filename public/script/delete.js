@@ -1,6 +1,6 @@
 
     function confirmDelete(event) {
-        if (!confirm("Apakah kamu yakin akan menghapus Produk ini?")) {
+        if (!confirm("Are You Sure Want to Delete This Product?")) {
             event.preventDefault(); // Batalin submit form
             return false;
         }

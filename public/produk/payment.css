@@ -1,0 +1,481 @@
+:root {
+  --light-brown: #f8f3ed; /* Body background */
+  --medium-brown: #e0d19f; /* Search bar, light accents */
+  --dark-brown: #5C4033; /* Header overlay, primary text */
+  --accent-brown: #8B4513; /* Add to cart button, links */
+  --darker-accent-brown: #6F350F; /* Hover state for accent */
+  --text-dark: #4b3621; /* Dark text */
+  --text-light: #fefefe; /* Light text */
+  --footer-bg: #7A5230; /* Footer background */
+  --notification-red: #ff4757; /* Keep red for visibility, but border changed */
+  --notification-border-brown: #c58628; /* Brown border for notification/cart */
+  --white: #ffffff;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: var(--light-brown);
+  color: #333;
+  line-height: 1.5; /* Menormalkan line-height untuk seluruh body */
+}
+
+/* Main content container - to center the single card */
+.main-content {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding: 40px 20px;
+    background-color: var(--light-brown);
+    min-height: calc(100vh - 100px - 80px);
+    /* Ubah baris ini dari 'align-items: stretch;' menjadi: */
+    align-items: flex-start; /* Ini akan membuat kartu hanya setinggi kontennya */
+}
+
+/* Gaya untuk dua section utama/kolom */
+.payment-section { /* Wrapper baru untuk kartu pembayaran */
+    flex: 2; /* Mengambil 2 bagian dari ruang yang tersedia */
+    max-width: 850px; /* Lebar maksimal serupa dengan detail-orderan dari orderNow.css */
+    min-width: 600px; /* Lebar minimal serupa dengan detail-orderan */
+    display: flex; /* Jadikan kontainer flex agar payment-card bisa flex-grow */
+    flex-direction: column;
+}
+
+.summary-section { /* Section untuk kartu ringkasan belanja */
+    flex: 1; /* Mengambil 1 bagian dari ruang yang tersedia */
+    max-width: 380px; /* Lebar maksimal untuk kartu ringkasan */
+    min-width: 300px; /* Lebar minimal untuk kartu ringkasan */
+    display: flex; /* Jadikan kontainer flex agar order-card bisa flex-grow */
+    flex-direction: column;
+}
+
+/* Sesuaikan .payment-card - hapus width/max-width karena parent section sekarang menanganinya */
+.payment-card {
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    padding: 30px;
+    width: 100%; /* Mengambil lebar penuh dari parent section-nya */
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    flex-grow: 1; /* Biarkan memanjang di dalam section-nya */
+}
+
+/* Gaya untuk kartu "Ringkasan Belanja", disalin dari orderNow.css */
+.order-card.ringkasan-belanja {
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    padding: 25px;
+    flex-grow: 1; /* Biarkan memanjang di dalam section-nya */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Untuk mendorong tombol ke bagian bawah jika kartu memanjang */
+}
+
+.order-card.ringkasan-belanja h2 {
+    font-size: 1.8rem;
+    color: var(--dark-brown);
+    margin-top: 0;
+    margin-bottom: 25px;
+    text-align: center;
+    border-bottom: 2px solid var(--medium-brown);
+    padding-bottom: 15px;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.summary-label {
+    font-weight: normal;
+    color: var(--text-dark);
+    margin: 0;
+}
+
+.summary-value {
+    font-weight: bold;
+    color: var(--text-dark);
+    margin: 0;
+}
+
+.total-summary-item {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid var(--medium-brown);
+}
+
+.final-total-amount {
+    font-size: 1.2rem;
+    color: var(--accent-brown);
+}
+
+.proceed-to-payment-btn {
+    background-color: var(--accent-brown);
+    color: var(--text-light);
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    width: 100%;
+    margin-top: auto; /* Dorong tombol ke bawah jika kartu fleksibel */
+    transition: background-color 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.proceed-to-payment-btn:hover {
+    background-color: var(--darker-accent-brown);
+}
+/* New Payment Card Styles */
+.payment-card {
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    padding: 30px;
+    width: 90%; /* Sesuaikan lebar sesuai kebutuhan */
+    max-width: 800px; /* Lebar maksimal untuk kartu */
+    display: flex;
+    flex-direction: column;
+    gap: 25px; /* Jarak antar bagian di dalam kartu */
+}
+
+.payment-header h2 {
+    font-size: 2rem;
+    color: var(--dark-brown);
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-align: center;
+    border-bottom: 2px solid var(--medium-brown);
+    padding-bottom: 15px;
+}
+
+.payment-icons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px; /* Lebar tetap untuk area ikon */
+    height: 40px;
+}
+
+.bank-icon,
+.ewallet-icon {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.payment-description {
+    flex-grow: 1;
+    color: var(--text-dark);
+}
+
+.payment-description p {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.payment-description .account-number {
+    font-size: 0.9em;
+    color: #666;
+}
+
+/* Payment Proof Upload Section */
+.payment-proof-upload {
+    border-top: 1px dashed var(--medium-brown);
+    padding-top: 25px;
+    text-align: center;
+}
+
+.payment-proof-upload h3 {
+    font-size: 1.4rem;
+    color: var(--dark-brown);
+    margin-bottom: 20px;
+}
+
+.upload-btn {
+    background-color: var(--accent-brown);
+    color: var(--text-light);
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1rem;
+    transition: background-color 0.2s ease;
+    margin-bottom: 15px;
+}
+
+.upload-btn:hover {
+    background-color: var(--darker-accent-brown);
+}
+
+.upload-btn i {
+    font-size: 1.2rem;
+}
+
+.hidden-input {
+    display: none; /* Sembunyikan input file bawaan */
+}
+
+.file-name-display {
+    display: block;
+    margin-top: 10px;
+    color: var(--text-dark);
+    font-size: 0.9em;
+}
+
+.image-preview {
+    max-width: 100%;
+    max-height: 200px; /* Batasi tinggi pratinjau */
+    margin-top: 20px;
+    border: 1px solid var(--medium-brown);
+    border-radius: 8px;
+    object-fit: contain;
+}
+
+/* New Payment Method Selection Styles */
+.payment-methods-selection {
+    position: relative;
+    border: 1px solid var(--medium-brown);
+    border-radius: 8px;
+    padding: 15px 20px;
+    background-color: #fcfcfc;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 20px; /* Jarak dari upload bukti pembayaran */
+}
+
+.payment-methods-selection:hover {
+    border-color: var(--accent-brown);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.selected-method-display {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.1rem;
+    color: var(--text-dark);
+    font-weight: 500;
+}
+
+.selected-method-display .toggle-icon {
+    transition: transform 0.3s ease;
+    font-size: 1.5rem;
+}
+
+.selected-method-display.active .toggle-icon {
+    transform: rotate(180deg);
+}
+
+.payment-options-dropdown {
+    position: absolute;
+    top: 100%; /* Posisikan di bawah area display */
+    left: 0;
+    right: 0;
+    background-color: var(--white);
+    border: 1px solid var(--medium-brown);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    z-index: 10; /* Pastikan di atas konten lain */
+    max-height: 200px; /* Batasi tinggi dan izinkan scroll */
+    overflow-y: auto;
+}
+
+.payment-option-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.2s ease;
+}
+
+.payment-option-item:last-child {
+    border-bottom: none;
+}
+
+.payment-option-item:hover {
+    background-color: var(--light-brown);
+}
+
+.payment-option-item .method-details {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-grow: 1;
+}
+
+.payment-option-item .method-details img {
+    max-width: 50px;
+    max-height: 30px;
+    object-fit: contain;
+}
+
+.payment-option-item input[type="radio"] {
+    appearance: none; /* Sembunyikan radio button default */
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--accent-brown);
+    border-radius: 50%;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    flex-shrink: 0; /* Cegah menyusut */
+}
+
+.payment-option-item input[type="radio"]:checked {
+    background-color: var(--accent-brown);
+    border-color: var(--accent-brown);
+}
+
+.payment-option-item input[type="radio"]:checked::before {
+    content: '';
+    display: block;
+    width: 10px;
+    height: 10px;
+    background-color: var(--white);
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.selected-account-details {
+    margin-top: 20px;
+    padding: 15px 20px;
+    border: 1px dashed var(--dark-brown);
+    border-radius: 8px;
+    background-color: var(--light-brown);
+    color: var(--text-dark);
+    font-size: 1rem;
+    line-height: 1.6;
+    display: none; /* Sembunyikan secara default */
+}
+
+.selected-account-details p {
+    margin: 5px 0;
+}
+
+.selected-account-details .account-number {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: var(--dark-brown);
+}
+
+
+/* Pay Button */
+.pay-button {
+    background-color: var(--accent-brown);
+    color: var(--text-light);
+    border: none;
+    border-radius: 8px;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 20px;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    font-weight: bold;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.pay-button:hover {
+    background-color: var(--darker-accent-brown);
+    transform: translateY(-1px);
+}
+
+/* Kolom Kanan (Ringkasan Belanja) */
+.summary-section {
+    flex: 0 0 350px;
+    max-width: 350px;
+    min-width: 280px;
+    position: -webkit-sticky; /* Untuk Safari */
+    position: sticky;
+    top: 100px; /* Jarak dari atas viewport saat scroll */
+    align-self: flex-start; /* Penting agar sticky berfungsi dengan baik dalam flex container */
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* === SUMMARY SECTION (RIGHT) === */
+.summary-section {
+    flex: 1; /* Kolom ringkasan mengambil 1/3 ruang */
+    position: sticky; /* Membuat elemen menempel saat discroll */
+    top: 100px; /* Menempel 100px dari bagian atas viewport */
+    align-self: flex-start; /* Penting: agar card menempel di bagian atas kolomnya */
+    height: fit-content; /* Card hanya akan setinggi kontennya */
+
+    /* Card basic styling sudah termasuk di .card, tapi diulang untuk kejelasan */
+    background-color: var(--white);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.summary-section h3 {
+  font-size: 22px;
+  color: var(--text-dark);
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.summary-details {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: var(--text-dark);
+}
+
+.summary-item span:first-child {
+  font-weight: normal;
+}
+
+.summary-item span:last-child {
+  font-weight: 600;
+}
+
+.total-summary {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--dark-brown);
+  padding-top: 15px;
+  border-top: 1px dashed #ddd;
+  margin-top: 15px;
+}
+
+.btn-pay-now {
+  background-color: var(--accent-brown);
+  color: var(--white);
+  padding: 15px;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  margin-top: auto;
+}
+
+.btn-pay-now:hover {
+  background-color: var(--darker-accent-brown);
+}

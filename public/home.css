@@ -168,22 +168,24 @@ body {
 
 .books-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 2rem;
-  margin-bottom: 3rem;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+padding: 40px;
+
 }
 
 .book-card {
   background: var(--gray);
-  border-radius: 15px;
+
+  border-radius: 12px;
   overflow: hidden;
-  transition: all 0.3s ease;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .book-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
+
 }
 
 .book-card img {
@@ -193,10 +195,12 @@ body {
 }
 
 .book-info {
-  padding: 1.5rem;
+
+  padding: 16px;
 }
 
-.book-info h3 {
+/* .book-info h3 {
+
   font-size: 1.3rem;
   margin-bottom: 0.5rem;
   color: var(--secondary);
@@ -205,22 +209,50 @@ body {
 .book-info p {
   color: var(--dark-gray);
   margin-bottom: 1rem;
-}
+
+} */
 
 .rating {
-  display: flex;
-  align-items: center;
-  color: var(--secondary);
+  float: right;
+  font-size: 13px;
+  color: #ffa000;
 }
 
-.rating i {
-  margin-right: 0.2rem;
+.book-price {
+  font-size: 14px;
+  font-weight: bold;
+  color: #4b3621;
 }
 
-.rating span {
-  margin-left: 0.5rem;
+.book-title {
+  font-size: 16px;
   font-weight: 600;
+  margin-bottom: 6px;
 }
+
+.book-genre p {
+  font-size: 13px;
+  color: #7a5c3e;
+  margin-bottom: 10px;
+}
+
+.add-to-cart-button {
+  display: inline-block;
+  margin-top: 5px;
+  padding: 6px 12px;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.add-to-cart-button:hover {
+  background-color: #0069d9;
+}
+
+
 
 .view-all {
   display: inline-flex;
@@ -522,20 +554,25 @@ body {
   font-size: 1.5rem;
   text-decoration: none;
   padding: 0.5rem;
-  margin-left: 1.5rem;
+  margin-left: 5px;
   border-radius: 50%;
   transition: all 0.3s ease;
   cursor: pointer;
   line-height: 1;
+
+ gap: 20px;
 }
 
-/* Style ikon bell */
+
 .notification-icon i {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 1.5em;
   height: 1.5em;
+
+   gap: 20px;
+
 }
 
 
@@ -685,6 +722,9 @@ body {
   border: 1px solid #57606f;
   color: #ffffff;
   margin-left: 20px;
+
+  gap: 20px;
+
 
 }
 
@@ -902,4 +942,214 @@ body {
   .category-icon2 i {
     font-size: 1.5rem;
   }
+
+
+}
+/* Icon Container */
+.cart-icon-container {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* Icons */
+.cart-icon, 
+.notification-icon, 
+.profile-icon {
+  color: var(--white);
+  font-size: 1.3rem;
+  text-decoration: none;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.cart-icon:hover, 
+.notification-icon:hover, 
+.profile-icon:hover {
+  color: var(--primary);
+}
+
+/* Profile Dropdown */
+.profile-dropdown {
+  position: relative;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background: var(--white);
+  min-width: 160px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  border-radius: 5px;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.dropdown-content a {
+  display: block;
+  padding: 0.75rem 1rem;
+  color: var(--black);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.dropdown-content a:hover {
+  background: var(--gray);
+  color: var(--secondary);
+}
+
+.profile-dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Umum */
+.profile-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 220px;
+  z-index: 1000;
+  overflow: hidden;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.sidebar-scrollable {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+/* Divider */
+.full-divider {
+  border: none;
+  border-top: 1px solid #e0e0e0;
+  margin: 0;
+}
+
+/* Daftar item */
+.profile-dropdown ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.profile-dropdown li {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.profile-dropdown li:last-child {
+  border-bottom: none;
+}
+
+/* Link item */
+.profile-dropdown a {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  text-decoration: none;
+  color: #333;
+  transition: background-color 0.2s ease;
+}
+
+.profile-dropdown a i {
+  font-size: 18px;
+  margin-right: 12px;
+  color: #555;
+}
+
+/* Hover efek */
+.profile-dropdown a:hover {
+  background-color: #f5f5f5;
+  color: #000;
+}
+
+.profile-dropdown a:hover i {
+  color: #000;
+}
+
+/* Scrollbar halus */
+.sidebar-scrollable::-webkit-scrollbar {
+  width: 6px;
+}
+.sidebar-scrollable::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 10px;
+}
+.sidebar-scrollable::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.profile-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.profile-toggle {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.profile-dropdown {
+  display: none; /* Default tersembunyi */
+}
+
+.profile-dropdown.show {
+  display: block; /* Muncul saat ada class "show" */
+}
+.profile-container {
+  position: relative;
+  display: inline-block;
+}
+
+.profile-dropdown {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: white;
+  min-width: 200px;
+  box-shadow: 0px 8px 16px rgba(0,0,0,0.1);
+  z-index: 1000;
+}
+
+.profile-dropdown.show {
+  display: block;
+}
+
+/* Gaya tambahan untuk tampilan lebih baik */
+.profile-dropdown ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.profile-dropdown li a {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  text-decoration: none;
+  color: #333;
+}
+
+.profile-dropdown li a:hover {
+  background-color: #f5f5f5;
+}
+
+.profile-dropdown li i {
+  margin-right: 10px;
+}
+
+.full-divider {
+  border: 0;
+  height: 1px;
+  background-color: #eee;
+  margin: 5px 0;
+
 }

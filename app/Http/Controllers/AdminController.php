@@ -50,7 +50,7 @@ class AdminController extends Controller
             'stock' => 'required|integer'
         ]);
 
-         if ($request->hasFile('gambar_sampul')) {
+        if ($request->hasFile('gambar_sampul')) {
             $file = $request->file('gambar_sampul');
             $filename = $file->hashName();
             $file->storeAs('sampul', $filename, 'public');
@@ -131,9 +131,7 @@ class AdminController extends Controller
     public function listUsers()
     {
         $users = User::all();
-        return view('user-management', [
-            'users' => $users
-        ]);
+        return view('admin.user-management', compact('users'));
     }
 
     public function updateUser(Request $request, $id)
@@ -148,4 +146,9 @@ class AdminController extends Controller
         $user->delete();
         return redirect()->route('user-management')->with('success', 'User deleted successfully');
     }
+
+    public function showRatingsAndReviews()
+{
+    return view('admin.ratings');
+}
 }

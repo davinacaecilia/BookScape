@@ -311,7 +311,8 @@ body.dark-mode .octa {
 
 
 /* MAIN */
-#content main {
+ #content main {
+
 	width: 100%;
 	padding: 36px 24px;
 	font-family: var(--poppins);
@@ -694,6 +695,23 @@ td:nth-child(4) {
 .btn-add:hover {
 	background-color: #0056b3;
 }
+.btn-detail {
+    padding: 5px 10px;
+    font-size: 0.85rem;
+    background-color: var(--brown-medium);
+    color: var(--brown-bg);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none; /* supaya link kayak tombol biasa */
+    display: inline-block;
+    transition: background-color 0.25s ease;
+}
+
+.btn-detail:hover {
+    background-color: var(--brown-dark);
+}
+
 
 // INi buat Bikin rapi alamat 
 td.address {
@@ -708,4 +726,7 @@ td.address {
 	td.address {
 		max-width: 120px;  /* responsif buat layar kecil */
 	}
+
+	
 }
+

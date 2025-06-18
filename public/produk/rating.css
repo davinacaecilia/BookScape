@@ -1,0 +1,219 @@
+:root {
+  --light-brown: #f8f3ed; /* Background body */
+  --medium-brown: #e0d19f; /* Aksen terang */
+  --dark-brown: #5C4033; /* Warna teks utama, header overlay */
+  --accent-brown: #8B4513; /* Tombol, link */
+  --darker-accent-brown: #6F350F; /* Hover tombol */
+  --text-dark: #4b3621; /* Teks gelap */
+  --text-light: #fefefe; /* Teks terang */
+  --footer-bg: #7A5230; /* Background footer */
+  --notification-red: #ff4757; /* Warna notifikasi */
+  --notification-border-brown: #c58628; /* Border notifikasi */
+  --white: #ffffff;
+  --star-color-active: #FFD700; /* Kuning emas untuk bintang aktif */
+  --star-color-inactive: #ccc; /* Abu-abu untuk bintang tidak aktif */
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f6f1eb;
+  color: #333;
+}
+
+/* === MAIN CONTENT UNTUK RATING CARD === */
+.rating-main-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 120px - 70px); /* Sesuaikan tinggi berdasarkan header/footer */
+  padding: 20px;
+  background-color: var(--light-brown);
+}
+
+/* === STYLING KARTU RATING === */
+.rating-card {
+  background-color: var(--white);
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  width: 100%;
+  max-width: 450px; /* Lebar maksimum kartu */
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Jarak antara bagian-bagian di dalam kartu */
+}
+
+/* === BAGIAN INFO BUKU === */
+.book-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.book-cover {
+  width: 120px;
+  height: 180px; /* Rasio aspek standar sampul buku */
+  object-fit: cover;
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.book-title {
+  font-size: 22px;
+  font-weight: bold;
+  color: var(--dark-brown);
+  margin-top: 15px; /* Jarak dari gambar */
+  margin-bottom: 0;
+}
+
+.book-author {
+  font-size: 16px;
+  color: #666;
+  margin-top: 5px;
+  margin-bottom: 0;
+}
+
+/* === BAGIAN RATING BINTANG === */
+.rating-stars {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.rating-label {
+    font-size: 18px;
+    color: var(--text-dark);
+    font-weight: 600;
+}
+
+.stars {
+    display: flex;
+    flex-direction: row-reverse; /* Penting untuk trik CSS sibling selector */
+    justify-content: center;
+}
+
+.stars input[type="radio"] {
+    display: none; /* Sembunyikan radio button asli */
+}
+
+.stars label {
+    font-size: 35px; /* Ukuran ikon bintang */
+    color: var(--star-color-inactive); /* Warna abu-abu default */
+    cursor: pointer;
+    padding: 0 3px; /* Jarak antar bintang */
+    transition: color 0.2s ease-in-out;
+}
+
+/* Pewarnaan bintang saat hover */
+.stars label:hover,
+.stars label:hover ~ label {
+    color: var(--star-color-active); /* Warna emas saat hover dan untuk bintang sebelumnya */
+}
+
+/* Pewarnaan bintang saat dipilih */
+.stars input[type="radio"]:checked ~ label {
+    color: var(--star-color-active); /* Warna emas untuk radio yang dipilih dan bintang sebelumnya */
+}
+
+/* === BAGIAN ULASAN TEKS === */
+.review-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Rata kiri label/textarea dalam bagian ini */
+  width: 100%;
+}
+
+.review-section label {
+  font-size: 18px;
+  color: var(--text-dark);
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+textarea#reviewText {
+  width: calc(100% - 20px); /* Sesuaikan dengan padding agar penuh */
+  min-height: 120px; /* Tinggi minimum textarea */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 16px;
+  color: var(--text-dark);
+  resize: vertical; /* Izinkan resize vertikal saja */
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+textarea#reviewText:focus {
+  border-color: var(--accent-brown); /* Sorot saat fokus */
+}
+
+/* === TOMBOL KIRIM === */
+.submit-review-btn {
+  background-color: var(--accent-brown);
+  color: var(--white);
+  padding: 12px 25px;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: fit-content; /* Sesuaikan lebar dengan konten */
+  margin: 0 auto; /* Posisikan tombol di tengah */
+}
+
+.submit-review-btn:hover {
+  background-color: var(--darker-accent-brown);
+}
+
+.submit-review-btn:disabled {
+  background-color: #cccccc; /* Warna abu-abu */
+  cursor: not-allowed;
+  opacity: 0.7; /* Sedikit transparan agar terlihat berbeda */
+  box-shadow: none; /* Hapus bayangan jika ada */
+}
+
+/* Pastikan efek hover hanya berlaku jika tombol tidak disabled */
+.submit-review-btn:hover:not(:disabled) {
+  background-color: var(--darker-accent-brown);
+}
+
+/* === MEDIA QUERIES (RESPONSIVE) === */
+@media (max-width: 600px) {
+  .rating-card {
+    padding: 20px;
+    margin: 0 10px; /* Tambahkan margin samping di layar kecil */
+  }
+
+  .book-cover {
+    width: 100px;
+    height: 150px;
+  }
+
+  .book-title {
+    font-size: 20px;
+  }
+
+  .book-author, .rating-label, .review-section label {
+    font-size: 16px;
+  }
+
+  .stars label {
+    font-size: 30px;
+  }
+
+  textarea#reviewText {
+    min-height: 100px;
+  }
+
+  .submit-review-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+}
