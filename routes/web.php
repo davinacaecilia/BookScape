@@ -1,5 +1,12 @@
 <?php
 
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\LogoutController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\LandingController; // Ditambahkan dari main
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\RegisterController;
@@ -23,4 +30,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/logout', [ProfileController::class, 'logout'])->name('logout');
+
 });
+
+// Route untuk list produk di hlmn user (punya jeilta) - di luar middleware auth
+Route::get('/produk', function () {
+    return view('produk');
+})->name('produk');

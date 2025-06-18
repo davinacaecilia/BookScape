@@ -1,0 +1,24 @@
+    .back-arrow {
+        display: inline-flex;
+        align-items: center;
+        cursor: pointer;
+        color: #333;
+        text-decoration: none;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        font-size: 1rem;
+        user-select: none;
+        border: none;
+        background: none;
+        padding: 0;
+        transition: color 0.2s;
+    }
+    .back-arrow:hover {
+        color: #007bff;
+    }
+    .back-arrow svg {
+        margin-right: 0.5rem;
+        width: 16px;
+        height: 16px;
+        fill: currentColor;
+    }
