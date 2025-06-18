@@ -1,0 +1,307 @@
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --light-brown: #f8f3ed; /* Body background */
+  --medium-brown: #e0d19f; /* Search bar, light accents */
+  --dark-brown: #5C4033; /* Header overlay, primary text */
+  --accent-brown: #8B4513; /* Add to cart button, links */
+  --darker-accent-brown: #6F350F; /* Hover state for accent */
+  --text-dark: #4b3621; /* Dark text */
+  --text-light: #fefefe; /* Light text */
+  --footer-bg: #7A5230; /* Footer background */
+  --notification-red: #ff4757; /* Keep red for visibility, but border changed */
+  --notification-border-brown: #c58628; /* Brown border for notification/cart */
+  --white: #ffffff;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: var(--light-brown);
+  color: #333;
+  line-height: 1.5; /* Menormalkan line-height untuk seluruh body */
+}
+
+
+/* === KONTEN UTAMA KERANJANG (New Layout) === */
+.cart-content-wrapper {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.cart-layout-container {
+  display: flex;
+  gap: 30px;
+}
+
+.cart-items-column {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--medium-brown);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  gap: 15px;
+}
+
+.cart-summary-column {
+  flex: 1;
+}
+
+/* === Styling untuk Kartu Hapus Semua Yang Dipilih === */
+.delete-all-selected-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: transparent;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+  min-height: auto;
+  padding-bottom: 15px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.delete-all-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.select-all-label {
+  font-size: 1.1em;
+  color: var(--text-dark);
+  cursor: pointer;
+}
+
+.delete-selected-btn {
+  background-color: transparent;
+  border: 1px solid var(--notification-red);
+  color: var(--notification-red);
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.delete-selected-btn:hover {
+  background-color: var(--notification-red);
+  color: var(--text-light);
+}
+
+/* === Styling untuk Kartu Barang Keranjang === */
+.cart-items-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.cart-card {
+  display: flex;
+  align-items: center; /* Pastikan semua item di tengah secara vertikal */
+  justify-content: space-between;
+  background-color: var(--white);
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+  min-height: 80px; /* Menjamin tinggi minimum */
+}
+
+.item-checkbox-container {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Pusatkan checkbox secara horizontal dalam containernya */
+    margin-right: 15px;
+    flex-shrink: 0; /* Pastikan tidak menyusut */
+}
+
+.item-checkbox {
+    width: 20px;
+    height: 20px; /* Atur tinggi eksplisit */
+    cursor: pointer;
+    accent-color: var(--accent-brown);
+    margin: 0; /* Pastikan tidak ada margin default */
+    vertical-align: middle; /* Pastikan terpusat secara vertikal jika ada masalah */
+}
+
+.item-details {
+  flex-grow: 1; /* Mengambil ruang yang tersedia */
+  margin-right: 20px;
+  /* Hapus display:flex, flex-direction:column, justify-content:center jika sebelumnya ada di sini */
+  /* Biarkan sebagai block element agar h3 dan p tertata secara normal */
+}
+
+.item-title {
+  font-size: 1.3em;
+  color: var(--dark-brown);
+  margin-top: 0;
+  margin-bottom: 5px; /* Jarak antara judul dan harga */
+  font-weight: 600;
+  line-height: 1.3; /* Atur line-height eksplisit untuk konsistensi */
+  word-wrap: break-word; /* Memastikan kata yang panjang dapat pecah baris */
+  white-space: normal; /* Memastikan teks membungkus */
+}
+
+.item-price {
+  font-size: 1.1em;
+  color: var(--accent-brown);
+  margin: 0; /* Pastikan tidak ada margin tambahan */
+  line-height: 1.1; /* Atur line-height eksplisit untuk konsistensi */
+}
+
+.item-quantity-control {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--medium-brown);
+  border-radius: 5px;
+  overflow: hidden;
+  margin-right: 15px;
+  flex-shrink: 0; /* Pastikan section ini tidak menyusut */
+}
+
+.quantity-btn {
+  background-color: var(--medium-brown);
+  color: var(--text-dark);
+  border: none;
+  cursor: pointer;
+  font-size: 1.1em;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+  margin: 0;
+  vertical-align: middle;
+  width: 35px;   /* Atur lebar tetap */
+  height: 35px;  /* Atur tinggi tetap, membuat tombol jadi kotak */
+  padding: 0;    /* Hapus padding internal karena sekarang ukurannya tetap */
+  display: flex; /* Jadikan flex container agar bisa memusatkan teks */
+  align-items: center; /* Pusatkan teks secara vertikal */
+  justify-content: center; /* Pusatkan teks secara horizontal */
+}
+
+.quantity-btn:hover {
+  background-color: var(--darker-accent-brown);
+  color: var(--text-light);
+}
+
+.quantity-display {
+  padding: 8px 15px;
+  font-size: 1.1em;
+  color: var(--dark-brown);
+  text-align: center;
+  min-width: 30px;
+  margin: 0; /* Pastikan tidak ada margin default */
+  vertical-align: middle; /* Jaga konsistensi vertikal */
+}
+
+.item-delete-btn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--notification-red);
+  font-size: 1.8em;
+  padding: 5px;
+  transition: color 0.2s ease;
+  margin: 0; /* Pastikan tidak ada margin default */
+  flex-shrink: 0; /* Pastikan section ini tidak menyusut */
+}
+
+.item-delete-btn:hover {
+  color: #CC0000;
+}
+
+@media (max-width: 768px) {
+  .cart-layout-container {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .cart-summary-card {
+    position: static;
+    top: auto;
+  }
+
+  .delete-all-selected-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .delete-selected-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* === Styling untuk Ringkasan Keranjang === */
+.cart-summary-card {
+  background-color: var(--white);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  position: sticky; /* Agar ringkasan tetap terlihat saat scroll */
+  top: 100px; /* Sesuaikan dengan tinggi header Anda */
+}
+
+.summary-title {
+  font-size: 1.6em;
+  color: var(--dark-brown);
+  margin-top: 0;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.summary-line {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 1.1em;
+}
+
+.summary-label {
+  color: var(--text-dark);
+}
+
+.summary-value {
+  color: var(--dark-brown);
+  font-weight: 500;
+}
+
+.summary-separator {
+  border-top: 1px solid var(--medium-brown);
+  margin: 15px 0;
+}
+
+.total-line .summary-label,
+.total-line .summary-value {
+  font-weight: bold;
+  font-size: 1.2em;
+  color: var(--accent-brown);
+}
+
+.checkout-btn {
+  width: 100%;
+  padding: 15px;
+  background-color: var(--accent-brown);
+  color: var(--text-light);
+  border: none;
+  border-radius: 5px;
+  font-size: 1.2em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-top: 20px;
+}
+
+.checkout-btn:hover {
+  background-color: var(--darker-accent-brown);
+}

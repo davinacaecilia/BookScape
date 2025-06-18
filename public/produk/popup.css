@@ -1,0 +1,63 @@
+/* Tambahkan ini di bagian atas global.css jika belum ada di file CSS lain yang diimpor */
+:root {
+  --light-brown: #f8f3ed;
+  --medium-brown: #e0d19f;
+  --dark-brown: #5C4033;
+  --accent-brown: #8B4513;
+  --darker-accent-brown: #6F350F;
+  --text-dark: #4b3621;
+  --text-light: #fefefe;
+  --footer-bg: #7A5230;
+  --notification-red: #ff4757;
+  --notification-border-brown: #c58628;
+  --white: #ffffff;
+}
+
+/* --- Custom SweetAlert2 Styling --- */
+.custom-swal-popup {
+  border-radius: 8px;
+}
+
+.custom-swal-title {
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 1.8em;
+  font-weight: bold;
+  color: var(--text-light) !important;
+}
+
+.custom-swal-content {
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 1.2em;
+  color: var(--text-light) !important;
+}
+
+.custom-swal-confirm-button {
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 1em;
+  padding: 10px 20px;
+  border-radius: 5px;
+  color: var(--text-dark);
+}
+
+.custom-swal-cancel-button {
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 1em;
+  padding: 10px 20px;
+  border-radius: 5px;
+  color: var(--text-dark);
+}
+
+.swal2-success-ring {
+    border-color: var(--darker-accent-brown) !important;
+}
+
+/* .swal2-success-line-tip, .swal2-success-line-long { background-color: var(--text-light) !important; } */
+/* Dihapus agar tetap hijau default */
+
+.swal2-error-ring {
+    border-color: #A0202A !important;
+}
+.swal2-error-line-tip,
+.swal2-error-line-long {
+    background-color: var(--text-light) !important;
+}
