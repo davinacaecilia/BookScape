@@ -24,8 +24,8 @@
 
   bookCards.forEach(card => {
     card.addEventListener('click', function() {
-      // Navigasi ke preview.html saat kartu buku diklik
-      window.location.href = 'preview';
+      const productId = this.dataset.id;
+      window.location.href = `/product/detail/${productId}`;
     });
   });
 

@@ -12,6 +12,7 @@ class Genre extends Model
 
     public function buku()
     {
-        return $this->belongsToMany(Buku::class, 'buku_genre');
+        return $this->belongsToMany(Buku::class, 'buku_genre', 'genre_id', 'buku_id');
     }
+
 }

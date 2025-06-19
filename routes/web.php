@@ -26,6 +26,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/logout', [ProfileController::class, 'logout'])->name('logout');
 
 });
+Route::get('/product-management', [AdminController::class, 'listProduct'])->name('product.management');
 
 Route::middleware('auth')->group(function () {
     // auth
@@ -37,7 +38,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders', [AdminController::class, 'listOrders'])->name('admin.orders');
     Route::get('/message', [AdminController::class, 'listMessage'])->name('admin.message');  
     //product management
-    Route::get('/product-management', [AdminController::class, 'listProduct'])->name('product.management');
+    // Route::get('/product-management', [AdminController::class, 'listProduct'])->name('product.management');
     Route::get('/product-management/create', [AdminController::class, 'addProduct'])->name('product.create');
     Route::post('/product-management/store', [AdminController::class, 'storeProduct'])->name('product.store');
     Route::get('/product-management/edit/{id}', [AdminController::class, 'editProduct'])->name('product.edit');
@@ -48,18 +49,10 @@ Route::middleware('auth')->group(function () {
 });
 
 
-Route::get('/product', function () {
-    return view('produk.new');
-});
-
-
-Route::get('/preview', function () {
-    return view('produk.preview');
-});
-
-Route::get('/cart', function () {
-    return view('produk.cart');
-});
+Route::get('/product', [UserController::class, 'showLibrary'])->name('product.library');
+Route::get('/product/detail/{id}', [UserController::class, 'showDetail'])->name('product.detail');
+Route::post('/cart/add/{id}', [UserController::class, 'addToCart'])->name('product.addToCart');
+Route::get('/cart', [UserController::class, 'showCart'])->name('product.cart');
 
 Route::get('/history', function () {
     return view('produk.history');

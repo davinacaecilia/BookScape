@@ -22,7 +22,7 @@ function showAddToCartPopup(isBookInStock) {
       }
     }).then((result) => {
       if (result.dismiss === Swal.DismissReason.cancel) {
-        window.location.href = 'cart.html';
+        window.location.href = '/cart';
       }
     });
   } else {
