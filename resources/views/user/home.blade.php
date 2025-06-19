@@ -177,74 +177,25 @@
   <section class="featured-books">
     <h2>New Arrival</h2>
     <div class="books-grid">
+      @foreach ($newArrivals as $newArrival)
       <div class="book-card book-card-1">
         <img class="book-cover book-cover-1"
-          src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg"
-          alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
+          src="{{ asset('storage/sampul/' . $newArrival->gambar_sampul) }}"
+          alt="{{ $newArrival->judul_buku }}" class="book-cover">
         <div class="book-info">
-          <h2 class="book-title">Skripsick</h2>
-          <p class="book-genre">Comedy</p>
-          <p class="book-price">Rp.40.00,00 <span class="rating">⭐ 4.5</span></p>
+          <h2 class="book-title">{{ $newArrival->judul_buku }}</h2>
+          <p class="book-genre">
+            @foreach($newArrival->genres as $genre)
+              {{ $genre->genre }}{{ !$loop->last ? ', ' : '' }}
+            @endforeach 
+          </p>
+          <p class="book-price">Rp {{ number_format($newArrival['harga'], 0, ',', '.') }}
+            <span class="rating">⭐ 4.5</span>
+          </p>
           <a href="#" class="add-to-cart-button">Add to Cart</a>
         </div>
-            
       </div>
-
-      <!-- Book 2 -->
-      <div class="book-card book-card-2">
-        <img class="book-cover book-cover-1"
-          src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg"
-          alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
-        <div class="book-info">
-          <h2 class="book-title">Skripsick</h2>
-          <p class="book-genre">Comedy</p>
-          <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
-          <a href="#" class="add-to-cart-button">Add to Cart</a>
-        </div>
-            
-      </div>
-
-      <!-- Book 3 -->
-      <div class="book-card book-card-3">
-        <img class="book-cover book-cover-1"
-          src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg"
-          alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
-        <div class="book-info">
-          <h2 class="book-title">Skripsick</h2>
-          <p class="book-genre">Comedy</p>
-          <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
-          <a href="#" class="add-to-cart-button">Add to Cart</a>
-        </div>
-            
-      </div>
-
-      <!-- Book 4 -->
-      <div class="book-card book-card-4">
-        <img class="book-cover book-cover-1"
-          src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg"
-          alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
-        <div class="book-info">
-          <h2 class="book-title">Skripsick</h2>
-          <p class="book-genre">Comedy</p>
-          <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
-          <a href="#" class="add-to-cart-button">Add to Cart</a>
-        </div>
-            
-      </div>
-
-      <!-- Book 5 -->
-      <div class="book-card book-card-5">
-        <img class="book-cover book-cover-1"
-          src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg"
-          alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
-        <div class="book-info">
-          <h2 class="book-title">Skripsick</h2>
-          <p class="book-genre">Comedy</p>
-          <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
-          <a href="#" class="add-to-cart-button">Add to Cart</a>
-        </div>
-            
-      </div>
+      @endforeach
     </div>
     </div>
   </section>
@@ -264,7 +215,6 @@
           <p class="book-price">Rp.40.00,00 <span class="rating">⭐ 4.5</span></p>
           <a href="#" class="add-to-cart-button">Add to Cart</a>
         </div>
-            
       </div>
 
       <!-- Book 2 -->
@@ -330,77 +280,25 @@
     <h2>Library</h2>
     <div class="books-grid">
       <!-- Best seller -->
+      @foreach ($libraries as $library)
       <div class="book-card book-card-1">
         <img class="book-cover book-cover-1"
-          src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg"
-          alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
+          src="{{ asset('storage/sampul/' . $library->gambar_sampul) }}"
+          alt="{{ $library->judul_buku }}" class="book-cover">
         <div class="book-info">
-          <h2 class="book-title">Skripsick</h2>
-          <p class="book-genre">Comedy</p>
-          <p class="book-price">Rp.40.00,00 <span class="rating">⭐ 4.5</span></p>
+          <h2 class="book-title">{{ $library->judul_buku }}</h2>
+          <p class="book-genre">
+            @foreach($library->genres as $genre)
+              {{ $genre->genre }}{{ !$loop->last ? ', ' : '' }}
+            @endforeach 
+          </p>
+          <p class="book-price">Rp {{ number_format($newArrival['harga'], 0, ',', '.') }}<span class="rating">⭐ 4.5</span></p>
           <a href="#" class="add-to-cart-button">Add to Cart</a>
         </div>
-            
       </div>
-
-      <!-- Book 2 -->
-      <div class="book-card book-card-2">
-        <img class="book-cover book-cover-1"
-          src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg"
-          alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
-        <div class="book-info">
-          <h2 class="book-title">Skripsick</h2>
-          <p class="book-genre">Comedy</p>
-          <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
-          <a href="#" class="add-to-cart-button">Add to Cart</a>
-        </div>
-            
-      </div>
-
-      <!-- Book 3 -->
-      <div class="book-card book-card-3">
-        <img class="book-cover book-cover-1"
-          src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg"
-          alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
-        <div class="book-info">
-          <h2 class="book-title">Skripsick</h2>
-          <p class="book-genre">Comedy</p>
-          <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
-          <a href="#" class="add-to-cart-button">Add to Cart</a>
-        </div>
-            
-      </div>
-
-      <!-- Book 4 -->
-      <div class="book-card book-card-4">
-        <img class="book-cover book-cover-1"
-          src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg"
-          alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
-        <div class="book-info">
-          <h2 class="book-title">Skripsick</h2>
-          <p class="book-genre">Comedy</p>
-          <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
-          <a href="#" class="add-to-cart-button">Add to Cart</a>
-        </div>
-            
-      </div>
-
-      <!-- Book 5 -->
-      <div class="book-card book-card-5">
-        <img class="book-cover book-cover-1"
-          src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg"
-          alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
-        <div class="book-info">
-          <h2 class="book-title">Skripsick</h2>
-          <p class="book-genre">Comedy</p>
-          <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
-          <a href="#" class="add-to-cart-button">Add to Cart</a>
-        </div>
-            
-      </div>
+      @endforeach
     </div>
-    </div>
-    <a href="#" class="view-all">View All <i class='bx bx-chevron-right'></i></a>
+    <a href="{{ route('product.library') }}" class="view-all">View All <i class='bx bx-chevron-right'></i></a>
   </section>
 
 

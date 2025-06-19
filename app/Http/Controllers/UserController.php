@@ -11,7 +11,9 @@ class UserController extends Controller
 {
     public function showHome()
     {
-        return view('user.home');
+        $newArrivals = Buku::orderBy('updated_at', 'desc')->get();
+        $libraries = Buku::all();
+        return view('user.home', compact('newArrivals', 'libraries'));
     }
 
     public function showProfile()

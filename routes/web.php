@@ -12,9 +12,6 @@ Route::get('/', function () {
 });
 
 //rute user
-Route::get('/home', function () {
-    return view('user.home');
-})->name('home');
 Route::get('/profile', function () {
     return view('user.profile');
 })->name('profile');
@@ -23,6 +20,7 @@ Route::get('/settings', function () {
 })->name('settings');
 
 
+Route::get('/home', [UserController::class, 'showHome'])->name('home');
 Route::get('/product', [UserController::class, 'showLibrary'])->name('product.library');
 Route::get('/product/detail/{id}', [UserController::class, 'showDetail'])->name('product.detail');
 Route::post('/cart/add/{id}', [UserController::class, 'addToCart'])->name('product.addToCart');
