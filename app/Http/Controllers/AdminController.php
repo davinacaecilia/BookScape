@@ -67,7 +67,8 @@ class AdminController extends Controller
             'stock' => $validated['stock'],
         ]);
 
-        $buku->genres()->sync($validated['genres']);
+        $genreIds = $validated['genres'] ?? []; 
+        $buku->genres()->sync($genreIds);  
 
         return redirect()->route('product.management')->with('success', 'Buku berhasil ditambahkan!');
     }
@@ -115,7 +116,8 @@ class AdminController extends Controller
             'stock' => $validated['stock'],
         ]);
 
-        $buku->genres()->sync($validated['genres']);
+        $genreIds = $validated['genres'] ?? []; 
+        $buku->genres()->sync($genreIds);  
 
         return redirect()->route('product.management')->with('success', 'Produk berhasil diperbarui');
     }
