@@ -13,28 +13,25 @@
               Categories <span class="arrow" id="arrow">&#9660;</span>
             </button>
             <div class="category-menu" id="categoryMenu">
-              <a href="{{ route('product.library') }}" class="{{ request('genre') == null ? 'active-genre' : '' }}">
-                All
-              </a>
+              <a href="{{ route('product.library') }}" class="{{ request('genre') == null ? 'active-genre' : '' }}">All</a>
               @foreach ($genres as $genre)
                 <a href="{{ route('product.library', ['genre' => $genre->genre]) }}"
                 class="{{ request('genre') == $genre->genre ? 'active-genre' : '' }}">{{ $genre->genre }}</a>
               @endforeach
             </div>
           </div>
+          
           <div class="search-bar">
-            <input type="text" placeholder="Search books, authors, or categories...">
-            <button><i class='bx bx-search'></i></button>
+            <form action="{{ route('product.library') }}" method="GET">
+              <input type="text" name="search" value="{{ request('search') }}" placeholder="Search books, authors, or categories...">
+              <button type="submit"><i class='bx bx-search'></i></button>
+            </form>
           </div>
         </div>
-    <div class="nav-icons">
-       <a href="cart" class="shopping-cart"> <i class='bx bx-cart'></i>
-        </a>
-
-        <a href="profile" class="profile-icon"> <i class='bx bx-user-circle'></i>
-        </a>
-    </div>
-  </div>
-</div>
+        <div class="nav-icons">
+          <a href="cart" class="shopping-cart"> <i class='bx bx-cart'></i></a>
+          <a href="profile" class="profile-icon"> <i class='bx bx-user-circle'></i></a>
+        </div>
+      </div>
     </div>
   </header>

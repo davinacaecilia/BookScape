@@ -110,9 +110,7 @@
             <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
             <a href="#" class="add-to-cart-button">Add to Cart</a>
           </div>
-              
         </div>
-
 
         <!-- Book 2 -->
         <div class="book-card book-card-2">

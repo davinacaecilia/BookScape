@@ -26,19 +26,28 @@ class UserController extends Controller
     
     public function showLibrary(Request $request)
     {
-        $products = Buku::with('genres');
-
         $genreFilter = $request->query('genre');
+        $searchQuery = $request->query('search');
+
+        $query = Buku::with('genres');
+
         if ($genreFilter) {
-            $products = $products->whereHas('genres', function ($query) use ($genreFilter) {
-                $query->where('genre', $genreFilter);
+            $query->whereHas('genres', function ($q) use ($genreFilter) {
+                $q->where('genre', $genreFilter);
             });
         }
 
-        $products = $products->get();
+        if ($request->filled('search')) {
+            $query->where(function ($q) use ($searchQuery) {
+                $q->where('judul_buku', 'like', '%' . $searchQuery . '%')
+                ->orWhere('penulis_buku', 'like', '%' . $searchQuery . '%');
+            });
+        }
+
+        $products = $query->get();
         $genres = Genre::orderBy('genre')->get();
 
-        return view('produk.new', compact('products', 'genres', 'genreFilter'));
+        return view('produk.new', compact('products', 'genres', 'genreFilter', 'searchQuery'));
     }
     
     public function showDetail(Request $request)

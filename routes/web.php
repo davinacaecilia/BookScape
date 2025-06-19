@@ -21,6 +21,8 @@ Route::get('/profile', function () {
 Route::get('/settings', function () {
     return view('user.settings');
 })->name('settings');
+
+
 Route::get('/product', [UserController::class, 'showLibrary'])->name('product.library');
 Route::get('/product/detail/{id}', [UserController::class, 'showDetail'])->name('product.detail');
 Route::post('/cart/add/{id}', [UserController::class, 'addToCart'])->name('product.addToCart');
@@ -40,7 +42,6 @@ Route::middleware(['auth', 'role:0'])->prefix('admin')->name('admin.')->group(fu
     })->name('ratings');
 
     //rute lain disini
-
 });
 
 Route::middleware(['auth', 'role:0'])->group(function () {
