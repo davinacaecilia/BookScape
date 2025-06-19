@@ -66,7 +66,19 @@ main {
 
 .genre-rating-wrapper {
   display: flex;
-  justify-content: space-between; /* Untuk menempatkan genre di kiri dan rating di kanan */
+  /* Removed justify-content: space-between; from here as it will be applied to .book-genres and .book-detail-rating */
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.book-genres { /* New style for the genre wrapper */
+  display: flex;
+  gap: 10px;
+}
+
+.genre-rating-wrapper {
+  display: flex;
+  justify-content: space-between; /* This will now space out the .book-genres div and the .book-detail-rating div */
   align-items: center;
   margin-bottom: 15px;
 }
@@ -241,3 +253,76 @@ main {
   border-radius: 5px;
 }
 
+/* START OF PRODUCT REVIEWS STYLING */
+.product-reviews {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: var(--white);
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.reviews-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--dark-brown);
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.review-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* 3 or 4 columns, responsive */
+  gap: 20px;
+}
+
+.review-card {
+  background-color: var(--light-brown);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.review-header {
+  display: flex;
+  align-items: center; /* Menyelaraskan foto profil, nama, dan rating secara vertikal */
+  gap: 10px; /* Jarak antara foto profil dan nama */
+  margin-bottom: 10px;
+}
+
+.profile-review-pic {
+  width: 40px; /* Ukuran foto profil */
+  height: 40px;
+  border-radius: 50%; /* Membuat foto profil bulat */
+  object-fit: cover; /* Memastikan gambar mengisi area tanpa terdistorsi */
+  border: 2px solid var(--medium-brown); /* Opsional: border di sekitar foto profil */
+}
+
+.reviewer-name {
+  font-weight: bold;
+  color: var(--dark-brown);
+  font-size: 1.1em;
+}
+
+.review-rating {
+  color: #ffa000; /* Gold color for stars */
+  font-size: 1em;
+  margin-left: auto; /* Mendorong rating ke kanan */
+}
+
+.review-rating span {
+  font-size: 0.9em;
+  color: var(--text-dark);
+  margin-left: 5px;
+}
+
+.review-text {
+  color: var(--text-dark);
+  line-height: 1.6;
+  font-size: 0.95em;
+  text-align: justify;
+}
+/* END OF PRODUCT REVIEWS STYLING */

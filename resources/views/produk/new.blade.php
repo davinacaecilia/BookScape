@@ -16,46 +16,27 @@
 @include('produk.navbar')
 
   <main class="book-grid">
-    <div class="book-card">
-  <img src="https://ebooks.gramedia.com/ebook-covers/34734/big_covers/ID_KPG2016MTH10DDAG_B.jpg" alt="Diary: Dagelan 2015" class="book-cover">
-  <div class="book-info">
-    <h2 class="book-title">Diary: Dagelan 2015</h2>
-    <p class="book-genre">COMEDY <span class="rating">⭐ 4.0</span></p>
-    <p class="book-price">Rp.79.00,00</p>
-    <a href="#" class="add-to-cart-button">Add to Cart</a>
-  </div>
-</div>
-
-    <div class="book-card">
-      <img src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1474594228i/32184214.jpg" alt="(EX)PERIENCE" class="book-cover">
-      <div class="book-info">
-        <h2 class="book-title">(EX)PERIENCE</h2>
-        <p class="book-genre">COMEDY, DRAMA <span class="rating">⭐ 4.7</span></p>
-        <p class="book-price">Rp.55.00,00</p>
-        <a href="#" class="add-to-cart-button">Add to Cart</a>
+    @forelse ($products as $product)
+      <div class="book-card" data-id="{{ $product->id }}">
+        <img src="{{ asset('storage/sampul/' . $product->gambar_sampul) }}" alt="{{ $product->judul_buku }}" class="book-cover">
+        
+        <div class="book-info">
+          <h2 class="book-title">{{ $product->judul_buku }}</h2>
+          <p class="book-genre">
+            @foreach($product->genres as $genre)
+              {{ $genre->genre }}{{ !$loop->last ? ', ' : '' }}
+            @endforeach 
+            <span class="rating">⭐ 4.0</span>
+          </p>
+          <p class="book-price">Rp {{ number_format($product['harga'], 0, ',', '.') }}</p>
+          <a href="#" class="add-to-cart-button">Add to Cart</a>
+        </div>
       </div>
-    </div>
-
-    <div class="book-card">
-      <img src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg" alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
-      <div class="book-info">
-        <h2 class="book-title">Skripsick</h2>
-        <p class="book-genre">SCI-FI<span class="rating">⭐ 4.5</span></p>
-        <p class="book-price">Rp.40.00,00</p>
-        <a href="#" class="add-to-cart-button">Add to Cart</a>
-      </div>
-    </div>
-
-    <div class="book-card">
-      <img src="https://image.gramedia.net/rs:fit:0:0/plain/https://cdn.gramedia.com/uploads/items/9786024260347C_9786024260347.jpg" alt="Setengah Jalan" class="book-cover">
-      <div class="book-info">
-        <h2 class="book-title">Setengah Jalan</h2>
-        <p class="book-genre">COMEDY <span class="rating">⭐ 4.7</span></p>
-        <p class="book-price">Rp.69.00,00</p>
-        <a href="#" class="add-to-cart-button">Add to Cart</a>
-      </div>
-    </div>
+    @empty
+      <p>Tidak ada produk ditemukan pada kategori ini.</p>
+    @endforelse
   </main>
+
 
   @include('produk.footer')
 

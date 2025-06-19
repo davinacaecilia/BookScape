@@ -21,9 +21,11 @@ Route::get('/profile', function () {
 Route::get('/settings', function () {
     return view('user.settings');
 })->name('settings');
-Route::get('/cart', function () {
-    return view('produk.cart');
-});
+
+Route::get('/product', [UserController::class, 'showLibrary'])->name('product.library');
+Route::get('/product/detail/{id}', [UserController::class, 'showDetail'])->name('product.detail');
+Route::post('/cart/add/{id}', [UserController::class, 'addToCart'])->name('product.addToCart');
+Route::get('/cart', [UserController::class, 'showCart'])->name('product.cart');
 
 
 
