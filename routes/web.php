@@ -12,20 +12,20 @@ Route::get('/', function () {
 });
 
 //rute user
-Route::get('/profile', function () {
-    return view('user.profile');
-})->name('profile');
-Route::get('/settings', function () {
-    return view('user.settings');
-})->name('settings');
+Route::middleware(['auth', 'role:1'])->group(function () {
 
+    Route::get('/settings', function () {
+        return view('user.settings');
+    })->name('settings');
 
-Route::get('/home', [UserController::class, 'showHome'])->name('home');
-Route::get('/product', [UserController::class, 'showLibrary'])->name('product.library');
-Route::get('/product/detail/{id}', [UserController::class, 'showDetail'])->name('product.detail');
-Route::post('/cart/add/{id}', [UserController::class, 'addToCart'])->name('product.addToCart');
-Route::get('/cart', [UserController::class, 'showCart'])->name('product.cart');
-
+    Route::get('/profile', [UserController::class, 'showProfile'])->name('profile');
+    Route::get('/home', [UserController::class, 'showHome'])->name('home');
+    Route::get('/product', [UserController::class, 'showLibrary'])->name('product.library');
+    Route::get('/product/detail/{id}', [UserController::class, 'showDetail'])->name('product.detail');
+    Route::post('/cart/add/{id}', [UserController::class, 'addToCart'])->name('product.addToCart');
+    Route::get('/cart', [UserController::class, 'showCart'])->name('product.cart');
+    Route::get('/history', [UserController::class, 'showHistory'])->name('order.history');
+});
 
 
 //rute admin

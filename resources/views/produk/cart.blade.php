@@ -29,59 +29,29 @@
         </div>
 
         <div class="cart-items-container">
-          <div class="cart-card">
-              <div class="item-checkbox-container">
-                  <input type="checkbox" class="item-checkbox" checked>
-              </div>
-              <div class="item-details">
-                  <h3 class="item-title">The Hunger Games: The Ballad of Songbirds and Snakes</h3>
-                  <p class="item-price">Rp 85.000</p>
-              </div>
-              <div class="item-quantity-control">
-                  <button class="quantity-btn minus-btn">-</button>
-                  <span class="quantity-display">1</span>
-                  <button class="quantity-btn plus-btn">+</button>
-              </div>
-              <button class="item-delete-btn">
-                  <i class='bx bx-trash'></i>
-              </button>
-          </div>
-
-          <div class="cart-card">
-              <div class="item-checkbox-container">
-                  <input type="checkbox" class="item-checkbox" checked>
-              </div>
-              <div class="item-details">
-                  <h3 class="item-title">Dune (Dune Chronicles, Book 1)</h3>
-                  <p class="item-price">Rp 120.000</p>
-              </div>
-              <div class="item-quantity-control">
-                  <button class="quantity-btn minus-btn">-</button>
-                  <span class="quantity-display">2</span>
-                  <button class="quantity-btn plus-btn">+</button>
-              </div>
-              <button class="item-delete-btn">
-                  <i class='bx bx-trash'></i>
-              </button>
-          </div>
-
-          <div class="cart-card">
-              <div class="item-checkbox-container">
-                  <input type="checkbox" class="item-checkbox">
-              </div>
-              <div class="item-details">
-                  <h3 class="item-title">To Kill a Mockingbird</h3>
-                  <p class="item-price">Rp 70.000</p>
-              </div>
-              <div class="item-quantity-control">
-                  <button class="quantity-btn minus-btn">-</button>
-                  <span class="quantity-display">1</span>
-                  <button class="quantity-btn plus-btn">+</button>
-              </div>
-              <button class="item-delete-btn">
-                  <i class='bx bx-trash'></i>
-              </button>
-          </div>
+            @if( $items->isEmpty() )
+                <p>Keranjangmu kosong.</p>
+            @else
+                @foreach($items as $item)
+                <div class="cart-card">
+                    <div class="item-checkbox-container">
+                        <input type="checkbox" class="item-checkbox">
+                    </div>
+                    <div class="item-details">
+                        <h3 class="item-title">{{ $item->buku->judul_buku }}</h3>
+                        <p class="item-price">Rp {{ number_format( $item->buku->harga, 0, ',', '.') }}</p>
+                    </div>
+                    <div class="item-quantity-control">
+                        <button class="quantity-btn minus-btn">-</button>
+                        <span class="quantity-display">{{ $item->quantity }}</span>
+                        <button class="quantity-btn plus-btn">+</button>
+                    </div>
+                    <button class="item-delete-btn">
+                        <i class='bx bx-trash'></i>
+                    </button>
+                </div>
+                @endforeach
+            @endif
         </div>
       </div>
 

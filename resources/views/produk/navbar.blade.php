@@ -23,14 +23,14 @@
           
           <div class="search-bar">
             <form action="{{ route('product.library') }}" method="GET">
-              <input type="text" name="search" value="{{ request('search') }}" placeholder="Search books, authors, or categories...">
+              <input type="text" name="search" value="{{ request('search') }}" placeholder="Search books or authors...">
               <button type="submit"><i class='bx bx-search'></i></button>
             </form>
           </div>
         </div>
         <div class="nav-icons">
           <a href="cart" class="shopping-cart"> <i class='bx bx-cart'></i></a>
-          <a href="profile" class="profile-icon"> <i class='bx bx-user-circle'></i></a>
+          <a href="profile" class="profile-icon"><i class='bx bx-user-circle'></i></a>
         </div>
       </div>
     </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Buku;
 use App\Models\Cart;
 use App\Models\Genre;
+use DB;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -12,13 +13,15 @@ class UserController extends Controller
     public function showHome()
     {
         $newArrivals = Buku::orderBy('updated_at', 'desc')->get();
+        $bestSellers = Buku::all();
         $libraries = Buku::all();
-        return view('user.home', compact('newArrivals', 'libraries'));
+        return view('user.home', compact('newArrivals', 'bestSellers', 'libraries'));
     }
 
     public function showProfile()
     {
-        return view('user.profile');
+        $user = auth()->user();
+        return view('user.profile', compact('user'));
     }
 
     public function showSettings()
@@ -61,33 +64,43 @@ class UserController extends Controller
         
         return view('produk.preview', compact('products', 'previousBuku', 'nextBuku'));
     }
-    public function addToCart(Request $request)
+
+    public function addToCart($id)
     {
-
-        $request->validate([
-            'quantity' => 'required|integer|min:1',
-        ]);
-
-        $userId = auth()->id();
-
-        // Jika sudah ada, update quantity
-        $cartItem = Cart::where('user_id', $userId)->where('book_id')->first();
-
-        if ($cartItem) {
-            $cartItem->quantity += $request->quantity;
-            $cartItem->save();
-        } else {
-            Cart::create([
-                'user_id' => $userId,
-                'quantity' => $request->quantity,
-            ]);
+        $user = auth()->user();
+        if (!$user) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
         }
 
-        return redirect()->back()->with('success', 'Buku berhasil ditambahkan ke keranjang');
+        $buku = Buku::findOrFail($id);
+
+        if ($buku->stock < 1) {
+            return response()->json(['message' => 'Stok habis'], 400);
+        }
+
+        Cart::updateOrCreate(
+            ['user_id' => $user->id, 'buku_id' => $buku->id],
+            ['quantity' => 0]
+        );
+        Cart::increment('quantity');
+
+        // Kirim balik JavaScript (untuk SweetAlert popup)
+        return response()->json(['message' => 'Berhasil ditambahkan ke keranjang']);
     }
 
+
     public function showCart() {
-        return view('produk.cart');
+        $user = auth()->user();
+
+        $items = Cart::with('buku')  // relasi ke model Buku
+            ->where('user_id', $user->id)
+            ->get();
+
+        return view('produk.cart', compact('items'));
+    }
+
+    public function showHistory() {
+        return view('produk.history');
     }
     
 }
