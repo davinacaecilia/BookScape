@@ -20,11 +20,11 @@
     <span>BOOKSCAPE</span>
   </div>
   <div class="nav-links">
-    <a href="#" class="active">Home</a>
+    <a href="{{ url ('/') }}" class="active">Home</a>
     <a href="#">Browse</a>
     <a href="#">Categories</a>
   <div class="cart-icon-container">
-    <a href="#" class="cart-icon">
+    <a href="{{ route ('produk.cart') }}" class="cart-icon">
       <i class='bx bx-cart'></i>
      <a href="#" class="notification-icon">
     <i class='bx bx-bell'></i>

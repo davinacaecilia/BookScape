@@ -26,7 +26,7 @@
 				<div class="left">
 					<h1>Dashboard</h1>
 					<ul class="breadcrumb">
-						<li><a href="#">Dashboard</a></li>
+						<li><a href="{{route('admin.dashboard')}">Dashboard</a></li>
 					</ul>
 				</div>
 			</div>
