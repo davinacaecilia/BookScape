@@ -67,8 +67,7 @@
 								<td style="padding: 10px; border: 1px solid #ccc;">{{ $user->id }}</td>
 								<td style="padding: 10px; border: 1px solid #ccc;">{{ $user->name }}</td>
 								<td style="padding: 10px; border: 1px solid #ccc;">{{ $user->email }}</td>
-								<td
-									style="padding: 10px; border: 1px solid #ccc; font-family: monospace; font-size: 0.85rem;">
+								<td style="padding: 10px; border: 1px solid #ccc; font-family: monospace; font-size: 0.85rem;">
 									{{ $user->password }}
 								</td>
 								<td style="padding: 10px; border: 1px solid #ccc;">{{ $user->user_level}}</td>
@@ -83,10 +82,23 @@
 		</main>
 	</section>
 
-<!-- Pagination di paling bawah -->
+	<!-- Pagination di paling bawah -->
 	<div id="pagination" class="pagination-container"></div>
+
+	<form id="logout-form-admin" action="{{ route('logout') }}" method="POST" style="display: none;">
+		@csrf
+	</form>
+
+	<script>
+		function confirmAdminLogout() {
+			if (confirm('Are You Sure Want to Log Out?')) {
+				document.getElementById('logout-form-admin').submit();
+			}
+		}
+	</script>
 
 	<script src="{{ asset('script/script.js') }}"></script>
 	<script src="{{ asset('script/pagination.js') }}"></script>
 </body>
+
 </html>
