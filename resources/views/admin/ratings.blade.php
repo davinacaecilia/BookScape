@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,6 +11,7 @@
 
     <title>Ratings & Reviews</title>
 </head>
+
 <body>
     @include('partial.sidebar')
 
@@ -35,7 +37,7 @@
                         <thead>
                             <tr>
                                 <th>Book Title</th>
-                                <th>Author</th> 
+                                <th>Author</th>
                                 <th>Reviewer Name</th>
                                 <th>Rating</th>
                                 <th>Review</th>
@@ -57,10 +59,12 @@
                                     <i class='bx bxs-star'></i>
                                     (5/5)
                                 </td>
-                                <td>Buku ini luar biasa! Ide ceritanya segar dan sangat menggugah pikiran. Benar-benar wajib dibaca.</td>
+                                <td>Buku ini luar biasa! Ide ceritanya segar dan sangat menggugah pikiran. Benar-benar
+                                    wajib dibaca.</td>
                                 <td>10 June 2025</td>
                                 <td>
-                                    <a href="#" class="btn-delete" style="color: red;" onclick="return confirm('Are You Sure Want to Delete This Comment?');">Delete</a>
+                                    <a href="#" class="btn-delete" style="color: red;"
+                                        onclick="return confirm('Are You Sure Want to Delete This Comment?');">Delete</a>
                                 </td>
                             </tr>
                             <tr>
@@ -75,10 +79,12 @@
                                     <i class='bx bx-star'></i>
                                     (4/5)
                                 </td>
-                                <td>Sangat praktis dan mudah diaplikasikan. Membantu mengubah kebiasaan kecil menjadi lebih baik.</td>
+                                <td>Sangat praktis dan mudah diaplikasikan. Membantu mengubah kebiasaan kecil menjadi
+                                    lebih baik.</td>
                                 <td>08 June 2025</td>
                                 <td>
-                                    <a href="#" class="btn-delete" style="color: red;" onclick="return confirm('Are You Sure Want to Delete This Comment?');">Delete</a>
+                                    <a href="#" class="btn-delete" style="color: red;"
+                                        onclick="return confirm('Are You Sure Want to Delete This Comment?');">Delete</a>
                                 </td>
                             </tr>
                             <tr>
@@ -93,10 +99,12 @@
                                     <i class='bx bx-star'></i>
                                     (4/5)
                                 </td>
-                                <td>Buku yang sangat informatif dan membuka wawasan. Terkadang agak padat, tapi isinya sangat berbobot.</td>
+                                <td>Buku yang sangat informatif dan membuka wawasan. Terkadang agak padat, tapi isinya
+                                    sangat berbobot.</td>
                                 <td>05 June 2025</td>
                                 <td>
-                                    <a href="#" class="btn-delete" style="color: red;" onclick="return confirm('Are You Sure Want to Delete This Comment?');">Delete</a>
+                                    <a href="#" class="btn-delete" style="color: red;"
+                                        onclick="return confirm('Are You Sure Want to Delete This Comment?');">Delete</a>
                                 </td>
                             </tr>
                             <tr>
@@ -111,10 +119,12 @@
                                     <i class='bx bxs-star'></i>
                                     (5/5)
                                 </td>
-                                <td>Pendekatan yang unik dan relevan tentang keuangan. Sangat direkomendasikan untuk siapa pun.</td>
+                                <td>Pendekatan yang unik dan relevan tentang keuangan. Sangat direkomendasikan untuk
+                                    siapa pun.</td>
                                 <td>01 June 2025</td>
                                 <td>
-                                    <a href="#" class="btn-delete" style="color: red;" onclick="return confirm('Are You Sure Want to Delete This Comment?');">Delete</a>
+                                    <a href="#" class="btn-delete" style="color: red;"
+                                        onclick="return confirm('Are You Sure Want to Delete This Comment?');">Delete</a>
                                 </td>
                             </tr>
                             <tr>
@@ -129,10 +139,12 @@
                                     <i class='bx bx-star'></i>
                                     (3/5)
                                 </td>
-                                <td>Dunia yang imajinatif, tapi alurnya terkadang lambat dan bahasanya cukup kompleks.</td>
+                                <td>Dunia yang imajinatif, tapi alurnya terkadang lambat dan bahasanya cukup kompleks.
+                                </td>
                                 <td>28 May 2025</td>
                                 <td>
-                                    <a href="#" class="btn-delete" style="color: red;" onclick="return confirm('Are You Sure Want to Delete This Comment?');">Delete</a>
+                                    <a href="#" class="btn-delete" style="color: red;"
+                                        onclick="return confirm('Are You Sure Want to Delete This Comment?');">Delete</a>
                                 </td>
                             </tr>
                         </tbody>
@@ -144,7 +156,20 @@
 
     <div id="pagination" class="pagination-container"></div>
 
+    <form id="logout-form-admin" action="{{ route('logout') }}" method="POST" style="display: none;">
+        @csrf
+    </form>
+
+    <script>
+        function confirmAdminLogout() {
+            if (confirm('Are You Sure Want to Log Out?')) {
+                document.getElementById('logout-form-admin').submit();
+            }
+        }
+    </script>
+
     <script src="{{ asset('script/script.js') }}"></script>
     <script src="{{ asset('script/pagination.js') }}"></script>
 </body>
+
 </html>
