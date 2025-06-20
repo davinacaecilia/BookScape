@@ -27,7 +27,7 @@ class RatingController extends Controller
         );
 
         // Arahkan kembali ke halaman sebelumnya dengan pesan sukses
-        return back()->with('success', 'Terima kasih atas ulasan Anda!');
+        return redirect()->route('home')->with('success', 'Terima kasih atas ulasan Anda!');
     }
 
     public function create(Buku $buku)

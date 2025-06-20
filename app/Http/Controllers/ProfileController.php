@@ -5,64 +5,72 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
-    // Menampilkan halaman profile
-    public function index()
+    /**
+     * Menampilkan halaman profil user beserta form editnya.
+     * Kita gunakan nama 'edit' sesuai konvensi Laravel.
+     */
+    public function edit(): View
     {
-        $user = Auth::user();
-        return view('profile', compact('user'));
+        // Mengambil user yang sedang login dan mengirimkannya ke view.
+        // Pastikan view Anda berada di 'resources/views/user/profile.blade.php'
+        return view('user.profile', [
+            'user' => Auth::user(),
+        ]);
     }
 
-    // Mengupdate data profile
-    public function update(Request $request)
+    /**
+     * Memproses dan menyimpan perubahan data profil.
+     */
+    public function update(Request $request): RedirectResponse
     {
         $user = Auth::user();
 
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-            'phone' => 'nullable|string|max:20',
-            'address' => 'nullable|string|max:500',
-            'password' => 'nullable|string|min:8|confirmed',
+        // Validasi data yang masuk.
+        // Aturan 'unique' untuk email akan mengabaikan email user saat ini.
+        $validatedData = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
+            'phone' => ['nullable', 'string', 'max:20'],
+            'address' => ['nullable', 'string'],
+            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
         ]);
 
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
+        // Mengisi data user dengan data yang sudah divalidasi
+        $user->fill([
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+        ]);
+        
+        // Jika ada perubahan email, reset status verifikasi (praktik baik dari Breeze)
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
         }
 
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->phone = $request->phone;
-        $user->address = $request->address;
-
+        // Hanya update password jika field password diisi
         if ($request->filled('password')) {
-            $user->password = Hash::make($request->password);
+            $user->password = Hash::make($validatedData['password']);
         }
 
+        // Simpan perubahan pada data user
         $user->save();
 
-        return redirect()->route('profile.index')->with('success', 'Profile updated successfully!');
+        // Simpan atau update data alamat di tabel terpisah
+        $user->alamat()->updateOrCreate(
+            ['user_id' => $user->id], // Kunci untuk mencari
+            [
+                'phone' => $validatedData['phone'],
+                'address' => $validatedData['address']
+            ] // Data alamat untuk disimpan
+        );
 
-    }
-
-    public function edit()
-    {
-        $user = Auth::user();
-        return view('profile', compact('user'));
-    }
-
-    public function logout(Request $request)
-    {
-        Auth::logout();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return redirect('/');
+        // Arahkan kembali ke halaman profil dengan pesan sukses.
+        // Kita beri nama rute 'profile.edit' nanti di web.php
+        return Redirect::route('profile.edit')->with('status', 'Profile berhasil diperbarui!');
     }
 }

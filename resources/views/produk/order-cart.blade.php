@@ -24,28 +24,24 @@
 
         <div class="detail-order-section card">
             <h3>Detail Orderan</h3>
-            <div class="order-item">
-                <img src="https://ebooks.gramedia.com/ebook-covers/34734/big_covers/ID_KPG2016MTH10DDAG_B.jpg" alt="The Hunger Games">
-                <div class="item-info">
-                    <h4>The Hunger Games</h4>
-                    <p>Suzanne Collins</p>
-                    <p class="quantity">Jumlah: 1</p>
+            @foreach ($orderItems as $item)
+                <div class="order-item">
+                    <img src="{{ asset('storage/sampul/' . $item->buku->gambar_sampul) }}" alt="{{ $item->buku->judul_buku }}">
+                    <div class="item-info">
+                        <h4>{{ $item->buku->judul_buku }}</h4>
+                        <p>{{ $item->buku->penulis_buku }}</p>
+                        <p class="quantity">Jumlah: {{ $item->quantity }}</p>
+                    </div>
+                    <span class="item-price">Rp {{ number_format($item->buku->harga * $item->quantity, 0, ',', '.') }}</span>
                 </div>
-                <span class="item-price">IDR 99.000,00</span>
-            </div>
-            <div class="order-item">
-                <img src="https://ebooks.gramedia.com/ebook-covers/34734/big_covers/ID_KPG2016MTH10DDAG_B.jpg" alt="Perahu Kertas">
-                <div class="item-info">
-                    <h4>Perahu Kertas</h4>
-                    <p>Dee Lestari</p>
-                    <p class="quantity">Jumlah: 1</p>
-                </div>
-                <span class="item-price">IDR 100.000,00</span>
-            </div>
+            @endforeach
+
+
             <div class="order-subtotal total-summary">
-                <span>Total Pesanan</span>
-                <span>IDR 199.000,00</span>
+            <span>Total Pesanan</span>
+            <span>Rp {{ number_format($subtotal, 0, ',', '.') }}</span>
             </div>
+
         </div>
     </div>
 

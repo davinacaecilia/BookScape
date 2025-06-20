@@ -42,7 +42,7 @@
                 <hr class="full-divider" />
                 <ul>
                   <li>
-                    <a href="{{ route('profile') }}">
+                    <a href="{{ route('profile.update') }}">
                       <i class='bx bx-user'></i> My Profile
                     </a>
                   </li>
@@ -112,8 +112,9 @@
         {{ $genre->genre }}{{ !$loop->last ? ', ' : '' }}
         @endforeach
           </p>
-          <p class="book-price">Rp {{ number_format($myCart->buku->harga, 0, ',', '.') }}<span class="rating">⭐
-          4.5</span></p>
+          <p class="book-price">Rp {{ number_format($myCart->buku->harga, 0, ',', '.') }}
+            <span class="rating">⭐ {{ $newArrival->averageRating() }}</span>
+          </p>
         </div>
         </a>
         </div>
@@ -233,7 +234,7 @@
   <!-- Categories -->
   <section class="categories">
     <h2>Browse by Category</h2>
-    <div class="category-grid">
+    <div class="category-grid2">
 
       <!-- Comedy -->
       <a href="{{ route('product.library', ['genre' => 'Comedy']) }}" class="category-card">
@@ -274,6 +275,7 @@
   <!-- Sci  -->
   <section class="categories2">
     <div class="category-grid2">
+      
       <a href="{{ route('product.library', ['genre' => 'Sci-Fi']) }}" class="category-card">
         <div class="category-icon">
           <i class='bx bx-planet'></i>

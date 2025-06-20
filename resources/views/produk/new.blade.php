@@ -27,7 +27,7 @@
             @foreach($product->genres as $genre)
               {{ $genre->genre }}{{ !$loop->last ? ', ' : '' }}
             @endforeach 
-            <span class="rating">⭐ 4.0</span>
+            <span class="rating">⭐ {{ $newArrival->averageRating() }}</span>
           </p>
           <p class="book-price">Rp {{ number_format($product['harga'], 0, ',', '.') }}</p>
           <form action="{{ route('product.addToCart', $product->id) }}" method="POST" enctype="multipart/form-data" class="cart-form">
