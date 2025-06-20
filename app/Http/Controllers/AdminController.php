@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Models\User;
 use App\Models\Buku;
 use App\Models\Genre;
@@ -13,7 +14,11 @@ class AdminController extends Controller
     public function showDashboard()
     {
         $userCount = User::count();
-        return view('admin.dashboard', compact('userCount'));
+        $bukuCount = Buku::count();
+        $orders = Order::with(['user', 'orderItems.buku'])
+                        ->orderBy('created_at', 'desc')
+                        ->get();
+        return view('admin.dashboard', compact('userCount', 'bukuCount', 'orders'));
     }
     public function listMessage()
     {

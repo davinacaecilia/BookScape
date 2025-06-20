@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="{{ asset('produk/navbar2.css') }}"/>
   <link rel="stylesheet" href="{{ asset('produk/footer.css') }}"/>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
 
@@ -22,64 +23,61 @@
                 <h2>Method Payment</h2>
             </div>
 
-<div class="payment-methods-selection">
-                <div class="selected-method-display">
-                    <p>Pilih Metode Pembayaran</p>
-                    <i class='bx bx-chevron-down toggle-icon'></i>
-                </div>
+            <form id="paymentForm" action="{{ route('payment.uploadProof', ['order' => $order->id]) }}" method="POST" enctype="multipart/form-data">
+                @csrf
 
-                <div class="payment-options-dropdown" style="display: none;">
-                    <label class="payment-option-item">
-                        <div class="method-details">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Bank_Central_Asia.svg/1200px-Bank_Central_Asia.svg.png" alt="BCA" class="bank-icon">
-                            <span>BCA</span>
-                        </div>
-                        <input type="radio" name="paymentMethod" value="BCA">
-                    </label>
-                    <label class="payment-option-item">
-                        <div class="method-details">
-                            <img src="https://developers.bri.co.id/sites/default/files/inline-images/BRIVA-BRI.jpg" alt="BRIVA" class="ewallet-icon">
-                            <span>BRIVA</span>
-                        </div>
-                        <input type="radio" name="paymentMethod" value="BRIVA">
-                    </label>
-                    <label class="payment-option-item">
-                        <div class="method-details">
-                            <img src="https://upload.wikimedia.org/wikipedia/id/thumb/f/fa/Bank_Mandiri_logo.svg/2560px-Bank_Mandiri_logo.svg.png" alt="Mandiri" class="bank-icon">
-                            <span>Mandiri</span>
-                        </div>
-                        <input type="radio" name="paymentMethod" value="Mandiri">
-                    </label>
-                    <label class="payment-option-item">
-                        <div class="method-details">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Logo_dana_blue.svg/2560px-Logo_dana_blue.svg.png" alt="DANA" class="ewallet-icon">
-                            <span>DANA</span>
-                        </div>
-                        <input type="radio" name="paymentMethod" value="DANA">
-                    </label>
-                </div>
+                <input type="hidden" name="order_id" value="{{ $order->id }}">
+                {{-- Ini akan diupdate oleh JS dengan ID metode pembayaran --}}
+                <input type="hidden" name="payment_method_id" id="selectedPaymentMethodInput">
 
-                <div class="selected-account-details">
+                <div class="payment-methods-selection">
+                    <div class="selected-method-display">
+                        <p>Pilih Metode Pembayaran</p>
+                        <i class='bx bx-chevron-down toggle-icon'></i>
                     </div>
-            </div>
 
-            <div class="payment-proof-upload">
-                <h3>Upload Bukti Pembayaran</h3>
-                <label for="paymentProofInput" class="upload-btn">
-                    <i class='bx bx-upload'></i> Pilih Gambar
-                    <input type="file" id="paymentProofInput" accept="image/*" class="hidden-input">
-                </label>
-                <span id="fileNameDisplay" class="file-name-display">Belum ada gambar terpilih</span>
-                <img id="imagePreview" src="#" alt="Image Preview" class="image-preview" style="display: none;">
-            </div>
+                    <div class="payment-options-dropdown" style="display: none;">
+                        {{-- Loop melalui paymentMethods yang dikirim dari controller --}}
+                        @foreach($paymentMethods as $method)
+                        <label class="payment-option-item"
+                               data-method-id="{{ $method->id }}"
+                               data-method-name="{{ $method->name }}"
+                               data-method-description="{{ $method->description }}"
+                               data-method-account-number="{{ $method->account_number }}"
+                               data-method-account-name="{{ $method->account_name }}">
+                            <div class="method-details">
+                                <img src="{{ $method->logo_path }}" alt="{{ $method->name }}" class="bank-icon">
+                                <span>{{ $method->name }}</span>
+                            </div>
+                            <input type="radio" name="paymentMethod" value="{{ $method->id }}">
+                        </label>
+                        @endforeach
+                    </div>
 
-            <button class="pay-button">Bayar</button>
+                    <div class="selected-account-details">
+                        </div>
+                </div>
+
+                <div class="payment-proof-upload">
+                    <h3>Upload Bukti Pembayaran</h3>
+                    <label for="paymentProofInput" class="upload-btn">
+                        <i class='bx bx-upload'></i> Pilih Gambar
+                        <input type="file" id="paymentProofInput" name="payment_proof" accept="image/*" class="hidden-input">
+                    </label>
+                    <span id="fileNameDisplay" class="file-name-display">Belum ada gambar terpilih</span>
+                    <img id="imagePreview" src="#" alt="Image Preview" class="image-preview" style="display: none;">
+                </div>
+
+                <button type="submit" class="pay-button">Bayar</button>
+            </form>
+
         </div>
     </section>
 </main>
 
   @include('produk.footer')
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ asset('produk/js/payment.js') }}"></script>
 </body>
 </html>

@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             BukuSeeder::class,
             BukuGenreSeeder::class,
             AdminUserSeeder::class,
+            PaymentMethodSeeder::class,
         ]);
     }
 }

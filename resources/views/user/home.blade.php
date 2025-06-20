@@ -113,7 +113,7 @@
         @endforeach
           </p>
           <p class="book-price">Rp {{ number_format($myCart->buku->harga, 0, ',', '.') }}
-            <span class="rating">⭐ {{ $newArrival->averageRating() }}</span>
+            <span class="rating">⭐ {{ $myCart->buku->averageRating() }}</span>
           </p>
         </div>
         </a>
