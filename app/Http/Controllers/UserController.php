@@ -46,7 +46,7 @@ class UserController extends Controller
         if ($request->filled('search')) {
             $query->where(function ($q) use ($searchQuery) {
                 $q->where('judul_buku', 'like', '%' . $searchQuery . '%')
-                ->orWhere('penulis_buku', 'like', '%' . $searchQuery . '%');
+                    ->orWhere('penulis_buku', 'like', '%' . $searchQuery . '%');
             });
         }
 
@@ -56,10 +56,9 @@ class UserController extends Controller
         return view('produk.new', compact('products', 'genres', 'genreFilter', 'searchQuery'));
     }
 
+
     public function showDetail(Request $request)
     {
-        $products = Buku::find($request->id);
-
         $searchQuery = $request->query('search');
         $query = Buku::with('genres');
         if ($request->filled('search')) {
@@ -97,10 +96,11 @@ class UserController extends Controller
         return response()->json(['message' => 'Berhasil ditambahkan ke keranjang']);
     }
 
-    public function showCart() {
+    public function showCart()
+    {
         $user = auth()->user();
 
-        $items = Cart::with('buku')  // relasi ke model Buku
+        $items = Cart::with('buku')
             ->where('user_id', $user->id)
             ->get();
 
@@ -115,8 +115,8 @@ class UserController extends Controller
         ]);
 
         $cart = Cart::where('id', $request->cart_id)
-                    ->where('user_id', auth()->user()->id)
-                    ->firstOrFail();
+            ->where('user_id', auth()->user()->id)
+            ->firstOrFail();
 
         $cart->quantity = $request->quantity;
         $cart->save();
@@ -131,8 +131,8 @@ class UserController extends Controller
         ]);
 
         $cart = Cart::where('id', $request->cart_id)
-                    ->where('user_id', auth()->id())
-                    ->first();
+            ->where('user_id', auth()->id())
+            ->first();
 
         if ($cart) {
             $cart->delete();
@@ -151,8 +151,8 @@ class UserController extends Controller
 
         // Menghapus semua item keranjang dengan ID yang ada di array dan milik pengguna saat ini
         $deletedCount = Cart::whereIn('id', $request->cart_ids) // Menggunakan whereIn untuk menghapus banyak ID sekaligus
-                            ->where('user_id', auth()->id())
-                            ->delete();
+            ->where('user_id', auth()->id())
+            ->delete();
 
         if ($deletedCount > 0) {
             return response()->json(['success' => true, 'message' => "$deletedCount item berhasil dihapus."]);
@@ -169,11 +169,15 @@ class UserController extends Controller
         $user = Auth::user();
         $alamatUser = $user->alamats;
 
+        $user = Auth::user();
+        $alamatUser = $user->alamats;
+
         $subtotal = $orderItems->sum(fn($i) => $i->quantity * $i->buku->harga);
         $shippingCost = 0.05 * $subtotal;
         $total = $subtotal + $shippingCost;
 
         return view('produk.order-cart', compact('orderItems', 'subtotal', 'shippingCost', 'total', 'alamatUser'));
+
     }
 
     public function checkoutNow(Request $request)
@@ -342,6 +346,7 @@ class UserController extends Controller
             return response()->json(['success' => false, 'message' => 'Terjadi kesalahan server saat mengunggah bukti pembayaran.'], 500);
         }
     }
+
 
     public function showHistory() {
         // Ambil semua order untuk user yang sedang login

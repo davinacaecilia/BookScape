@@ -23,7 +23,7 @@
         <span>BOOKSCAPE</span>
       </div>
       <div class="nav-links">
-        <a href="/home">Home</a>
+        <a href="{{ route ('home') }}">Home</a>
         <a href="/browse">Books</a>
         <a href="/categories">Categories</a>
         <a href="/profile" class="active">Profile</a>
@@ -44,24 +44,21 @@
           <div class="profile-section">
             <h2 class="profile-section-title">Informasi Pribadi</h2>
             <div class="profile-info">
-              {{-- Menampilkan data --}}
               <div class="info-group">
-                <span class="info-label">Nama Lengkap</span>
-                {{-- Data user biasa --}}
+                <span class="info-label">Nama Lengkap:</span>
                 <div class="info-value">{{ $user->name }}</div>
               </div>
               <div class="info-group">
-                <span class="info-label">Email</span>
+                <span class="info-label">Email:</span>
                 <div class="info-value">{{ $user->email }}</div>
               </div>
               <div class="info-group">
-                <span class="info-label">Nomor Telepon</span>
-                {{-- Data dari relasi alamat, gunakan nullsafe operator ?-> --}}
-                <div class="info-value">{{ $user->alamat?->phone }}</div>
+                <span class="info-label">No. Telepon:</span>
+                <div class="info-value">{{ $user->primaryAlamat?->phone ?? '' }}</div>
               </div>
               <div class="info-group">
-                <span class="info-label">Alamat</span>
-                <div class="info-value">{{ $user->alamat?->address }}</div>
+                <span class="info-label">Alamat:</span>
+                <div class="info-value">{{ $user->primaryAlamat?->address ?? '' }}</div>
               </div>
             </div>
 
@@ -74,7 +71,7 @@
               {{-- Arahkan ke rute update profil bawaan Breeze --}}
               <form method="POST" action="{{ route('profile.update') }}">
                 @csrf
-                @method('patch') {{-- Breeze menggunakan PATCH untuk update profil --}}
+                @method('patch')
 
                 {{-- Input untuk data User --}}
                 <div class="form-group">
@@ -86,14 +83,14 @@
                   <input type="email" name="email" value="{{ old('email', $user->email) }}" required>
                 </div>
 
-                {{-- Input untuk data Alamat --}}
+                {{-- Input Alamat & Telepon Utama --}}
                 <div class="form-group">
                   <label for="phone">Nomor Telepon</label>
-                  <input type="tel" name="phone" value="{{ old('phone', $user->alamat?->phone) }}" required>
+                  <input type="tel" name="phone" value="{{ old('phone', $user->primaryAlamat?->phone) }}">
                 </div>
                 <div class="form-group">
                   <label for="address">Alamat</label>
-                  <input type="text" id="address" name="address" value="{{ old('address', $user->alamat?->address) }}">
+                  <input type="text" name="address" value="{{ old('address', $user->primaryAlamat?->address) }}">
                 </div>
 
                 <div class="form-actions">
@@ -102,11 +99,6 @@
                 </div>
               </form>
             </div>
-          </div>
-
-          <div class="profile-section">
-            <h2 class="profile-section-title">Riwayat Pesanan</h2>
-            <p>Anda belum memiliki pesanan.</p>
           </div>
         </div>
       </div>
