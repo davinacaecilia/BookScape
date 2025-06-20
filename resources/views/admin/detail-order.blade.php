@@ -5,7 +5,6 @@
 @section('head')
     <link rel="stylesheet" href="{{ asset('css/arrow.css') }}" />
 <style>
-    /* Style form container */
     .order-detail {
         max-width: 600px;
         display: flex;
@@ -13,7 +12,6 @@
         gap: 1rem;
     }
 
-    /* Style label & input/textarea */
     label {
         font-weight: 600;
         margin-bottom: 0.3rem;
@@ -130,7 +128,7 @@
     <select name="status" id="status-select" style="width: 100%; padding: 0.5rem; border: 1px solid var(--brown-light); border-radius: 4px; font-size: 0.9rem;">
         <option value="Pending" selected>Pending</option>
         <option value="Process">Process</option>
-        <option value="Completed">Completed</option>
+        <option value="Completed">Arrived</option>
         <option value="Canceled">Canceled</option>
     </select>
 </div>
