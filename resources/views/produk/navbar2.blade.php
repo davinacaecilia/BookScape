@@ -1,6 +1,6 @@
  <header class="header">
     <div class="header-left">
-      <a href="new" class="back-link">
+      <a href="{{ route('home') }}" class="back-link">
         <i class="bx bx-arrow-back back-icon"></i>
       </a>
       <span class="category-title">Preview Book</span>
@@ -10,9 +10,11 @@
       <div class="header-right">
         <div class="header-right-inner">
           <div class="search-bar">
-            <input type="text" placeholder="Search books, authors, or categories...">
-            <button><i class='bx bx-search'></i></button>
-        ` </div>
+            <form action="{{ route('product.library') }}" method="GET">
+              <input type="text" name="search" value="{{ request('search') }}" placeholder="Search books or authors...">
+              <button type="submit"><i class='bx bx-search'></i></button>
+            </form>
+          </div>
         </div>
         
         <div class="nav-icons">

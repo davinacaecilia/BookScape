@@ -11,7 +11,7 @@
             </div>
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" id="email" placeholder="Masukkan Email">
+                <input type="email" id="email" placeholder="Masukkan Email" value="{{ auth()->user()->email }}">
             </div>
             <div class="form-group">
                 <label for="noTelp">No. Telp</label>

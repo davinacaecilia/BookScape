@@ -1,3 +1,29 @@
+window.updateCartSummary = function () {
+  let total = 0;
+  let totalQty = 0;
+
+  document.querySelectorAll('.cart-card').forEach(card => {
+    const checkbox = card.querySelector('.item-checkbox');
+    if (!checkbox || !checkbox.checked) return;
+
+    const priceText = card.querySelector('.item-price')?.innerText || '0';
+    const price = parseInt(priceText.replace(/[^0-9]/g, ''));
+
+    const qtyText = card.querySelector('.quantity-display')?.innerText || '1';
+    const quantity = parseInt(qtyText);
+
+    total += price * quantity;
+    totalQty += quantity;
+  });
+
+  const summaryLabel = document.querySelector('.summary-line .summary-label');
+  const summaryValue = document.querySelectorAll('.summary-value');
+
+  if (summaryLabel) summaryLabel.innerText = `Total harga (${totalQty} barang)`;
+  summaryValue.forEach(el => el.innerText = `Rp ${total.toLocaleString('id-ID')}`);
+};
+
+
 document.addEventListener('DOMContentLoaded', () => {
   const selectAllCheckbox = document.getElementById('selectAllItems');
   let itemCheckboxes = document.querySelectorAll('.cart-card .item-checkbox');
@@ -10,31 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       deleteAllSelectedButton.setAttribute('disabled', 'true');
     }
-  }
-
-  function updateCartSummary() {
-    let total = 0;
-    let totalQty = 0;
-
-    document.querySelectorAll('.cart-card').forEach(card => {
-      const checkbox = card.querySelector('.item-checkbox');
-      if (!checkbox || !checkbox.checked) return;
-
-      const priceText = card.querySelector('.item-price')?.innerText || '0';
-      const price = parseInt(priceText.replace(/[^0-9]/g, ''));
-
-      const qtyText = card.querySelector('.quantity-display')?.innerText || '1';
-      const quantity = parseInt(qtyText);
-
-      total += price * quantity;
-      totalQty += quantity;
-    });
-
-    const summaryLabel = document.querySelector('.summary-line .summary-label');
-    const summaryValue = document.querySelectorAll('.summary-value');
-
-    if (summaryLabel) summaryLabel.innerText = `Total harga (${totalQty} barang)`;
-    summaryValue.forEach(el => el.innerText = `Rp ${total.toLocaleString('id-ID')}`);
   }
 
   function displayEmptyCartMessage() {
@@ -77,11 +78,15 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // --- DELETE SELECTED PAKAI FORM ---
+  // --- DELETE SELECTED PAKAI AJAX ---
   if (deleteAllSelectedButton) {
     deleteAllSelectedButton.addEventListener('click', () => {
-      const selectedCheckboxes = Array.from(itemCheckboxes).filter(cb => cb.checked);
+      // Mengambil semua ID keranjang dari item yang dicentang
+      const selectedCartIds = Array.from(itemCheckboxes)
+        .filter(cb => cb.checked) // Filter hanya yang dicentang
+        .map(cb => cb.closest('.cart-card').dataset.id); // Ambil nilai data-id dari elemen .cart-card
 
-      if (selectedCheckboxes.length === 0) return;
+      if (selectedCartIds.length === 0) return; // Jika tidak ada yang dipilih, hentikan
 
       Swal.fire({
         title: 'Hapus Produk',
@@ -94,9 +99,28 @@ document.addEventListener('DOMContentLoaded', () => {
         cancelButtonText: 'Batal'
       }).then((result) => {
         if (result.isConfirmed) {
-          selectedCheckboxes.forEach(cb => {
-            const form = cb.closest('.cart-card').querySelector('.delete-cart-form');
-            if (form) form.submit();
+          fetch('/cart/delete-selected', { // Mengirim permintaan ke rute baru untuk penghapusan massal
+            method: 'POST',
+            headers: {
+              'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content, // Token CSRF untuk keamanan
+              'Content-Type': 'application/json', // Menentukan tipe konten sebagai JSON
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify({ cart_ids: selectedCartIds }) // Mengirim array ID dalam format JSON
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              Swal.fire('Dihapus!', 'Produk yang dipilih telah dihapus.', 'success').then(() => {
+                location.reload(); // Memuat ulang halaman untuk memperbarui tampilan keranjang
+              });
+            } else {
+              Swal.fire('Gagal!', data.message || 'Gagal menghapus produk.', 'error');
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            Swal.fire('Error!', 'Terjadi kesalahan saat menghapus produk.', 'error');
           });
         }
       });
@@ -125,6 +149,29 @@ document.addEventListener('DOMContentLoaded', () => {
       updateCartSummary();
     });
   });
+  
+  const checkoutForm = document.getElementById('checkout-form');
+  const hiddenInput = document.getElementById('selectedCartIds');
+
+  checkoutForm.addEventListener('submit', function (e) {
+    const selectedIds = [];
+
+    document.querySelectorAll('.cart-card').forEach(card => {
+      const checkbox = card.querySelector('.item-checkbox');
+      if (checkbox && checkbox.checked) {
+        selectedIds.push(card.dataset.id);
+      }
+    });
+
+    if (selectedIds.length === 0) {
+      e.preventDefault(); // Gagalkan submit
+      Swal.fire('Oops!', 'Pilih setidaknya satu item untuk checkout.', 'warning');
+      return;
+    }
+
+    hiddenInput.value = selectedIds.join(','); // kirim sebagai string dipisah koma
+  });
+
 
   updateDeleteButtonState();
   updateCartSummary();
