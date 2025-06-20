@@ -28,8 +28,7 @@
       </div>
       <div class="nav-links">
         <a href="{{ route('home') }}" class="active">Home</a>
-        <a href="{{ route('product.library') }}">Browse</a>
-        <a href="#">Categories</a>
+        <a href="{{ route('product.library') }}">Library</a>
         <div class="cart-icon-container">
           <a href="{{ route('product.cart') }}" class="cart-icon">
             <i class='bx bx-cart'></i>
@@ -98,25 +97,34 @@
     </section>
 
     <!-- New arrival -->
+    @if( $myCarts->isEmpty() )
+    @else
     <section class="featured-books">
       <h2>My Cart</h2>
       <div class="books-grid">
-        <!-- Book 1 -->
+        @foreach ($myCarts as $myCart)
         <div class="book-card book-card-1">
-          <img class="book-cover book-cover-1"
-            src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg"
-            alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
-          <div class="book-info">
-            <h2 class="book-title">Skripsick</h2>
-            <p class="book-genre">Comedy</p>
-            <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
-            <a href="#" class="add-to-cart-button">Add to Cart</a>
-          </div>
+          <a href="{{ route('product.detail', $myCart->buku->id) }}" style="text-decoration: none;">
+            <img class="book-cover book-cover-1"
+              src="{{ asset('storage/sampul/' . $myCart->buku->gambar_sampul) }}"
+              alt="{{ $myCart->buku->judul_buku }}" class="book-cover">
+            <div class="book-info">
+              <h2 class="book-title">{{ $myCart->buku->judul_buku }}</h2>
+              <p class="book-genre">
+                @foreach($myCart->buku->genres as $genre)
+                  {{ $genre->genre }}{{ !$loop->last ? ', ' : '' }}
+                @endforeach 
+              </p>
+              <p class="book-price">Rp {{ number_format($myCart->buku->harga, 0, ',', '.') }}<span class="rating">⭐ 4.5</span></p>
+            </div>
+          </a>
         </div>
+        @endforeach
       </div>
       <a href="{{ route('product.cart') }}" class="view-all">View All <i class='bx bx-chevron-right'></i></a>
   </div>
   </section>
+  @endif
 
 
   <!-- New Arrival -->
@@ -140,11 +148,11 @@
               <span class="rating">⭐ 4.5</span>
             </p>
             <form action="{{ route('product.addToCart', $newArrival->id) }}" method="POST" enctype="multipart/form-data" class="cart-form">
-            @csrf
-            <button type="submit" class="add-to-cart-button" data-stock="{{ $newArrival->stock }}" style="border: none;">
-              Add to Cart
-            </button>
-          </form>
+              @csrf
+              <button type="submit" class="add-to-cart-button" data-stock="{{ $newArrival->stock }}" style="border: none;">
+                Add to Cart
+              </button>
+            </form>
           </div>
         </a>
       </div>

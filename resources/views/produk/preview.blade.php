@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>Book Details — Bookscape</title>
   <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
@@ -38,7 +39,10 @@
         <div class="price-actions-wrapper">
           <p class="book-detail-price">Rp {{ number_format($products['harga'], 0, ',', '.') }}</p>
           <div class="book-detail-actions">
-            <button id="add-to-cart-button" class="cart-icon-button" title="Add to Cart"><i class='fa-solid fa-cart-plus'></i></button>
+            <form action="{{ route('product.addToCart', $products->id) }}" method="POST" enctype="multipart/form-data" class="cart-form">
+            @csrf
+              <button id="add-to-cart-button" data-stock="{{ $products->stock }}" class="cart-icon-button" title="Add to Cart"><i class='fa-solid fa-cart-plus'></i></button>
+            </form>
             <button id="buy-now-button" class="buy-now-button">Buy Now</button>
           </div>
         </div>

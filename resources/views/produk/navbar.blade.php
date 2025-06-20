@@ -1,6 +1,6 @@
   <header class="header">
     <div class="header-left">
-      <a href="home" class="back-link">
+      <a href="{{ route('home') }}" class="back-link">
         <i class="bx bx-arrow-back back-icon"></i>
       </a>
       <span class="category-title">Library</span>
@@ -29,7 +29,7 @@
           </div>
         </div>
         <div class="nav-icons">
-          <a href="cart" class="shopping-cart"> <i class='bx bx-cart'></i></a>
+          <a href="{{ route('product.cart') }}" class="shopping-cart"> <i class='bx bx-cart'></i></a>
           <a href="profile" class="profile-icon"><i class='bx bx-user-circle'></i></a>
         </div>
       </div>

@@ -1,32 +1,52 @@
- // --- Fungsionalitas Tombol Kuantitas (+/-) ---
-    const cartCards = document.querySelectorAll('.cart-card, .detail-orderan');
+const cartCards = document.querySelectorAll('.cart-card');
 
+cartCards.forEach(card => {
+  const minusBtn = card.querySelector('.minus-btn');
+  const plusBtn = card.querySelector('.plus-btn');
+  const quantityDisplay = card.querySelector('.quantity-display');
+  const cartId = card.dataset.id;
 
-    cartCards.forEach(card => {
-      // Untuk setiap kartu, dapatkan tombol minus, display kuantitas, dan tombol plus
-      const minusBtn = card.querySelector('.minus-btn');
-      const plusBtn = card.querySelector('.plus-btn');
-      const quantityDisplay = card.querySelector('.quantity-display');
+  function updateQuantityToServer(newQty) {
+    const formData = new FormData();
+    formData.append('cart_id', cartId);
+    formData.append('quantity', newQty);
 
-      // Tambahkan event listener untuk tombol Plus
-      if (plusBtn) {
-        plusBtn.addEventListener('click', () => {
-          let currentQuantity = parseInt(quantityDisplay.textContent);
-          currentQuantity++; // Tambah 1
-          quantityDisplay.textContent = currentQuantity;
-          // Di sini Anda mungkin ingin memanggil fungsi untuk memperbarui total harga
-        });
+    fetch('/cart/update-quantity', {
+      method: 'POST',
+      headers: {
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+        'Accept': 'application/json'
+      },
+      body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (!data.success) {
+        console.error('Gagal update kuantitas di server.');
       }
+    })
+    .catch(err => console.error('Fetch error:', err));
+  }
 
-      // Tambahkan event listener untuk tombol Minus
-      if (minusBtn) {
-        minusBtn.addEventListener('click', () => {
-          let currentQuantity = parseInt(quantityDisplay.textContent);
-          if (currentQuantity > 0) { // Pastikan tidak kurang dari 0
-            currentQuantity--; // Kurang 1
-            quantityDisplay.textContent = currentQuantity;
-            // Di sini Anda mungkin ingin memanggil fungsi untuk memperbarui total harga
-          }
-        });
+  if (plusBtn) {
+    plusBtn.addEventListener('click', () => {
+      let current = parseInt(quantityDisplay.textContent);
+      current++;
+      quantityDisplay.textContent = current;
+      updateQuantityToServer(current);
+      if (typeof updateCartSummary === 'function') updateCartSummary();
+    });
+  }
+
+  if (minusBtn) {
+    minusBtn.addEventListener('click', () => {
+      let current = parseInt(quantityDisplay.textContent);
+      if (current > 1) {
+        current--;
+        quantityDisplay.textContent = current;
+        updateQuantityToServer(current);
+        if (typeof updateCartSummary === 'function') updateCartSummary();
       }
     });
+  }
+});

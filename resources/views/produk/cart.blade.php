@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>Cart — Bookscape</title>
   <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
@@ -29,11 +30,8 @@
         </div>
 
         <div class="cart-items-container">
-            @if( $items->isEmpty() )
-                <p>Keranjangmu kosong.</p>
-            @else
                 @foreach($items as $item)
-                <div class="cart-card">
+                <div class="cart-card" data-id="{{ $item->id }}">
                     <div class="item-checkbox-container">
                         <input type="checkbox" class="item-checkbox">
                     </div>
@@ -46,12 +44,15 @@
                         <span class="quantity-display">{{ $item->quantity }}</span>
                         <button class="quantity-btn plus-btn">+</button>
                     </div>
-                    <button class="item-delete-btn">
+                    <form action="{{ route('cart.delete') }}" method="POST" class="delete-cart-form">
+                      @csrf
+                      <input type="hidden" name="cart_id" value="{{ $item->id }}">
+                      <button type="submit" class="item-delete-btn">
                         <i class='bx bx-trash'></i>
-                    </button>
+                      </button>
+                    </form>
                 </div>
                 @endforeach
-            @endif
         </div>
       </div>
 
@@ -59,17 +60,44 @@
         <div class="cart-summary-card">
             <h3 class="summary-title">Ringkasan Keranjang</h3>
             <div class="summary-line">
-                <span class="summary-label">Total harga (1 barang)</span>
-                <span class="summary-value">Rp 255.000</span> </div>
+                <span class="summary-label">Total harga (<span id="total-item-count">0</span> barang)</span>
+                <span class="summary-value">Rp 0</span>
+            </div>
             <div class="summary-separator"></div>
             <div class="summary-line total-line">
                 <span class="summary-label">Subtotal</span>
-                <span class="summary-value">Rp 255.000</span> </div>
+                <span class="summary-value">Rp 0</span>
+            </div>
             <button class="checkout-btn">Checkout</button>
         </div>
       </div>
     </div>
   </main>
+
+  @if(session('success'))
+<script>
+  Swal.fire({
+    icon: 'success',
+    title: 'Berhasil',
+    text: '{{ session("success") }}',
+    timer: 2000,
+    showConfirmButton: false
+  });
+</script>
+@endif
+
+@if(session('error'))
+<script>
+  Swal.fire({
+    icon: 'error',
+    title: 'Gagal',
+    text: '{{ session("error") }}',
+    timer: 2000,
+    showConfirmButton: false
+  });
+</script>
+@endif
+
 
 @include('produk.footer')
 

@@ -24,6 +24,9 @@ Route::middleware(['auth', 'role:1'])->group(function () {
     Route::get('/product/detail/{id}', [UserController::class, 'showDetail'])->name('product.detail');
     Route::post('/cart/add/{id}', [UserController::class, 'addToCart'])->name('product.addToCart');
     Route::get('/cart', [UserController::class, 'showCart'])->name('product.cart');
+    Route::post('/cart/update-quantity', [UserController::class, 'updateQuantity'])->name('cart.updateQuantity');
+    Route::post('/cart/delete', [UserController::class, 'deleteCart'])->name('cart.delete');
+
     Route::get('/history', [UserController::class, 'showHistory'])->name('order.history');
 });
 
