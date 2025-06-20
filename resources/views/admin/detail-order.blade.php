@@ -1,4 +1,4 @@
-@extends('admin.product-create-layout')
+@extends('admin.product-create-layout') {{-- Pastikan layout ini benar --}}
 
 @section('title', 'Detail Order')
 
@@ -20,7 +20,8 @@
     }
 
     input[type="text"],
-    textarea {
+    textarea,
+    select { /* Tambahkan select */
         width: 100%;
         padding: 0.5rem;
         border: 1px solid var(--brown-light);
@@ -51,11 +52,34 @@
         border: none;
         border-top: 1px solid var(--brown-light);
     }
+
+    .status { /* Pastikan Anda memiliki styling untuk class status */
+        padding: 0.3em 0.6em;
+        border-radius: 4px;
+        font-size: 0.85em;
+        font-weight: bold;
+        color: white; /* Default color */
+    }
+    .status.pending { background-color: orange; }
+    .status.waiting_payment_confirmation { background-color: rgb(139, 139, 41); } /* Warna custom */
+    .status.process { background-color: blue; }
+    .status.arrived { background-color: purple; }
+    .status.completed { background-color: green; }
+    .status.canceled { background-color: red; }
+
+    .payment-proof-image {
+        max-width: 100%;
+        height: auto;
+        border: 1px solid var(--brown-light);
+        border-radius: 4px;
+        display: block; /* Agar tidak ada ruang ekstra di bawah gambar */
+        margin-top: 0.5rem;
+    }
 </style>
 @endsection
+
 @section('content')
-<!-- Tombol back dengan arrow -->
-<button type="button" class="back-arrow" onclick="window.history.back()">
+<button type="button" class="back-arrow" onclick="window.location.href = '{{ route('admin.orders') }}'">
     <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
         <path d="M9.707 14.707a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 111.414 1.414L6.414 9H17a1 1 0 110 2H6.414l3.293 3.293a1 1 0 010 1.414z"/>
     </svg>
@@ -64,82 +88,94 @@
 
 <h1>Detail Order</h1>
 
+{{-- Form untuk update status order. Action dan method akan diisi oleh JavaScript --}}
+{{-- Anda bisa membuat endpoint API terpisah untuk update status jika tidak mau submit form full --}}
+<form id="updateOrderStatusForm" action="{{ route('admin.orders.updateStatus', $order->id) }}" method="POST">
+    @csrf
+    @method('POST') {{-- Atau PUT jika Anda menggunakan PUT method di route --}}
+
     <div class="order-detail">
         <div>
             <label>Order ID:</label>
-            <input type="text" value="ORDER12345" readonly>
+            <input type="text" value="{{ $order->id }}" readonly>
         </div>
         <div>
             <label>Order Date:</label>
-            <input type="text" value="30-05-2025" readonly>
+            <input type="text" value="{{ \Carbon\Carbon::parse($order->created_at)->format('d-m-Y H:i') }}" readonly>
         </div>
-        <div>
-    </div>
+        {{-- Penutup div yang hilang di sini --}}
+    </div> {{-- Penutup div yang hilang --}}
 
-    </div>
+    {{-- Perbaiki struktur div --}}
     <div>
         <label>Buyer Name:</label>
-        <input type="text" value="Igun Dwikasih" readonly>
+        <input type="text" value="{{ $order->user->name ?? 'N/A' }}" readonly> {{-- Menggunakan $order->user->name jika ada kolom 'name' di User --}}
     </div>
     <div>
         <label>Email:</label>
-        <input type="text" value="igundw@example.com" readonly>
+        <input type="text" value="{{ $order->user->email ?? 'N/A' }}" readonly>
     </div>
     <div>
         <label>Phone:</label>
-        <input type="text" value="+62 812 3456 7890" readonly>
+        <input type="text" value="{{ $order->user->phone ?? '+62 [Nomor Telepon Tidak Tersedia]' }}" readonly> {{-- Asumsi ada kolom 'phone' di tabel users --}}
     </div>
     <div>
         <label>Shipping Address:</label>
-        <textarea readonly>Jl. Merdeka No. 123, Bandung, Jawa Barat</textarea>
+        <textarea readonly>{{ $order->shipping_address ?? 'Alamat tidak tersedia. (Pastikan kolom ada di tabel orders)' }}</textarea> {{-- Asumsi ada kolom 'shipping_address' di tabel orders --}}
     </div>
     <div>
         <label>Payment Method:</label>
-        <input type="text" value="Credit Card" readonly>
+        <input type="text" value="{{ $order->paymentMethod->name ?? 'N/A' }}" readonly> {{-- Mengambil nama metode pembayaran --}}
     </div><br>
     <div>
         <label>Books Ordered:</label>
         <ul class="book-list">
-            <li>
-                <strong>Harry Potter</strong> by J.K. Rowling <br>
-                Genre: Fantasy <br>
-                Price: Rp 120.000 <br>
-                Quantity: 1 <br>
-                Subtotal: Rp 120.000
-            </li>
+        @if($order->items->isEmpty()) {{-- Gunakan orderItems sesuai relasi --}}
+			<li>Tidak ada buku dalam pesanan ini.</li>
+		@else
+			@foreach($order->items as $item)
+                <li>
+                    <strong>{{ $item->buku->judul_buku ?? 'Buku Tidak Ditemukan' }}</strong> by {{ $item->buku->penulis_buku ?? 'Penulis Tidak Ditemukan' }}<br>
+                    Genre: {{ $item->buku->genres->pluck('genre')->join(', ') ?? 'N/A' }} <br> {{-- Asumsi buku punya relasi genres --}}
+                    Price: Rp {{ number_format($item->price, 0, ',', '.') }} <br>
+                    Quantity: {{ $item->quantity }} <br>
+                    Subtotal: Rp {{ number_format($item->price * $item->quantity, 0, ',', '.') }}
+                </li>
             <hr class="divider">
-            <li>
-                <strong>Atomic Habits</strong> by James Clear <br>
-                Genre: Self-help <br>
-                Price: Rp 80.000 <br>
-                Quantity: 2 <br>
-                Subtotal: Rp 160.000
-            </li>
+			@endforeach
+		@endif
         </ul>
     </div>
+    <div> {{-- Ini adalah div penutup untuk bagian di atas --}}
+        <label>Total Price (incl. shipping):</label>
+        <input type="text" value="Rp {{ number_format($order->total_price, 0, ',', '.') }}" readonly>
+    </div>
+    {{-- Tambahan status dropdown --}}
     <div>
-    <div>
-    <label>Total Price (incl. shipping):</label>
-    <input type="text" value="Rp 300.000" readonly>
-</div>
-<!-- Tambahan status dropdown -->
-<div>
-    <label>Status:</label>
-    <select name="status" id="status-select" style="width: 100%; padding: 0.5rem; border: 1px solid var(--brown-light); border-radius: 4px; font-size: 0.9rem;">
-        <option value="Pending" selected>Pending</option>
-        <option value="Process">Process</option>
-        <option value="Completed">Arrived</option>
-        <option value="Canceled">Canceled</option>
-    </select>
-</div>
+        <label>Status:</label>
+        <select name="status" id="status-select" style="width: 100%; padding: 0.5rem; border: 1px solid var(--brown-light); border-radius: 4px; font-size: 0.9rem;">
+            {{-- Loop untuk status agar dinamis --}}
+            @php
+                $statuses = ['pending', 'process', 'arrived', 'canceled', 'completed'];
+            @endphp
+            @foreach($statuses as $statusOption)
+                <option value="{{ $statusOption }}" {{ strtolower($order->status) === $statusOption ? 'selected' : '' }}>
+                    {{ ucwords(str_replace('_', ' ', $statusOption)) }}
+                </option>
+            @endforeach
+        </select>
+    </div>
 
-<!-- Bukti pembayaran -->
-<div style="margin-top: 1rem;">
-    <label>Bukti Pembayaran:</label>
-    <img src="{{ asset('images/bukti-pembayaran.jpg') }}" alt="Bukti Pembayaran" style="max-width: 100%; height: auto; border: 1px solid var(--brown-light); border-radius: 4px;">
-</div>
-  </div>
-      <button type="submit">Approve</button>
-    </form>
-</div>
+    <div style="margin-top: 1rem;">
+        <label>Bukti Pembayaran:</label>
+        @if($order->payment_proof)
+            <img src="{{ asset('storage/bukti/' . $order->payment_proof) }}" alt="Bukti Pembayaran" class="payment-proof-image">
+        @else
+            <p>Tidak ada bukti pembayaran diunggah.</p>
+        @endif
+    </div>
+
+    <button type="submit" style="margin-top: 1.5rem; padding: 0.7rem 1.2rem; background-color: var(--brown-dark); color: white; border: none; border-radius: 5px; cursor: pointer;">Update Status Order</button>
+</form> {{-- Penutup form --}}
+
 @endsection

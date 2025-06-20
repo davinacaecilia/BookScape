@@ -1,54 +1,61 @@
-const totalPages = 3;
-  let currentPage = 1;
+document.addEventListener('DOMContentLoaded', function () {
+  const container = document.getElementById("pagination");
+  if (!container || !window.paginationData) return;
 
-  function renderPagination() {
-    const container = document.getElementById("pagination");
-    container.innerHTML = "";
+  const { currentPage, lastPage, baseUrl, query } = window.paginationData;
 
-    // Tombol First
-    if (currentPage > 1) {
-      const firstBtn = createButton("« First", () => changePage(1));
-      container.appendChild(firstBtn);
-    }
-
-    // Tombol Previous
-    if (currentPage > 1) {
-      const prevBtn = createButton("Previous", () => changePage(currentPage - 1));
-      container.appendChild(prevBtn);
-    }
-
-    // Nomor halaman
-    for (let i = 1; i <= totalPages; i++) {
-      const pageBtn = createButton(i, () => changePage(i));
-      if (i === currentPage) pageBtn.classList.add("active");
-      container.appendChild(pageBtn);
-    }
-
-    // Tombol Next
-    if (currentPage < totalPages) {
-      const nextBtn = createButton("Next", () => changePage(currentPage + 1));
-      container.appendChild(nextBtn);
-    }
-
-    // Tombol Last
-    if (currentPage < totalPages) {
-      const lastBtn = createButton("Last »", () => changePage(totalPages));
-      container.appendChild(lastBtn);
-    }
+  function buildURL(page) {
+    const params = new URLSearchParams(query);
+    params.set('page', page);
+    return `${baseUrl}?${params.toString()}`;
   }
 
-  function createButton(text, onClick) {
+  function createButton(label, page, isActive = false, disabled = false) {
     const btn = document.createElement("button");
-    btn.textContent = text;
-    btn.onclick = onClick;
+    btn.textContent = label;
+
+    if (isActive) btn.classList.add("active");
+    if (disabled) {
+      btn.disabled = true;
+    } else {
+      btn.onclick = () => {
+        window.location.href = buildURL(page);
+      };
+    }
+
     return btn;
   }
 
-  function changePage(page) {
-    currentPage = page;
-    renderPagination();
-    // Lo bisa panggil fungsi loadPageData(page) di sini kalau mau load data sesuai halaman
+  function renderPagination() {
+    container.innerHTML = "";
+
+    if (lastPage <= 1) return;
+
+    container.appendChild(createButton("« First", 1, false, currentPage === 1));
+    container.appendChild(createButton("‹ Prev", currentPage - 1, false, currentPage === 1));
+
+    const range = 1;
+    let start = currentPage - range;
+    let end = currentPage + range;
+
+    if (start < 1) {
+      end += 1 - start;
+      start = 1;
+    }
+
+    if (end > lastPage) {
+      start -= end - lastPage;
+      end = lastPage;
+      if (start < 1) start = 1;
+    }
+
+    for (let i = start; i <= end; i++) {
+      container.appendChild(createButton(i, i, i === currentPage));
+    }
+
+    container.appendChild(createButton("Next ›", currentPage + 1, false, currentPage === lastPage));
+    container.appendChild(createButton("Last »", lastPage, false, currentPage === lastPage));
   }
 
-  // Inisialisasi
   renderPagination();
+});

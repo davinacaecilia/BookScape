@@ -44,6 +44,8 @@ Route::middleware(['auth', 'role:1'])->group(function () {
 Route::middleware(['auth', 'role:0'])->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'showDashboard'])->name('dashboard');
     Route::get('/orders', [AdminController::class, 'listOrders'])->name('orders');
+    Route::get('/orders/detail/{id}', [AdminController::class, 'orderDetail'])->name('orders.detail');
+    Route::post('/orders/{order}/update-status', [AdminController::class, 'updateOrderStatus'])->name('orders.updateStatus'); // Rute update status
     Route::get('/ratings', [AdminController::class, 'showRatingsAndReviews'])->name('ratings');
     Route::get('/product-management', [AdminController::class, 'listProduct'])->name('product.management');
     Route::get('/user-management', [AdminController::class, 'listUsers'])->name('user.management');
