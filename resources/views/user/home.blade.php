@@ -229,7 +229,7 @@
   <!-- Categories -->
   <section class="categories">
     <h2>Browse by Category</h2>
-    <div class="category-grid">
+    <div class="category-grid2">
 
       <!-- Comedy -->
       <a href="{{ route('product.library', ['genre' => 'Comedy']) }}" class="category-card">
@@ -270,6 +270,7 @@
   <!-- Sci  -->
   <section class="categories2">
     <div class="category-grid2">
+      
       <a href="{{ route('product.library', ['genre' => 'Sci-Fi']) }}" class="category-card">
         <div class="category-icon">
           <i class='bx bx-planet'></i>

@@ -2,17 +2,17 @@
         <h3>Ringkasan Belanja</h3>
         <div class="summary-details">
             <div class="summary-item">
-                <span>Total Harga (2 Barang)</span>
-                <span>IDR 120.000,00</span>
+                <span>Total Harga ({{ $orderItems->sum('quantity') }} Barang)</span>
+                <span>Rp {{ number_format($subtotal, 0, ',', '.') }}</span>
             </div>
             <div class="summary-item">
                 <span>Total Biaya Pengiriman</span>
-                <span>IDR 10.000,00</span>
+                <span>Rp {{ number_format($shippingCost, 0, ',', '.') }}</span>
             </div>
             <div class="summary-item total-summary">
                 <span>Total Belanja</span>
-                <span>IDR 130.000,00</span>
+                <span>Rp {{ number_format($total, 0, ',', '.') }}</span>
             </div>
         </div>
-        <button class="btn-pay-now">lanjutkan Pembayaran</button>
+        <button class="btn-pay-now">Lanjutkan Pembayaran</button>
     </div>

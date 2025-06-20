@@ -68,7 +68,11 @@
                 <span class="summary-label">Subtotal</span>
                 <span class="summary-value">Rp 0</span>
             </div>
-            <button class="checkout-btn">Checkout</button>
+            <form id="checkout-form" action="{{ route('cart.checkout') }}" method="POST">
+              @csrf
+              <input type="hidden" name="selected_cart_ids" id="selectedCartIds">
+              <button type="submit" class="checkout-btn">Checkout</button>
+            </form>
         </div>
       </div>
     </div>
@@ -101,7 +105,7 @@
 
 @include('produk.footer')
 
-<script src="{{ asset('produk/js/quantity.js') }}"></script>
 <script src="{{ asset('produk/js/cart.js') }}"></script>
+<script src="{{ asset('produk/js/quantity.js') }}"></script>
 </body>
 </html>
