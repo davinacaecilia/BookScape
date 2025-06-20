@@ -68,10 +68,11 @@ class UserController extends Controller
             });
         }
 
+        $buku = Buku::with('genres', 'ratings.user')->findOrFail($request->id); // Tambahkan eager loading untuk relasi yang dibutuhkan di Blade
         $previousBuku = Buku::where('id', '<', $request->id)->orderBy('id', 'desc')->first();
         $nextBuku = Buku::where('id', '>', $request->id)->orderBy('id', 'asc')->first();
 
-        return view('produk.preview', compact('products', 'previousBuku', 'nextBuku', 'searchQuery'));
+        return view('produk.preview', compact('buku', 'previousBuku', 'nextBuku', 'searchQuery'));
     }
 
     public function addToCart($id)
