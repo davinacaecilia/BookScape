@@ -47,7 +47,12 @@
               <button id="add-to-cart-button" data-stock="{{ $buku->stock }}" class="cart-icon-button"
                 title="Add to Cart"><i class='fa-solid fa-cart-plus'></i></button>
             </form>
-            <button id="buy-now-button" class="buy-now-button">Buy Now</button>
+            <form action="{{ route('order.checkout') }}" method="POST" class="buy-now-form">
+                @csrf
+                <input type="hidden" name="buku_id" value="{{ $products->id }}">
+                <input type="hidden" name="quantity" id="quantityInputBuyNow" value="1"> 
+                <button type="submit" class="buy-now-button" id="buy-now-button">Buy Now</button>
+            </form>
           </div>
         </div>
       </div>

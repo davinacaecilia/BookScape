@@ -19,14 +19,21 @@ Route::middleware(['auth', 'role:1'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::get('/home', [UserController::class, 'showHome'])->name('home');
+
     Route::get('/product', [UserController::class, 'showLibrary'])->name('product.library');
     Route::get('/product/detail/{id}', [UserController::class, 'showDetail'])->name('product.detail');
+
     Route::post('/cart/add/{id}', [UserController::class, 'addToCart'])->name('product.addToCart');
     Route::get('/cart', [UserController::class, 'showCart'])->name('product.cart');
     Route::post('/cart/update-quantity', [UserController::class, 'updateQuantity'])->name('cart.updateQuantity');
     Route::post('/cart/delete', [UserController::class, 'deleteCart'])->name('cart.delete');
     Route::post('/cart/delete-selected', [UserController::class, 'deleteSelectedCart'])->name('cart.deleteSelected');
     Route::post('/cart/checkout', [UserController::class, 'checkout'])->name('cart.checkout');
+
+    Route::post('/order/place', [UserController::class, 'placeOrder'])->name('order.place');
+    Route::post('/checkout', [UserController::class, 'checkoutNow'])->name('order.checkout');
+    Route::get('/payment/{order}', [UserController::class, 'showPaymentPage'])->name('order.payment');
+    Route::post('/payment/{order}/upload-proof', [UserController::class, 'uploadPaymentProof'])->name('payment.uploadProof');
 
     Route::get('/history', [UserController::class, 'showHistory'])->name('order.history');
     Route::get('/rating/{buku}', [RatingController::class, 'create'])->name('rating.create');

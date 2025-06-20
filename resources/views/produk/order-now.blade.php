@@ -19,22 +19,27 @@
     <section class="order-details-section">
         <div class="order-card detail-orderan">
             <h2>Detail Orderan</h2>
-     <div class="order-item">
-    <div class="item-visual-section">
-        <img src="https://ebooks.gramedia.com/ebook-covers/34734/big_covers/ID_KPG2016MTH10DDAG_B.jpg" alt="Book Cover" class="book-cover">
+            @foreach($orderItems as $item)
+            <div class="order-item">
+            <div class="item-visual-section">
+                <img src="{{ asset('storage/sampul/' . $item->buku->gambar_sampul) }}" alt="{{ $item->buku->judul_buku }}" class="book-cover">
+            </div>
+            <div class="item-info">
+                <h3 class="book-title">{{ $item->buku->judul_buku }}</h3>
+                <p class="book-author">{{ $item->buku->penulis_buku }}</p>
+                <p class="item-price-per-unit">Rp {{ number_format($item->buku->harga, 0, ',', '.') }}</p>
+                <div class="quantity-control">
+                    <p class="quantity-label">Jumlah:</p>
+                    <button class="quantity-btn minus-btn">-</button>
+                    <span class="quantity-display">{{ $item->quantity }}</span>
+                    <button class="quantity-btn plus-btn">+</button>
+                </div>
+                <button class="add-address-btn" id="addAddressButton">Tambahkan Alamat</button>
+            </div>
+            </div>
+            @endforeach
+
         </div>
-    <div class="item-info">
-        <h3 class="book-title">The Hunger Games</h3>
-        <p class="book-author">Suzanne Collins</p>
-        <p class="item-price-per-unit">IDR 99.000,00</p> <div class="quantity-control">
-            <p class="quantity-label">Jumlah:</p>
-             <button class="quantity-btn minus-btn">-</button>
-                  <span class="quantity-display">2</span>
-                  <button class="quantity-btn plus-btn">+</button>
-        </div>
-        <button class="add-address-btn" id="addAddressButton">Tambahkan Alamat</button> </div>
-    </div>
-    </div>
     </section>
 
     @include('produk.ringkasan-keranjang')
@@ -44,7 +49,7 @@
 
 @include('produk.footer')
 
-
+<script src="{{ asset('produk/js/cart.js') }}"></script>
 <script src="{{ asset('produk/js/quantity.js') }}"></script>
 <script src="{{ asset('produk/js/popuporder.js') }}"></script>
 </body>
