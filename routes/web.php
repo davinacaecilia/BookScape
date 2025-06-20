@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\RatingController;
+use App\Http\Controllers\AlamatController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -14,7 +15,7 @@ Route::get('/', function () {
 
 //rute user
 Route::middleware(['auth', 'role:1'])->group(function () {
-    
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::get('/home', [UserController::class, 'showHome'])->name('home');
@@ -37,6 +38,10 @@ Route::middleware(['auth', 'role:1'])->group(function () {
     Route::get('/history', [UserController::class, 'showHistory'])->name('order.history');
     Route::get('/rating/{buku}', [RatingController::class, 'create'])->name('rating.create');
     Route::post('/ratings/{buku}', [RatingController::class, 'store'])->name('ratings.store');
+
+    Route::post('/alamats', [AlamatController::class, 'store'])->name('alamats.store');
+    Route::delete('/alamats/{alamat}', [AlamatController::class, 'destroy'])->name('alamats.destroy');
+    Route::patch('/alamats/{alamat}/set-default', [AlamatController::class, 'setDefault'])->name('alamats.setDefault');
 });
 
 

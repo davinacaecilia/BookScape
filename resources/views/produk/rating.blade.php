@@ -20,13 +20,13 @@
   <main class="rating-main-content">
     <div class="rating-card">
       @if (session('success'))
-            <div class="alert-success">{{ session('success') }}</div>
-        @endif
+      <div class="alert-success">{{ session('success') }}</div>
+    @endif
       <div class="book-info">
-        <img src="https://ebooks.gramedia.com/ebook-covers/34734/big_covers/ID_KPG2016MTH10DDAG_B.jpg" alt="Sampul Buku"
+        <img src="{{ asset('storage/sampul/' . $buku->gambar_sampul) }}" alt="Sampul Buku {{ $buku->judul_buku }}"
           class="book-cover">
-        <h3 class="book-title">The Hunger Games</h3>
-        <p class="book-author">Oleh Suzanne Collins</p>
+        <h3 class="book-title">{{ $buku->judul_buku }}</h3>
+        <p class="book-author">Oleh {{ $buku->penulis_buku }}</p>
       </div>
       <form method="POST" action="{{ route('ratings.store', $buku->id) }}">
         @csrf

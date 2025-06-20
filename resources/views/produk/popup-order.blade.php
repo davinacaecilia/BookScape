@@ -1,29 +1,36 @@
 <div id="addressModalOverlay" class="modal-overlay">
-    <div class="address-modal">
+    <form id="addressForm" class="address-modal" action="{{ route('alamats.store') }}"
+        onsubmit="event.preventDefault(); saveAddress();">
+        @csrf
+
         <div class="modal-header">
-            <h3>Detail Alamat</h3>
-            <button class="close-modal-btn">&times;</button>
+            <h3>Alamat Pengiriman</h3>
+            <button type="button" class="close-modal-btn">&times;</button>
         </div>
+
         <div class="modal-body">
             <div class="form-group">
-                <label for="namaPenerima">Nama Lengkap</label>
-                <input type="text" id="namaPenerima" placeholder="Masukkan Nama Lengkap">
+                <label>Nama Lengkap</label>
+                <input type="text" value="{{ auth()->user()->name }}" readonly>
             </div>
             <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" placeholder="Masukkan Email" value="{{ auth()->user()->email }}">
+                <label>Email</label>
+                <input type="email" value="{{ auth()->user()->email }}" readonly>
             </div>
+
             <div class="form-group">
                 <label for="noTelp">No. Telp</label>
-                <input type="tel" id="noTelp" placeholder="+62">
+                <input type="tel" id="noTelp" name="phone" placeholder="+62" required>
             </div>
             <div class="form-group">
-                <label for="alamatLengkap">Shipping Address</label>
-                <textarea id="alamatLengkap" rows="4" placeholder="Detail alamat, nama jalan, nomor rumah, RT/RW"></textarea>
+                <label for="alamatLengkap">Alamat Pengiriman</label>
+                <textarea id="alamatLengkap" name="address" rows="4"
+                    placeholder="Detail alamat, nama jalan, nomor rumah, RT/RW" required></textarea>
             </div>
         </div>
+
         <div class="modal-footer">
-            <button class="btn-save-address">Simpan</button>
+            <button type="submit" class="btn-save-address">Simpan Alamat</button>
         </div>
-    </div>
+    </form>
 </div>

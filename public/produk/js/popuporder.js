@@ -1,75 +1,111 @@
-// popuporder.js
+// public/produk/js/popuporder.js - VERSI FINAL YANG SUDAH DIPERIKSA
 
-// Targetkan tombol "Tambahkan Alamat" di order-now.blade.php
-const addAddressButton = document.getElementById('addAddressButton');
+document.addEventListener("DOMContentLoaded", function () {
+    const createAddressBtn = document.querySelector(".btn-create-address");
+    const addressModalOverlay = document.getElementById("addressModalOverlay");
+    const addressForm = document.getElementById("addressForm");
+    const closeModalBtn = document.querySelector(".close-modal-btn");
+    const addressListContainer = document.getElementById("addressList");
 
-// Targetkan tombol "Create Address" yang mungkin ada di halaman lain
-// Pastikan elemen dengan kelas 'btn-create-address' ada di halaman tersebut
-const createAddressBtn = document.querySelector('.btn-create-address');
-
-
-const addressModalOverlay = document.getElementById('addressModalOverlay');
-const closeModalBtn = document.querySelector('.close-modal-btn');
-const saveAddressBtn = document.querySelector('.btn-save-address');
-// Input fields
-const namaPenerimaInput = document.getElementById('namaPenerima');
-const emailInput = document.getElementById('email');
-const noTelpInput = document.getElementById('noTelp');
-const alamatLengkapTextarea = document.getElementById('alamatLengkap');
-
-function showModal() {
-    addressModalOverlay.style.display = 'flex';
-    // Optional: Reset form fields when opening
-    namaPenerimaInput.value = '';
-    emailInput.value = '';
-    noTelpInput.value = '';
-    alamatLengkapTextarea.value = '';
-}
-
-function hideModal() {
-    addressModalOverlay.style.display = 'none';
-}
-
-// Tambahkan event listener untuk addAddressButton
-if (addAddressButton) {
-    addAddressButton.addEventListener('click', showModal);
-}
-
-// Tambahkan event listener untuk createAddressBtn
-if (createAddressBtn) { // Pastikan tombol ini ada di halaman
-    createAddressBtn.addEventListener('click', showModal);
-}
-
-closeModalBtn.addEventListener('click', hideModal);
-addressModalOverlay.addEventListener('click', (event) => {
-    if (event.target === addressModalOverlay) {
-        hideModal();
+    if (!createAddressBtn || !addressModalOverlay || !addressForm) {
+        return;
     }
-});
 
-saveAddressBtn.addEventListener('click', () => {
-    const namaPenerima = namaPenerimaInput.value.trim();
-    const noTelp = noTelpInput.value.trim();
-    const alamatLengkap = alamatLengkapTextarea.value.trim();
+    function showModal() {
+        const primaryPhone = createAddressBtn.dataset.phone;
+        const primaryAddress = createAddressBtn.dataset.address;
 
-    // Cek apakah semua field wajib terisi
-    const isMandatoryFieldsFilled = namaPenerima !== '' && emailInput.value.trim() !== '' && noTelp !== '' && alamatLengkap !== '';
+        document.querySelector('#addressForm input[name="phone"]').value =
+            primaryPhone || "";
+        document.querySelector('#addressForm textarea[name="address"]').value =
+            primaryAddress || "";
 
-    if (isMandatoryFieldsFilled) {
-        Swal.fire({
-            icon: 'success',
-            title: 'Berhasil Disimpan!',
-            text: 'Detail alamat Anda telah berhasil disimpan.',
-            showConfirmButton: false,
-            timer: 1500
-        });
-
-        hideModal();
-    } else {
-        Swal.fire({
-            icon: 'error',
-            title: 'Input Tidak Lengkap',
-            text: 'Mohon lengkapi Nama Lengkap, Email, No. Telp, dan Shipping Address.',
-        });
+        addressModalOverlay.style.display = "flex";
     }
+
+    function hideModal() {
+        addressModalOverlay.style.display = "none";
+    }
+
+    window.saveAddress = function () {
+        const formData = new FormData(addressForm);
+        const csrfToken = document
+            .querySelector('meta[name="csrf-token"]')
+            .getAttribute("content");
+        const formActionUrl = addressForm.action;
+
+        fetch(formActionUrl, {
+            method: "POST",
+            headers: {
+                "X-CSRF-TOKEN": csrfToken,
+                Accept: "application/json",
+            },
+            body: formData,
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    return response.json().then((err) => {
+                        throw err;
+                    });
+                }
+                return response.json();
+            })
+            .then((data) => {
+                if (data.success) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Berhasil!",
+                        text: data.message,
+                        timer: 1500,
+                        showConfirmButton: false,
+                    });
+
+                    const noAddressText =
+                        document.getElementById("noAddressText");
+                    if (noAddressText) noAddressText.remove();
+
+                    // Mengganti isi div, bukan menambah
+                    const addressDisplayContainer =
+                        document.getElementById("addressList");
+                    // Kosongkan dulu isinya untuk memastikan hanya satu yang tampil
+                    addressDisplayContainer.innerHTML = "";
+
+                    const newAddressDiv = document.createElement("div");
+                    newAddressDiv.classList.add("address-item");
+                    newAddressDiv.innerHTML = `
+                <div class="address-item-radio">
+                    <input type="radio" name="selected_address" value="${data.alamat.id}" id="alamat-${data.alamat.id}" checked>
+                    <label for="alamat-${data.alamat.id}">
+                        <strong>Alamat Pengiriman:</strong>
+                        <p>${data.alamat.phone}</p>
+                        <p>${data.alamat.address}</p>
+                    </label>
+                </div>
+                `;
+                    addressListContainer.appendChild(newAddressDiv);
+
+                    hideModal();
+                }
+            })
+            .catch((error) => {
+                let errorMessages = "Terjadi kesalahan.";
+                if (error && error.errors) {
+                    errorMessages = Object.values(error.errors)
+                        .map((err) => `<li>${err[0]}</li>`)
+                        .join("");
+                    // INI BARIS YANG SUDAH DIPERBAIKI DENGAN BENAR
+                    errorMessages = `<ul style="text-align:left; padding-left:20px;">${errorMessages}</ul>`;
+                }
+
+                Swal.fire({
+                    icon: "error",
+                    title: "Gagal Menyimpan",
+                    html: errorMessages,
+                });
+            });
+    };
+
+    createAddressBtn.addEventListener("click", showModal);
+    closeModalBtn.addEventListener("click", hideModal);
+    addressForm.addEventListener("submit", saveAddress);
 });
