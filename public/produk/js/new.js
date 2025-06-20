@@ -1,9 +1,10 @@
-//kode dropdown
+document.addEventListener('DOMContentLoaded', function () {
+  // --- DROPDOWN KATEGORI ---
   const toggleBtn = document.getElementById('categoryToggle');
   const categoryMenu = document.getElementById('categoryMenu');
   const arrowIcon = document.getElementById('arrow');
 
-  toggleBtn.addEventListener('click', function (e) {
+  toggleBtn?.addEventListener('click', function (e) {
     e.stopPropagation();
     categoryMenu.classList.toggle('show');
     arrowIcon.classList.toggle('rotate');
@@ -17,26 +18,56 @@
       toggleBtn.classList.remove('active');
     }
   });
-  //akhir dropdown
 
-  // --- KARTU BUKU ---
+  // --- ADD TO CART FORM ---
+  const forms = document.querySelectorAll('.cart-form');
+
+  forms.forEach(form => {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const button = form.querySelector('.add-to-cart-button');
+      const stock = parseInt(button.dataset.stock);
+
+      if (!stock || stock <= 0) {
+        showAddToCartPopup(false);
+        return;
+      }
+
+      const formData = new FormData(form);
+
+      fetch(form.action, {
+        method: 'POST',
+        headers: {
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+          'Accept': 'application/json'
+        },
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.message === 'Berhasil ditambahkan ke keranjang') {
+          showAddToCartPopup(true);
+        } else {
+          showAddToCartPopup(false);
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        showAddToCartPopup(false);
+      });
+    });
+  });
+
+  // --- BOOK CARD CLICK (NAVIGASI DETAIL) ---
   const bookCards = document.querySelectorAll('.book-card');
 
   bookCards.forEach(card => {
-    card.addEventListener('click', function() {
-      // Navigasi ke preview.html saat kartu buku diklik
-      window.location.href = 'preview';
+    card.addEventListener('click', function (e) {
+      if (e.target.closest('.add-to-cart-button')) return;
+
+      const productId = this.dataset.id;
+      window.location.href = `/product/detail/${productId}`;
     });
   });
-
-  // --- KODE UNTUK TOMBOL "ADD TO CART ---
-  const addToCartButtons = document.querySelectorAll('.add-to-cart-button');
-  addToCartButtons.forEach(button => {
-    button.addEventListener('click', function(event) {
-      event.stopPropagation(); // Tetap penting agar tidak memicu klik kartu
-
-      const isBookInStockProduk = false;
-
-      showAddToCartPopup(isBookInStockProduk);
-    });
-  });
+});

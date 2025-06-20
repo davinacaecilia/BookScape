@@ -14,35 +14,22 @@ Route::get('/', function () {
 
 //rute user
 Route::middleware(['auth', 'role:1'])->group(function () {
-    Route::get('/home', function () {
-        return view('user.home');
-    })->name('home');
+    
+    Route::get('/profile', [UserController::class, 'showProfile'])->name('profile.update');
     Route::get('/profile', [UserController::class, 'showProfile'])->name('profile');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::get('/cart', function () {
-        return view('produk.cart');
-    });
-    Route::get('/history', function () {
-        return view('produk.history');
-    });
+    Route::get('/home', [UserController::class, 'showHome'])->name('home');
+    Route::get('/product', [UserController::class, 'showLibrary'])->name('product.library');
+    Route::get('/product/detail/{id}', [UserController::class, 'showDetail'])->name('product.detail');
+    Route::post('/cart/add/{id}', [UserController::class, 'addToCart'])->name('product.addToCart');
+    Route::get('/cart', [UserController::class, 'showCart'])->name('product.cart');
+    Route::post('/cart/update-quantity', [UserController::class, 'updateQuantity'])->name('cart.updateQuantity');
+    Route::post('/cart/delete', [UserController::class, 'deleteCart'])->name('cart.delete');
+    Route::get('/history', [UserController::class, 'showHistory'])->name('order.history');
     Route::get('/new', function () {
         return view('produk.new');
     });
-    Route::get('/order-cart', function () {
-        return view('produk.order-cart');
-    });
-    Route::get('/order-now', function () {
-        return view('produk.order-now');
-    });
-    Route::get('/payment', function () {
-        return view('produk.payment');
-    });
-    Route::get('/preview', function () {
-        return view('produk.preview');
-    });
     Route::get('/rating/{buku}', [RatingController::class, 'create'])->name('rating.create');
 });
-
 
 
 //rute admin

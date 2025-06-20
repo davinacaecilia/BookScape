@@ -4,12 +4,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>BookScape - Home</title>
   <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
   <link rel="stylesheet" href="{{ asset('user/home.css') }}">
+  <link rel="stylesheet" href="{{ asset('produk/popup.css') }}" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 </head>
 
 <body>
@@ -26,59 +27,57 @@
         <span>BOOKSCAPE</span>
       </div>
       <div class="nav-links">
-        <a href="#" class="active">Home</a>
-        <a href="#">Browse</a>
-        <a href="#">Categories</a>
+        <a href="{{ route('home') }}" class="active">Home</a>
+        <a href="{{ route('product.library') }}">Library</a>
         <div class="cart-icon-container">
-          <a href="#" class="cart-icon">
+          <a href="{{ route('product.cart') }}" class="cart-icon">
             <i class='bx bx-cart'></i>
-            <div class="profile-container">
-              <a href="#" class="pr le-icon profile-toggle" onclick="toggleDropdown(event)">
-                <i class='bx bx-user'></i>
-              </a>
-              <div class="profile-dropdown" id="profileDropdown">
-                <div class="sidebar-scrollable">
-                  <hr class="full-divider" />
-                  <ul>
-                    <li>
-                      <a href="{{ route('profile') }}">
-                        <i class='bx bx-user'></i> My Profile
-                      </a>
-                    </li>
-                    <li><a href="#"><i class='bx bx-cart'></i> History Order</a></li>
-                    <li>
-                      <a href="#" onclick="event.preventDefault(); confirmLogout();">
-                        <i class='bx bx-log-out'></i> Logout
-                      </a>
-                    </li>
-                    <script>
-                      function confirmLogout() {
-                        Swal.fire({
-                          title: 'Logout',
-                          text: "Apakah Anda yakin ingin logout?",
-                          icon: 'warning', // Icon 'warning' atau 'question' lebih cocok
-                          showCancelButton: true,
-                          confirmButtonColor: '#3085d6',
-                          cancelButtonColor: '#d33',
-                          confirmButtonText: 'Ya, Logout',
-                          cancelButtonText: 'Batal'
-                        }).then((result) => {
-                          // Jika user menekan "Ya, Logout"
-                          if (result.isConfirmed) {
-                            // Langsung submit form-nya. TIDAK PERLU ada popup sukses lagi.
-                            document.getElementById('logout-form').submit();
-                          }
-                        });
-                      }
-                    </script>
-                  </ul>
-                  <hr class="full-divider" />
-                </div>
+          </a>
+          <div class="profile-container">
+            <a href="#" class="pr le-icon profile-toggle" onclick="toggleDropdown(event)">
+              <i class='bx bx-user'></i>
+            </a>
+            <div class="profile-dropdown" id="profileDropdown">
+              <div class="sidebar-scrollable">
+                <hr class="full-divider" />
+                <ul>
+                  <li>
+                    <a href="{{ route('profile') }}">
+                      <i class='bx bx-user'></i> My Profile
+                    </a>
+                  </li>
+                  <li><a href="{{ route('order.history') }}"><i class='bx bx-cart'></i> History Order</a></li>
+                  <li>
+                    <a href="#" onclick="event.preventDefault(); confirmLogout();">
+                      <i class='bx bx-log-out'></i> Logout
+                    </a>
+                  </li>
+                  <script>
+                    function confirmLogout() {
+                      Swal.fire({
+                        title: 'Logout',
+                        text: "Apakah Anda yakin ingin logout?",
+                        icon: 'warning', // Icon 'warning' atau 'question' lebih cocok
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, Logout',
+                        cancelButtonText: 'Batal'
+                      }).then((result) => {
+                        // Jika user menekan "Ya, Logout"
+                        if (result.isConfirmed) {
+                          // Langsung submit form-nya. TIDAK PERLU ada popup sukses lagi.
+                          document.getElementById('logout-form').submit();
+                        }
+                      });
+                    }
+                  </script>
+                </ul>
+                <hr class="full-divider" />
               </div>
             </div>
-          </a>
+          </div>
         </div>
-        </a>
       </div>
     </nav>
 
@@ -89,164 +88,74 @@
         <p>Explore thousands of books from all genres and find your perfect read</p>
 
         <div class="search-bar">
-          <input type="text" placeholder="Search books, authors, or categories...">
+          <input type="text" placeholder="Search books or authors...">
           <button><i class='bx bx-search'></i></button>
         </div>
       </div>
     </section>
 
     <!-- New arrival -->
-    <section class="featured-books">
-      <h2>My Cart</h2>
-      <div class="books-grid">
-        <!-- Book 1 -->
+    @if($myCarts->isEmpty())
+  @else
+      <section class="featured-books">
+        <h2>My Cart</h2>
+        <div class="books-grid">
+        @foreach ($myCarts as $myCart)
         <div class="book-card book-card-1">
-          <img class="book-cover book-cover-1"
-            src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg"
-            alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
-          <div class="book-info">
-            <h2 class="book-title">Skripsick</h2>
-            <p class="book-genre">Comedy</p>
-            <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
-            <a href="#" class="add-to-cart-button">Add to Cart</a>
-          </div>
-              
+        <a href="{{ route('product.detail', $myCart->buku->id) }}" style="text-decoration: none;">
+        <img class="book-cover book-cover-1" src="{{ asset('storage/sampul/' . $myCart->buku->gambar_sampul) }}"
+          alt="{{ $myCart->buku->judul_buku }}" class="book-cover">
+        <div class="book-info">
+          <h2 class="book-title">{{ $myCart->buku->judul_buku }}</h2>
+          <p class="book-genre">
+          @foreach($myCart->buku->genres as $genre)
+        {{ $genre->genre }}{{ !$loop->last ? ', ' : '' }}
+        @endforeach
+          </p>
+          <p class="book-price">Rp {{ number_format($myCart->buku->harga, 0, ',', '.') }}<span class="rating">⭐
+          4.5</span></p>
         </div>
-
-
-        <!-- Book 2 -->
-        <div class="book-card book-card-2">
-          <img class="book-cover book-cover-1"
-            src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg"
-            alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
-          <div class="book-info">
-            <h2 class="book-title">Skripsick</h2>
-            <p class="book-genre">Comedy</p>
-            <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
-            <a href="#" class="add-to-cart-button">Add to Cart</a>
-          </div>
-              
+        </a>
         </div>
-
-        <!-- Book 3 -->
-        <div class="book-card book-card-3">
-          <img class="book-cover book-cover-1"
-            src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg"
-            alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
-          <div class="book-info">
-            <h2 class="book-title">Skripsick</h2>
-            <p class="book-genre">Comedy</p>
-            <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
-            <a href="#" class="add-to-cart-button">Add to Cart</a>
-          </div>
-              
+      @endforeach
         </div>
-
-        <!-- Book 4 -->
-        <div class="book-card book-card-4">
-          <img class="book-cover book-cover-1"
-            src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg"
-            alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
-          <div class="book-info">
-            <h2 class="book-title">Skripsick</h2>
-            <p class="book-genre">Comedy</p>
-            <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
-            <a href="#" class="add-to-cart-button">Add to Cart</a>
-          </div>
-              
-        </div>
-
-        <!-- Book 5 -->
-        <div class="book-card book-card-4">
-          <img class="book-cover book-cover-1"
-            src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg"
-            alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
-          <div class="book-info">
-            <h2 class="book-title">Skripsick</h2>
-            <p class="book-genre">Comedy</p>
-            <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
-            <a href="#" class="add-to-cart-button">Add to Cart</a>
-          </div>
-              
-        </div>
+        <a href="{{ route('product.cart') }}" class="view-all">View All <i class='bx bx-chevron-right'></i></a>
       </div>
-      <a href="#" class="view-all">View All <i class='bx bx-chevron-right'></i></a>
-  </div>
-  </section>
+      </section>
+    @endif
 
 
   <!-- New Arrival -->
   <section class="featured-books">
     <h2>New Arrival</h2>
     <div class="books-grid">
+      @foreach ($newArrivals as $newArrival)
       <div class="book-card book-card-1">
-        <img class="book-cover book-cover-1"
-          src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg"
-          alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
+      <a href="{{ route('product.detail', $newArrival->id) }}" style="text-decoration: none;">
+        <img class="book-cover book-cover-1" src="{{ asset('storage/sampul/' . $newArrival->gambar_sampul) }}"
+        alt="{{ $newArrival->judul_buku }}" class="book-cover">
         <div class="book-info">
-          <h2 class="book-title">Skripsick</h2>
-          <p class="book-genre">Comedy</p>
-          <p class="book-price">Rp.40.00,00 <span class="rating">⭐ 4.5</span></p>
-          <a href="#" class="add-to-cart-button">Add to Cart</a>
+        <h2 class="book-title">{{ $newArrival->judul_buku }}</h2>
+        <p class="book-genre">
+          @foreach($newArrival->genres as $genre)
+        {{ $genre->genre }}{{ !$loop->last ? ', ' : '' }}
+      @endforeach
+        </p>
+        <p class="book-price">Rp {{ number_format($newArrival['harga'], 0, ',', '.') }}
+          <span class="rating">⭐ {{ $newArrival->averageRating() }}</span>
+        </p>
+        <form action="{{ route('product.addToCart', $newArrival->id) }}" method="POST" enctype="multipart/form-data"
+          class="cart-form">
+          @csrf
+          <button type="submit" class="add-to-cart-button" data-stock="{{ $newArrival->stock }}"
+          style="border: none;">
+          Add to Cart
+          </button>
+        </form>
         </div>
-            
+      </a>
       </div>
-
-      <!-- Book 2 -->
-      <div class="book-card book-card-2">
-        <img class="book-cover book-cover-1"
-          src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg"
-          alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
-        <div class="book-info">
-          <h2 class="book-title">Skripsick</h2>
-          <p class="book-genre">Comedy</p>
-          <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
-          <a href="#" class="add-to-cart-button">Add to Cart</a>
-        </div>
-            
-      </div>
-
-      <!-- Book 3 -->
-      <div class="book-card book-card-3">
-        <img class="book-cover book-cover-1"
-          src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg"
-          alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
-        <div class="book-info">
-          <h2 class="book-title">Skripsick</h2>
-          <p class="book-genre">Comedy</p>
-          <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
-          <a href="#" class="add-to-cart-button">Add to Cart</a>
-        </div>
-            
-      </div>
-
-      <!-- Book 4 -->
-      <div class="book-card book-card-4">
-        <img class="book-cover book-cover-1"
-          src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg"
-          alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
-        <div class="book-info">
-          <h2 class="book-title">Skripsick</h2>
-          <p class="book-genre">Comedy</p>
-          <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
-          <a href="#" class="add-to-cart-button">Add to Cart</a>
-        </div>
-            
-      </div>
-
-      <!-- Book 5 -->
-      <div class="book-card book-card-5">
-        <img class="book-cover book-cover-1"
-          src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg"
-          alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
-        <div class="book-info">
-          <h2 class="book-title">Skripsick</h2>
-          <p class="book-genre">Comedy</p>
-          <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
-          <a href="#" class="add-to-cart-button">Add to Cart</a>
-        </div>
-            
-      </div>
+    @endforeach
     </div>
     </div>
   </section>
@@ -255,75 +164,33 @@
   <section class="featured-books">
     <h2>Best Seller</h2>
     <div class="books-grid">
-      <!-- Best seller -->
+      @foreach ($bestSellers as $bestSeller)
       <div class="book-card book-card-1">
-        <img class="book-cover book-cover-1"
-          src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg"
-          alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
+      <a href="{{ route('product.detail', $bestSeller->id) }}" style="text-decoration: none;">
+        <img class="book-cover book-cover-1" src="{{ asset('storage/sampul/' . $bestSeller->gambar_sampul) }}"
+        alt="{{ $bestSeller->judul_buku }}" class="book-cover">
         <div class="book-info">
-          <h2 class="book-title">Skripsick</h2>
-          <p class="book-genre">Comedy</p>
-          <p class="book-price">Rp.40.00,00 <span class="rating">⭐ 4.5</span></p>
-          <a href="#" class="add-to-cart-button">Add to Cart</a>
+        <h2 class="book-title">{{ $bestSeller->judul_buku }}</h2>
+        <p class="book-genre">
+          @foreach($bestSeller->genres as $genre)
+        {{ $genre->genre }}{{ !$loop->last ? ', ' : '' }}
+      @endforeach
+        </p>
+        <p class="book-price">Rp {{ number_format($bestSeller['harga'], 0, ',', '.') }}
+          <span class="rating">⭐ {{ $bestSeller->averageRating() }}</span>
+        </p>
+        <form action="{{ route('product.addToCart', $bestSeller->id) }}" method="POST" enctype="multipart/form-data"
+          class="cart-form">
+          @csrf
+          <button type="submit" class="add-to-cart-button" data-stock="{{ $bestSeller->stock }}"
+          style="border: none;">
+          Add to Cart
+          </button>
+        </form>
         </div>
-            
+      </a>
       </div>
-
-      <!-- Book 2 -->
-      <div class="book-card book-card-2">
-        <img class="book-cover book-cover-1"
-          src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg"
-          alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
-        <div class="book-info">
-          <h2 class="book-title">Skripsick</h2>
-          <p class="book-genre">Comedy</p>
-          <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
-          <a href="#" class="add-to-cart-button">Add to Cart</a>
-        </div>
-            
-      </div>
-
-      <!-- Book 3 -->
-      <div class="book-card book-card-3">
-        <img class="book-cover book-cover-1"
-          src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg"
-          alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
-        <div class="book-info">
-          <h2 class="book-title">Skripsick</h2>
-          <p class="book-genre">Comedy</p>
-          <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
-          <a href="#" class="add-to-cart-button">Add to Cart</a>
-        </div>
-            
-      </div>
-
-      <!-- Book 4 -->
-      <div class="book-card book-card-4">
-        <img class="book-cover book-cover-1"
-          src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg"
-          alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
-        <div class="book-info">
-          <h2 class="book-title">Skripsick</h2>
-          <p class="book-genre">Comedy</p>
-          <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
-          <a href="#" class="add-to-cart-button">Add to Cart</a>
-        </div>
-            
-      </div>
-
-      <!-- Book 5 -->
-      <div class="book-card book-card-5">
-        <img class="book-cover book-cover-1"
-          src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg"
-          alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
-        <div class="book-info">
-          <h2 class="book-title">Skripsick</h2>
-          <p class="book-genre">Comedy</p>
-          <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
-          <a href="#" class="add-to-cart-button">Add to Cart</a>
-        </div>
-            
-      </div>
+    @endforeach
     </div>
     </div>
   </section>
@@ -332,77 +199,34 @@
     <h2>Library</h2>
     <div class="books-grid">
       <!-- Best seller -->
+      @foreach ($libraries as $library)
       <div class="book-card book-card-1">
-        <img class="book-cover book-cover-1"
-          src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg"
-          alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
+      <a href="{{ route('product.detail', $library->id) }}" style="text-decoration: none;">
+        <img class="book-cover book-cover-1" src="{{ asset('storage/sampul/' . $library->gambar_sampul) }}"
+        alt="{{ $library->judul_buku }}" class="book-cover">
         <div class="book-info">
-          <h2 class="book-title">Skripsick</h2>
-          <p class="book-genre">Comedy</p>
-          <p class="book-price">Rp.40.00,00 <span class="rating">⭐ 4.5</span></p>
-          <a href="#" class="add-to-cart-button">Add to Cart</a>
+        <h2 class="book-title">{{ $library->judul_buku }}</h2>
+        <p class="book-genre">
+          @foreach($library->genres as $genre)
+        {{ $genre->genre }}{{ !$loop->last ? ', ' : '' }}
+      @endforeach
+        </p>
+        <p class="book-price">Rp {{ number_format($library['harga'], 0, ',', '.') }}
+          <span class="rating">⭐ {{ $library->averageRating() }}</span>
+        </p>
+        <form action="{{ route('product.addToCart', $library->id) }}" method="POST" enctype="multipart/form-data"
+          class="cart-form">
+          @csrf
+          <button type="submit" class="add-to-cart-button" data-stock="{{ $library->stock }}" style="border: none;">
+          Add to Cart
+          </button>
+        </form>
         </div>
-            
+      </a>
       </div>
-
-      <!-- Book 2 -->
-      <div class="book-card book-card-2">
-        <img class="book-cover book-cover-1"
-          src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg"
-          alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
-        <div class="book-info">
-          <h2 class="book-title">Skripsick</h2>
-          <p class="book-genre">Comedy</p>
-          <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
-          <a href="#" class="add-to-cart-button">Add to Cart</a>
-        </div>
-            
-      </div>
-
-      <!-- Book 3 -->
-      <div class="book-card book-card-3">
-        <img class="book-cover book-cover-1"
-          src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg"
-          alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
-        <div class="book-info">
-          <h2 class="book-title">Skripsick</h2>
-          <p class="book-genre">Comedy</p>
-          <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
-          <a href="#" class="add-to-cart-button">Add to Cart</a>
-        </div>
-            
-      </div>
-
-      <!-- Book 4 -->
-      <div class="book-card book-card-4">
-        <img class="book-cover book-cover-1"
-          src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg"
-          alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
-        <div class="book-info">
-          <h2 class="book-title">Skripsick</h2>
-          <p class="book-genre">Comedy</p>
-          <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
-          <a href="#" class="add-to-cart-button">Add to Cart</a>
-        </div>
-            
-      </div>
-
-      <!-- Book 5 -->
-      <div class="book-card book-card-5">
-        <img class="book-cover book-cover-1"
-          src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1394359102i/21408196.jpg"
-          alt="Skripsick: Derita Mahasiswa Abadi" class="book-cover">
-        <div class="book-info">
-          <h2 class="book-title">Skripsick</h2>
-          <p class="book-genre">Comedy</p>
-          <p class="book-price">Rp.40.00,00<span class="rating">⭐ 4.5</span></p>
-          <a href="#" class="add-to-cart-button">Add to Cart</a>
-        </div>
-            
-      </div>
+    @endforeach
     </div>
-    </div>
-    <a href="#" class="view-all">View All <i class='bx bx-chevron-right'></i></a>
+    <a href="{{ route('product.library') }}" class="view-all">View All <i class='bx bx-chevron-right'></i></a>
   </section>
 
 
@@ -412,7 +236,7 @@
     <div class="category-grid">
 
       <!-- Comedy -->
-      <a href="#" class="category-card">
+      <a href="{{ route('product.library', ['genre' => 'Comedy']) }}" class="category-card">
         <div class="category-icon">
           <i class='bx bx-laugh'></i>
         </div>
@@ -420,7 +244,7 @@
       </a>
 
       <!-- Drama -->
-      <a href="#" class="category-card">
+      <a href="{{ route('product.library', ['genre' => 'Drama']) }}" class="category-card">
         <div class="category-icon">
           <i class='bx bx-mask'></i>
         </div>
@@ -428,7 +252,7 @@
       </a>
 
       <!-- Romance -->
-      <a href="#" class="category-card">
+      <a href="{{ route('product.library', ['genre' => 'Romance']) }}" class="category-card">
         <div class="category-icon">
           <i class='bx bx-heart'></i>
         </div>
@@ -436,7 +260,7 @@
       </a>
 
       <!-- Horror -->
-      <a href="#" class="category-card">
+      <a href="{{ route('product.library', ['genre' => 'Horror']) }}" class="category-card">
         <div class="category-icon">
           <i class='bx bx-ghost'></i>
         </div>
@@ -450,15 +274,15 @@
   <!-- Sci  -->
   <section class="categories2">
     <div class="category-grid2">
-      <a href="#" class="category-card">
+      <a href="{{ route('product.library', ['genre' => 'Sci-Fi']) }}" class="category-card">
         <div class="category-icon">
           <i class='bx bx-planet'></i>
         </div>
-        <span class="category-name">Sci </span>
+        <span class="category-name">Sci-Fi</span>
       </a>
 
       <!-- Fantasy -->
-      <a href="#" class="category-card2">
+      <a href="{{ route('product.library', ['genre' => 'Fantasy']) }}" class="category-card2">
         <div class="category-icon2">
           <i class='bx bx-star'></i>
         </div>
@@ -466,7 +290,7 @@
       </a>
 
       <!-- Thriller -->
-      <a href="#" class="category-card2">
+      <a href="{{ route('product.library', ['genre' => 'Thriller']) }}" class="category-card2">
         <div class="category-icon2">
           <img class="categori-icon2" src="https://th.bing.com/th/id/OIP.pE3Fj-nk1vC5L2HyD1_nCAHaHa?rs=1&pid=ImgDetMain"
             alt="Thriller">
@@ -475,7 +299,7 @@
       </a>
 
       <!-- Mystery -->
-      <a href="#" class="category-card2">
+      <a href="{{ route('product.library', ['genre' => 'Mystery']) }}" class="category-card2">
         <div class="category-icon2">
           <i class='bx bx-question-mark'></i>
         </div>
@@ -521,6 +345,9 @@
       }
     });
   </script>
+
+  <script src="{{ asset('produk/js/new.js') }}"></script>
+  <script src="{{ asset('produk/js/popup.js') }}"></script>
 </body>
 
 </html>
