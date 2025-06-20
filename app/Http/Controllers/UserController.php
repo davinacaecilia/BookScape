@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -13,7 +14,8 @@ class UserController extends Controller
 
     public function showProfile()
     {
-        return view('user.profile');
+        $user = Auth::user(); 
+        return view('user.profile', compact('user'));
     }
 
     public function showSettings()

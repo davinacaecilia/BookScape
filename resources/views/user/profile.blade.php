@@ -6,7 +6,7 @@
     <title>Profile Pengguna</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="{{ asset('profile.css') }}">
+    <link rel="stylesheet" href="{{ asset('user/profile.css') }}">
 </head>
 <body>
     <div class="home-container">
