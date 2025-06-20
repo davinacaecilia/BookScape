@@ -23,45 +23,34 @@ body {
 
 /* --- START OF ORDER HISTORY CARD STYLING --- */
 .order-history-container {
-  padding: 40px 20px; /* Padding di sekitar container utama */
-  max-width: 900px; /* Lebar maksimum container, menyesuaikan preview card */
-  margin: 0 auto; /* Tengahkankan container */
+  padding: 40px 20px;
+  max-width: 900px;
+  margin: 0 auto;
   display: flex;
-  flex-direction: column; /* Menumpuk card secara vertikal */
-  gap: 20px; /* Jarak antar card */
+  flex-direction: column;
+  gap: 20px;
 }
 
 .order-card {
   background-color: var(--white);
   border-radius: 15px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Shadow halus */
-  padding: 20px 30px; /* Padding di dalam card */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 20px 30px;
   display: flex;
-  justify-content: space-between; /* Status di kiri, detail di kanan */
-  align-items: center; /* Sejajarkan secara vertikal */
-  min-height: 80px; /* Tinggi minimum card */
+  flex-direction: column;
+  position: relative;
 }
 
-.order-status {
-  display: flex; /* Untuk menampung multiple button (Process + Cancel) */
+.order-status-header {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  z-index: 10;
+  display: flex;
+  gap: 10px;
   align-items: center;
-  gap: 10px; /* Jarak antar button jika ada banyak */
 }
 
-.status-button {
-  padding: 8px 15px;
-  border-radius: 20px; /* Bentuk pill */
-  font-size: 14px;
-  font-weight: 600;
-  border: none;
-  cursor: default; /* Defaultnya tidak bisa diklik, kecuali Cancel */
-  transition: all 0.2s ease;
-  white-space: nowrap; /* Mencegah teks wrapping */
-}
-
-/* --- NEW STATUS STYLING --- */
-
-/* Kelas dasar untuk semua tombol status */
 .status {
   font-size: 14px;
   font-weight: 700;
@@ -71,59 +60,388 @@ body {
   cursor: default;
   display: inline-block;
   white-space: nowrap;
-  width: 110px; /* Sesuaikan nilai ini sesuai keinginan Anda */
-  text-align: center; /* Pastikan teks tetap di tengah jika lebar fix */
+  width: 110px;
+  text-align: center;
 }
-
 
 /* Styling untuk setiap status spesifik */
 .status.pending {
-  background-color: var(--medium-brown); /* Kuning dari variabel root */
-  color: rgb(255, 255, 255); /* Teks hitam agar kontras */
+  background-color: var(--medium-brown);
+  color: rgb(255, 255, 255);
 }
 
 .status.process {
-  background-color: #5DADE2; /* Biru terang */
+  background-color: #5DADE2;
   color: white;
 }
 
 .status.completed {
-  background-color: #6B8E23; /* Hijau Olive */
+  background-color: #6B8E23;
   color: white;
 }
 
 .status.canceled {
-  background-color: #CC0000; /* Merah dari variabel root */
+  background-color: #CC0000;
   color: white;
 }
 
-/* Opsional: Jika Anda ingin hover effect, tambahkan di sini */
-.status:hover {
-    opacity: 0.9; /* Sedikit transparan saat dihover */
+.status.arrived {
+    background-color: #FF8C00;
+    color: white;
 }
 
-/* --- END OF NEW STATUS STYLING --- */
+.status:hover {
+    opacity: 0.9;
+}
 
-.order-details {
+.rate-button {
+  display: inline-block;
+  padding: 6px 16px;
+  border-radius: 20px;
+  background-color: var(--accent-brown);
+  color: var(--text-light);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+  text-align: center;
+  min-width: 70px;
+}
+
+.rate-button:hover {
+  background-color: var(--darker-accent-brown);
+}
+
+.confirm-button {
+  display: inline-block;
+  padding: 6px 16px;
+  border-radius: 20px;
+  background-color: #4CAF50;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+  text-align: center;
+  min-width: 80px;
+}
+
+.confirm-button:hover {
+  background-color: #45a049;
+}
+
+.order-details-group {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 20px;
+  margin-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.individual-order-item {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   text-align: left;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #f0f0f0;
+}
+
+.individual-order-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.item-header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  margin-bottom: 5px;
 }
 
 .order-title {
   font-size: 18px;
   font-weight: bold;
   color: var(--text-dark);
-  margin: 0 0 5px 0; /* Hapus margin default */
+  margin: 0;
+  flex-grow: 1;
 }
 
 .order-price {
   font-size: 16px;
   font-weight: 600;
   color: var(--dark-brown);
-  margin: 0; /* Hapus margin default */
+  margin: 0;
 }
 
-/* --- END OF ORDER HISTORY CARD STYLING --- */
+.order-date {
+  font-size: 14px;
+  color: #777;
+  margin: 0;
+  white-space: nowrap;
+  margin-left: 15px;
+}
+
+/* --- START OF MODAL STYLING --- */
+.modal {
+  display: none; /* Default: Hidden */
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+  /* remove display: flex; here */
+  justify-content: center;
+  align-items: center;
+  /* Tambahkan properti opacity dan pointer-events untuk transisi */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.modal.show { /* Kelas baru untuk menampilkan modal */
+  display: flex; /* Aktifkan flex saat kelas 'show' ada */
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  width: 80%;
+  max-width: 500px;
+  position: relative;
+  text-align: center;
+  transform: scale(0.9); /* Mulai dari sedikit lebih kecil */
+  transition: transform 0.3s ease;
+}
+
+.modal.show .modal-content { /* Animasi saat modal ditampilkan */
+  transform: scale(1);
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    color: var(--dark-brown);
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.modal-content p {
+    font-size: 16px;
+    line-height: 1.5;
+    color: #555;
+    margin-bottom: 25px;
+}
+
+.close-button {
+  color: #aaa;
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.btn {
+  padding: 10px 25px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.cancel-btn {
+  background-color: #ccc;
+  color: #333;
+}
+
+.cancel-btn:hover {
+  background-color: #bbb;
+}
+
+.confirm-btn {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.confirm-btn:hover {
+  background-color: #45a049;
+}
+
+/* --- END OF MODAL STYLING --- */
+
+/* Tambahkan ini di history.css Anda */
+
+/* Styling untuk tombol "Action" pada status Pending */
+.pending-action-button {
+  display: inline-block;
+  padding: 6px 16px;
+  border-radius: 20px;
+  background-color: #007bff; /* Warna biru, bisa disesuaikan */
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+  text-align: center;
+  min-width: 80px;
+}
+
+.pending-action-button:hover {
+  background-color: #0056b3; /* Warna biru lebih gelap saat hover */
+}
+
+/* Pastikan bagian modal dan modal.show sudah seperti ini */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.modal.show {
+  display: flex;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  width: 80%;
+  max-width: 500px;
+  position: relative;
+  text-align: center;
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+}
+
+.modal.show .modal-content {
+  transform: scale(1);
+}
+
+/* Jika Anda ingin status Pending itu sendiri tidak bisa diklik secara visual */
+.status.pending {
+  cursor: default;
+}
+
+
+/* ... existing CSS ... */
+
+/* Styling for container harga dan tombol invoice */
+.item-footer {
+  display: flex;
+  justify-content: space-between; /* Membuat harga di kiri, tombol di kanan */
+  align-items: center;
+  margin-top: 5px;
+  width: 100%; /* Pastikan ini mengisi lebar penuh dari parent */
+  /* padding-right: 5px; /* Opsional: Jika Anda ingin sedikit padding di kanan */
+}
+
+/* New: Styling for the invoice button container */
+.invoice-button-container {
+    display: flex;
+    justify-content: flex-end; /* Aligns the button to the right */
+    width: 100%;
+    margin-top: 15px; /* Add some space above the button */
+    padding-top: 10px; /* Add padding at the top */
+    border-top: 1px dashed #f0f0f0; /* Optional: a subtle separator */
+}
+
+/* Pastikan order-price tidak memiliki margin bawah yang mengganggu penataan flex */
+.order-price {
+    margin-bottom: 0;
+}
+
+/* Container untuk setiap kelompok invoice (misal, invoice lama, invoice baru) */
+.invoice-group-block {
+    border-bottom: 1px dashed #e0e0e0; /* Pemisah visual antar kelompok invoice */
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+.order-details-group .invoice-group-block:last-of-type {
+    border-bottom: none; /* Hapus border untuk yang terakhir */
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+
+/* Container untuk tombol invoice di dalam setiap invoice-group-block */
+.invoice-buttons-per-group-container {
+    display: flex;
+    justify-content: flex-end; /* Posisikan tombol di kanan bawah */
+    align-items: center;
+    margin-top: 10px; /* Jarak dari item buku di atasnya */
+    width: 100%;
+}
+
+/* Styling untuk tombol "Lihat Invoice" (tetap sama) */
+.view-invoice-button {
+  background-color: #a2aab3;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.view-invoice-button:hover {
+  background-color: #818991;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transform: translateY(-1px);
+}
+
 

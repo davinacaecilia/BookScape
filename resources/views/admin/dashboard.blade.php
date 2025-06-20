@@ -49,7 +49,7 @@
 				<li>
 					<i class='bx bxs-dollar-circle'></i>
 					<span class="text">
-						<h3>IDR 6000.000k</h3>
+						<h3>{{ $bukuCount }}</h3>
 						<p>Products</p>
 					</span>
 				</li>
@@ -74,15 +74,21 @@
 							</tr>
 						</thead>
 						<tbody>
+							@forelse($orders as $order)
 							<tr>
-								<td>#ORD001</td>
-								<td>igundw_</td>
+								<td>{{ $order->id }}</td>
+								<td>{{ $order->id }}</td>
 								<td>Harry Poteer <br> Romeo Juliet</td>
 								<td>Rp 150.000</td>
 								<td>Jl. Merdeka No. 1, Bandung</td>
 								<td>15-12-2024</td>
 								<td><span class="status pending">Pending</span></td>
 							</tr>
+							@empty
+								<tr>
+									<td colspan="10" style="text-align: center;">Tidak ada order yang ditemukan.</td>
+								</tr>
+								@endforelse
 							<tr>
 								<td>#ORD002</td>
 								<td>arlo</td>
