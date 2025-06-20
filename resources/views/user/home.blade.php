@@ -87,10 +87,10 @@
         <h1>WELCOME TO BOOKSCAPE</h1>
         <p>Explore thousands of books from all genres and find your perfect read</p>
 
-        <div class="search-bar">
-          <input type="text" placeholder="Search books or authors...">
-          <button><i class='bx bx-search'></i></button>
-        </div>
+        <form class="search-bar" action="{{ route('product.library') }}" method="GET">
+          <input type="text" name="search" placeholder="Search books or authors...">
+          <button type="submit"><i class='bx bx-search'></i></button>
+        </form>
       </div>
     </section>
 
@@ -113,7 +113,7 @@
         @endforeach
           </p>
           <p class="book-price">Rp {{ number_format($myCart->buku->harga, 0, ',', '.') }}
-            <span class="rating">⭐ {{ $newArrival->averageRating() }}</span>
+          <span class="rating">⭐ {{ $myCart->buku->averageRating() }}</span>
           </p>
         </div>
         </a>
@@ -275,7 +275,7 @@
   <!-- Sci  -->
   <section class="categories2">
     <div class="category-grid2">
-      
+
       <a href="{{ route('product.library', ['genre' => 'Sci-Fi']) }}" class="category-card">
         <div class="category-icon">
           <i class='bx bx-planet'></i>

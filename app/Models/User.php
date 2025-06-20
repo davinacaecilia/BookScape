@@ -6,6 +6,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Authenticatable
 {
@@ -52,12 +54,18 @@ class User extends Authenticatable
         return $this->hasMany(Rating::class);
     }
 
-    public function orders() {
+    public function orders()
+    {
         return $this->hasMany(Order::class);
     }
 
-    public function alamat()
+    public function alamats(): HasMany
     {
-        return $this->hasOne(Alamat::class);
+        return $this->hasMany(Alamat::class);
+    }
+
+    public function primaryAlamat(): HasOne
+    {
+        return $this->hasOne(Alamat::class)->where('is_primary', true);
     }
 }

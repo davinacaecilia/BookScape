@@ -32,7 +32,7 @@ class RatingController extends Controller
 
     public function create(Buku $buku)
     {
-        // Cukup tampilkan view dan kirim data buku yang sesuai dari URL
-        return view('produk.rating', ['buku' => $buku]);
+        // Laravel otomatis mencari buku berdasarkan ID di URL
+        return view('produk.rating', compact('buku'));
     }
 }

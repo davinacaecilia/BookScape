@@ -19,7 +19,7 @@
         
         <div class="nav-icons">
           <a href="{{ route('product.cart') }}" class="shopping-cart"> <i class='bx bx-cart'></i></a>
-          <a href="profile" class="profile-icon"> <i class='bx bx-user-circle'></i></a>
+          <a href="{{ route('profile.update') }}" class="profile-icon"> <i class='bx bx-user-circle'></i></a>
         </div>
       </div>
     </div>

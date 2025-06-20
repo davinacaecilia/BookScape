@@ -13,7 +13,7 @@ class UserController extends Controller
 {
     public function showHome()
     {
-        $myCarts = Cart::with('buku') 
+        $myCarts = Cart::with('buku')
             ->where('user_id', auth()->user()->id)
             ->get();
         $newArrivals = Buku::orderBy('updated_at', 'desc')->get();
@@ -26,7 +26,7 @@ class UserController extends Controller
     {
         return view('user.settings');
     }
-    
+
     public function showLibrary(Request $request)
     {
         $genreFilter = $request->query('genre');
@@ -43,7 +43,7 @@ class UserController extends Controller
         if ($request->filled('search')) {
             $query->where(function ($q) use ($searchQuery) {
                 $q->where('judul_buku', 'like', '%' . $searchQuery . '%')
-                ->orWhere('penulis_buku', 'like', '%' . $searchQuery . '%');
+                    ->orWhere('penulis_buku', 'like', '%' . $searchQuery . '%');
             });
         }
 
@@ -52,24 +52,20 @@ class UserController extends Controller
 
         return view('produk.new', compact('products', 'genres', 'genreFilter', 'searchQuery'));
     }
-    
-    public function showDetail(Request $request)
-    {
-        $products = Buku::find($request->id);
 
-        $searchQuery = $request->query('search');
-        $query = Buku::with('genres');
-        if ($request->filled('search')) {
-            $query->where(function ($q) use ($searchQuery) {
-                $q->where('judul_buku', 'like', '%' . $searchQuery . '%')
-                ->orWhere('penulis_buku', 'like', '%' . $searchQuery . '%');
-            });
-        }
-        
-        $previousBuku = Buku::where('id', '<', $request->id)->orderBy('id', 'desc')->first();
-        $nextBuku = Buku::where('id', '>', $request->id)->orderBy('id', 'asc')->first();
-        
-        return view('produk.preview', compact('products', 'previousBuku', 'nextBuku', 'searchQuery'));
+    public function showDetail($id) 
+    {
+
+        $buku = Buku::with('genres', 'ratings.user')->findOrFail($id);
+
+        $previousBuku = Buku::where('id', '<', $buku->id)->orderBy('id', 'desc')->first();
+        $nextBuku = Buku::where('id', '>', $buku->id)->orderBy('id', 'asc')->first();
+
+        return view('produk.preview', [
+            'buku' => $buku,
+            'previousBuku' => $previousBuku,
+            'nextBuku' => $nextBuku,
+        ]);
     }
 
     public function addToCart($id)
@@ -94,10 +90,11 @@ class UserController extends Controller
         return response()->json(['message' => 'Berhasil ditambahkan ke keranjang']);
     }
 
-    public function showCart() {
+    public function showCart()
+    {
         $user = auth()->user();
 
-        $items = Cart::with('buku')  // relasi ke model Buku
+        $items = Cart::with('buku')
             ->where('user_id', $user->id)
             ->get();
 
@@ -112,8 +109,8 @@ class UserController extends Controller
         ]);
 
         $cart = Cart::where('id', $request->cart_id)
-                    ->where('user_id', auth()->user()->id)
-                    ->firstOrFail();
+            ->where('user_id', auth()->user()->id)
+            ->firstOrFail();
 
         $cart->quantity = $request->quantity;
         $cart->save();
@@ -121,7 +118,7 @@ class UserController extends Controller
         return response()->json(['success' => true]);
     }
 
-    
+
     public function deleteCart(Request $request)
     {
         $request->validate([
@@ -129,8 +126,8 @@ class UserController extends Controller
         ]);
 
         $cart = Cart::where('id', $request->cart_id)
-                    ->where('user_id', auth()->id())
-                    ->first();
+            ->where('user_id', auth()->id())
+            ->first();
 
         if ($cart) {
             $cart->delete();
@@ -149,8 +146,8 @@ class UserController extends Controller
 
         // Menghapus semua item keranjang dengan ID yang ada di array dan milik pengguna saat ini
         $deletedCount = Cart::whereIn('id', $request->cart_ids) // Menggunakan whereIn untuk menghapus banyak ID sekaligus
-                            ->where('user_id', auth()->id())
-                            ->delete();
+            ->where('user_id', auth()->id())
+            ->delete();
 
         if ($deletedCount > 0) {
             return response()->json(['success' => true, 'message' => "$deletedCount item berhasil dihapus."]);
@@ -165,16 +162,26 @@ class UserController extends Controller
 
         $orderItems = Cart::with('buku')->whereIn('id', $ids)->get();
 
+        $user = Auth::user();
+        $alamatUser = $user->alamats;
+
         $subtotal = $orderItems->sum(fn($i) => $i->quantity * $i->buku->harga);
         $shippingCost = 0.05 * $subtotal;
         $total = $subtotal + $shippingCost;
 
-        return view('produk.order-cart', compact('orderItems', 'subtotal', 'shippingCost', 'total'));
+        return view('produk.order-cart', compact(
+            'orderItems',
+            'subtotal',
+            'shippingCost',
+            'total',
+            'alamatUser'
+        ));
     }
 
 
-    public function showHistory() {
+    public function showHistory()
+    {
         return view('produk.history');
     }
-    
+
 }
