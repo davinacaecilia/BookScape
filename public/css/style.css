@@ -487,7 +487,7 @@ body.dark-mode .octa {
 	font-weight: 700;
 }
 .status.process {
-	background-color: #5DADE2;  /* Burnt Orange */
+background-color: #5DADE2;  /* Biru */
 	color: white;
 	font-size: 14px;
 	font-weight: 700;
@@ -495,23 +495,32 @@ body.dark-mode .octa {
 	border-radius: 20px;
 }
 .status.completed {
-	background-color: #6B8E23;  /* Olive Green */
+	background-color: #6B8E23;  /* Hijau Zaitun */
 	color: white;
-	font-size: 14px;       /* ukuran font dibuat sama */
-	font-weight: 700;      /* biar tebal */
+	font-size: 14px;
+	font-weight: 700;
 	padding: 6px 16px;
 	border-radius: 20px;
 }
+.status.arrived {
+  background-color: #E67E22;  /* Ungu (Amethyst) */
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 6px 16px;
+  border-radius: 20px;
+}
+
 .status.pending {
-	background-color: var(--yellow); /* kuning */
-	color: black;                    /* biar kontras */
+	background-color: var(--yellow); /* Kuning */
+	color: black;
 	font-size: 14px;
 	font-weight: 700;
 	padding: 6px 16px;
 	border-radius: 20px;
 }
 .status.canceled {
-	background-color: var(--red); /* merah */
+	background-color: var(--red); /* Merah */
 	color: white;
 	font-size: 14px;
 	font-weight: 700;
