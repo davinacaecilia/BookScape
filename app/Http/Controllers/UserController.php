@@ -7,6 +7,7 @@ use App\Models\Cart;
 use App\Models\Genre;
 use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -19,12 +20,6 @@ class UserController extends Controller
         $bestSellers = Buku::all();
         $libraries = Buku::all();
         return view('user.home', compact('newArrivals', 'bestSellers', 'libraries', 'myCarts'));
-    }
-
-    public function showProfile()
-    {
-        $user = auth()->user();
-        return view('user.profile', compact('user'));
     }
 
     public function showSettings()

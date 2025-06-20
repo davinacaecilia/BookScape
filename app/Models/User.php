@@ -47,7 +47,8 @@ class User extends Authenticatable
         ];
     }
 
-    public function ratings() {
+    public function ratings()
+    {
         return $this->hasMany(Rating::class);
     }
 
@@ -55,4 +56,8 @@ class User extends Authenticatable
         return $this->hasMany(Order::class);
     }
 
+    public function alamat()
+    {
+        return $this->hasOne(Alamat::class);
+    }
 }

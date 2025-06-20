@@ -1,49 +1,31 @@
-document.addEventListener('DOMContentLoaded', () => {
-        const starRatings = document.querySelectorAll('input[name="rating"]');
-        const reviewTextarea = document.getElementById('reviewText');
-        const submitButton = document.getElementById('submitReviewBtn');
+// public/produk/js/rating.js
 
-        const updateButtonState = () => {
-            let isStarSelected = false;
-            starRatings.forEach(star => {
-                if (star.checked) {
-                    isStarSelected = true;
-                }
-            });
+document.addEventListener('DOMContentLoaded', function() {
+    // Ambil semua input radio untuk rating
+    const ratingInputs = document.querySelectorAll('.stars input[name="rating"]');
+    
+    // Ambil tombol submit
+    const submitButton = document.querySelector('.submit-review-btn');
 
-            const isReviewFilled = reviewTextarea.value.trim().length > 0;
+    // Fungsi untuk mengaktifkan tombol submit
+    function enableSubmitButton() {
+        // Cek apakah ada bintang yang sudah dipilih
+        const isStarSelected = document.querySelector('input[name="rating"]:checked');
 
-            if (isStarSelected && isReviewFilled) {
-                submitButton.removeAttribute('disabled');
-            } else {
-                submitButton.setAttribute('disabled', 'disabled');
-            }
-        };
+        // Jika ada bintang yang dipilih
+        if (isStarSelected) {
+            // Aktifkan tombolnya (hapus atribut disabled)
+            submitButton.disabled = false;
+        }
+        // Tidak ada 'else', jadi tombol akan tetap aktif setelah diaktifkan
+    }
 
-        // Event listeners for stars and textarea
-        starRatings.forEach(star => {
-            star.addEventListener('change', updateButtonState);
-        });
-
-        reviewTextarea.addEventListener('input', updateButtonState);
-
-        // Event listener for the submit button
-        submitButton.addEventListener('click', (event) => {
-            event.preventDefault(); // Mencegah submit form default
-
-            Swal.fire({
-                title: 'Ulasan Terkirim!',
-                text: 'Terima kasih telah memberikan ulasan. Pendapat Anda sangat berarti bagi kami.',
-                icon: 'success',
-                confirmButtonText: 'Oke',
-                confirmButtonColor: 'var(--accent-brown)' // Menggunakan variabel CSS untuk warna tombol
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = 'history'; 
-                }
-            });
-        });
-
-        // Set initial state of the button on page load
-        updateButtonState();
+    // Tambahkan event listener ke setiap radio button bintang
+    // Setiap kali pengguna mengubah pilihan bintang, kita panggil fungsinya
+    ratingInputs.forEach(input => {
+        input.addEventListener('change', enableSubmitButton);
     });
+
+    // PENTING: KITA TIDAK MEMBUTUHKAN EVENT LISTENER UNTUK TOMBOL SUBMIT.
+    // Kita ingin browser melakukan aksi default-nya, yaitu men-submit form.
+});
