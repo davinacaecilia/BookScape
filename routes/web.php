@@ -12,21 +12,23 @@ Route::get('/', function () {
 });
 
 //rute user
-Route::get('/home', function () {
-    return view('user.home');
-})->name('home');
-Route::get('/profile', function () {
-    return view('user.profile');
-})->name('profile');
-Route::get('/settings', function () {
-    return view('user.settings');
-})->name('settings');
+Route::middleware(['auth', 'role:1'])->group(function () {
 
-Route::get('/product', [UserController::class, 'showLibrary'])->name('product.library');
-Route::get('/product/detail/{id}', [UserController::class, 'showDetail'])->name('product.detail');
-Route::post('/cart/add/{id}', [UserController::class, 'addToCart'])->name('product.addToCart');
-Route::get('/cart', [UserController::class, 'showCart'])->name('product.cart');
+    Route::get('/settings', function () {
+        return view('user.settings');
+    })->name('settings');
 
+    Route::get('/profile', [UserController::class, 'showProfile'])->name('profile');
+    Route::get('/home', [UserController::class, 'showHome'])->name('home');
+    Route::get('/product', [UserController::class, 'showLibrary'])->name('product.library');
+    Route::get('/product/detail/{id}', [UserController::class, 'showDetail'])->name('product.detail');
+    Route::post('/cart/add/{id}', [UserController::class, 'addToCart'])->name('product.addToCart');
+    Route::get('/cart', [UserController::class, 'showCart'])->name('product.cart');
+    Route::post('/cart/update-quantity', [UserController::class, 'updateQuantity'])->name('cart.updateQuantity');
+    Route::post('/cart/delete', [UserController::class, 'deleteCart'])->name('cart.delete');
+
+    Route::get('/history', [UserController::class, 'showHistory'])->name('order.history');
+});
 
 
 //rute admin
@@ -41,7 +43,6 @@ Route::middleware(['auth', 'role:0'])->prefix('admin')->name('admin.')->group(fu
     })->name('ratings');
 
     //rute lain disini
-
 });
 
 Route::middleware(['auth', 'role:0'])->group(function () {

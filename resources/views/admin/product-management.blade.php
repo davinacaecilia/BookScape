@@ -66,7 +66,7 @@
                         <p>Stock: {{ $product->stock }}</p>
                         <p>Genre:
                             @foreach($product->genres as $genre)
-                                {{ $genre->nama_genre }}{{ !$loop->last ? ', ' : '' }}
+                                {{ $genre->genre }}{{ !$loop->last ? ', ' : '' }}
                             @endforeach
                         </p>
                         <div class="action-buttons">
