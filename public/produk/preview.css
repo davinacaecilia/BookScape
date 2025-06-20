@@ -1,0 +1,328 @@
+:root {
+  --light-brown: #f8f3ed; /* Body background */
+  --medium-brown: #e0d19f; /* Search bar, light accents */
+  --dark-brown: #5C4033; /* Header overlay, primary text */
+  --accent-brown: #8B4513; /* Add to cart button, links */
+  --darker-accent-brown: #6F350F; /* Hover state for accent */
+  --text-dark: #4b3621; /* Dark text */
+  --text-light: #fefefe; /* Light text */
+  --footer-bg: #7A5230; /* Footer background */
+  --notification-red: #ff4757; /* Keep red for visibility, but border changed */
+  --notification-border-brown: #c58628; /* Brown border for notification/cart */
+  --white: #ffffff;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: var(--light-brown);
+  color: #333;
+}
+
+/* --- START OF NEW BOOK DETAIL CARD STYLING --- */
+main {
+  padding: 20px; /* Memberikan padding di sekitar main untuk card */
+}
+
+.book-detail-card {
+  background-color: var(--white);
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  margin: 40px auto; /* Memberi jarak atas/bawah dan menengahkan card */
+  max-width: 900px; /* Lebar card yang lebih besar */
+  padding: 30px;
+  display: flex; /* Menggunakan Flexbox untuk tata letak gambar dan info */
+  align-items: flex-start; /* Konten di card dimulai dari atas */
+  gap: 30px; /* Jarak antara gambar dan info */
+}
+
+.book-cover-detail {
+  width: 250px; /* Lebar gambar cover */
+  height: auto; /* Tinggi otomatis menjaga rasio aspek */
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Shadow yang lebih menonjol untuk gambar */
+  flex-shrink: 0; /* Mencegah gambar menyusut */
+}
+
+.book-detail-info {
+  flex: 1; /* Bagian info mengambil sisa ruang */
+  display: flex;
+  flex-direction: column; /* Mengatur konten di dalam info secara vertikal */
+}
+
+.book-detail-title {
+  font-size: 28px;
+  font-weight: bold;
+  color: var(--text-dark);
+  margin-bottom: 5px;
+}
+
+.book-detail-author {
+  font-size: 18px;
+  color: var(--accent-brown); /* Warna cokelat untuk pengarang */
+  margin-bottom: 15px;
+  display: block;
+}
+
+.genre-rating-wrapper {
+  display: flex;
+  /* Removed justify-content: space-between; from here as it will be applied to .book-genres and .book-detail-rating */
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.book-genres { /* New style for the genre wrapper */
+  display: flex;
+  gap: 10px;
+}
+
+.genre-rating-wrapper {
+  display: flex;
+  justify-content: space-between; /* This will now space out the .book-genres div and the .book-detail-rating div */
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.book-detail-genre {
+  display: inline-block;
+  padding: 5px 12px;
+  background-color: var(--medium-brown); /* Background cokelat untuk tag genre */
+  color: var(--dark-brown);
+  border-radius: 20px; /* Sudut lebih membulat */
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.book-detail-rating {
+  color: #ffa000; /* Warna emas untuk bintang */
+  font-size: 1.1em;
+}
+
+.book-detail-rating span {
+  font-size: 0.9em;
+  color: var(--text-dark); /* Warna teks untuk nilai rating */
+  margin-left: 5px;
+}
+
+.book-detail-description {
+  color: var(--text-dark);
+  line-height: 1.7;
+  margin-bottom: 25px;
+  font-size: 15px;
+  text-align: justify; /* Teks deskripsi rata kanan kiri */
+}
+
+.price-actions-wrapper {
+  display: flex;
+  justify-content: space-between; /* Harga di kiri, tombol di kanan */
+  align-items: center;
+  margin-top: auto; /* Mendorong wrapper ini ke bagian bawah container flex */
+  padding-top: 20px; /* Jarak dari deskripsi */
+  border-top: 1px solid rgba(0,0,0,0.05); /* Garis pemisah */
+}
+
+.book-detail-price {
+  font-size: 26px;
+  font-weight: bold;
+  color: var(--dark-brown);
+  margin: 0; /* Hapus margin default */
+}
+
+.book-detail-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* Jarak antara ikon dan tombol */
+}
+
+.add-to-wishlist-button,
+.cart-icon-button {
+  background: none;
+  border: none;
+  color: var(--accent-brown); /* Warna cokelat untuk ikon */
+  font-size: 1.8em; /* Ukuran ikon lebih besar */
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.add-to-wishlist-button:hover,
+.cart-icon-button:hover {
+  color: var(--dark-brown); /* Changed to medium brown on hover */
+}
+
+.buy-now-button {
+  background-color: var(--accent-brown);
+  color: var(--text-light);
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Shadow untuk tombol */
+}
+
+.buy-now-button:hover {
+  background-color: var(--darker-accent-brown);
+}
+
+/* Hapus atau sembunyikan gaya untuk .book-grid dan .book-card lama */
+.book-grid { display: none; } /* Sembunyikan grid lama jika masih ada */
+/* Anda juga bisa menghapus blok CSS ini sepenuhnya jika tidak lagi digunakan */
+.book-card, .book-cover, .book-info, .book-title, .book-genre, .rating, .book-price, .add-to-cart-button {
+  display: none; /* Sembunyikan elemen-elemen dari grid lama */
+}
+
+/* Navigasi Kiri Kanan (Seperti di Karya.html) */
+.nav-arrows {
+  position: fixed; /* Posisikan tombol tetap di viewport saat scroll */
+  top: 50%; /* Posisikan di tengah vertikal layar */
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between; /* Letakkan tombol di sisi paling kiri dan paling kanan */
+  transform: translateY(-50%); /* Penyesuaian untuk penempatan vertikal yang tepat */
+  padding: 0 20px; /* Jarak dari tepi layar (kiri dan kanan) */
+  z-index: 99; /* Pastikan tombol di atas konten lain */
+  pointer-events: none; /* Secara default, biarkan klik menembus elemen ini jika tidak langsung pada tombol */
+}
+
+/* Navigasi Kiri Kanan */
+.nav-arrows {
+  position: absolute; /* <--- INI YANG MEMBUATNYA TETAP DI TEMPAT, TIDAK IKUT SCROLL */
+  top: 50%;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  transform: translateY(-50%);
+  padding: 0 20px;
+  z-index: 99;
+  pointer-events: none;
+}
+
+.nav-arrow {
+  background-color: rgba(119, 79, 26, 0.4); /* Tetap semi-transparan hitam untuk latar belakang tombol */
+  color: white; /* <--- UBAH KEMBALI KE WARNA PUTIH UNTUK IKON PANAH (Agar KONTRAST) */
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: background-color 0.3s ease;
+}
+
+.nav-arrow:hover {
+  background-color: rgba(172, 137, 43, 0.6);
+}
+
+/* --- Custom SweetAlert2 Styling --- */
+.custom-swal-popup {
+  border-radius: 8px;
+}
+
+.custom-swal-title {
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 1.8em;
+  font-weight: bold;
+  color: var(--text-light) !important;
+}
+
+.custom-swal-content {
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 1.2em;
+  color: var(--text-light) !important;
+}
+
+.custom-swal-confirm-button {
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 1em;
+  padding: 10px 20px;
+  border-radius: 5px;
+}
+
+.custom-swal-confirm-button {
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 1em;
+  padding: 10px 20px;
+  border-radius: 5px;
+}
+
+/* START OF PRODUCT REVIEWS STYLING */
+.product-reviews {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: var(--white);
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.reviews-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--dark-brown);
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.review-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* 3 or 4 columns, responsive */
+  gap: 20px;
+}
+
+.review-card {
+  background-color: var(--light-brown);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.review-header {
+  display: flex;
+  align-items: center; /* Menyelaraskan foto profil, nama, dan rating secara vertikal */
+  gap: 10px; /* Jarak antara foto profil dan nama */
+  margin-bottom: 10px;
+}
+
+.profile-review-pic {
+  width: 40px; /* Ukuran foto profil */
+  height: 40px;
+  border-radius: 50%; /* Membuat foto profil bulat */
+  object-fit: cover; /* Memastikan gambar mengisi area tanpa terdistorsi */
+  border: 2px solid var(--medium-brown); /* Opsional: border di sekitar foto profil */
+}
+
+.reviewer-name {
+  font-weight: bold;
+  color: var(--dark-brown);
+  font-size: 1.1em;
+}
+
+.review-rating {
+  color: #ffa000; /* Gold color for stars */
+  font-size: 1em;
+  margin-left: auto; /* Mendorong rating ke kanan */
+}
+
+.review-rating span {
+  font-size: 0.9em;
+  color: var(--text-dark);
+  margin-left: 5px;
+}
+
+.review-text {
+  color: var(--text-dark);
+  line-height: 1.6;
+  font-size: 0.95em;
+  text-align: justify;
+}
+/* END OF PRODUCT REVIEWS STYLING */

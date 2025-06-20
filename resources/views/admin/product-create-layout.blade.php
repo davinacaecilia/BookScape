@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>BookScape Admin - @yield('title', 'Dashboard')</title>
-    
+
     <style>
         /* Palet warna coklat */
         :root {
@@ -36,7 +37,7 @@
             background-color: white;
             padding: 2rem 2.5rem;
             border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
         h1 {
@@ -83,16 +84,29 @@
             background-color: var(--brown-dark);
         }
     </style>
-    
+
     @yield('head') {{-- kalau mau tambah css/js lain di child view --}}
 </head>
+
 <body>
     <header>
         BookScape Admin Panel
     </header>
 
+    <form id="logout-form-admin" action="{{ route('logout') }}" method="POST" style="display: none;">
+        @csrf
+    </form>
+
+    <script>
+        function confirmAdminLogout() {
+            if (confirm('Are You Sure Want to Log Out?')) {
+                document.getElementById('logout-form-admin').submit();
+            }
+        }
+    </script>
     <div class="container">
         @yield('content')
     </div>
 </body>
+
 </html>

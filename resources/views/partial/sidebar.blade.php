@@ -1,10 +1,10 @@
 <section id="sidebar">
-    <a href="#" class="brand">
-        <i class='bx bx-book-reader' style="margin-left: 8px;"></i>
-        <span class="text">
-            <span class="octa">Book</span><span class="prime">Scape</span>
-        </span>
-    </a>
+  <a href="#" class="brand">
+    <i class='bx bx-book-reader' style="margin-left: 8px;"></i>
+    <span class="text">
+      <span class="octa">Book</span><span class="prime">Scape</span>
+    </span>
+  </a>
   <ul class="side-menu top">
     <li class="{{ Request::is('dashboard') ? 'active' : '' }}">
       <a href="{{ route('admin.dashboard') }}">
@@ -19,28 +19,39 @@
       </a>
     </li>
     <li class="{{ Request::routeIs('admin.ratings') ? 'active' : '' }}">
-            <a href="{{ route('admin.ratings') }}">
-                <i class='bx bxs-star'></i>
-                <span class="text">Ratings & Reviews</span>
-            </a>
-        </li>
+      <a href="{{ route('admin.ratings') }}">
+        <i class='bx bxs-star'></i>
+        <span class="text">Ratings & Reviews</span>
+      </a>
+    </li>
     <li class="{{ Request::is('product-management') ? 'active' : '' }}">
       <a href="{{ route('product.management') }}">
         <i class='bx bxs-cart-add'></i>
         <span class="text">Product Management</span>
       </a>
     </li>
- <li class="{{ Request::is('user-management') ? 'active' : '' }}">
-    <a href="{{ route('user.management') }}">
+    <li class="{{ Request::is('user-management') ? 'active' : '' }}">
+      <a href="{{ route('user.management') }}">
         <i class='bx bx-user'></i>
         <span class="text">User Management</span>
-        </a>
+      </a>
     </li>
-    <li>
-      <a href="{{ route('logout') }}" class="logout"  onclick="return confirm('Are You Sure Want to Log Out?');">
+    <li class="logout-link">
+      <a href="#" class="logout" onclick="event.preventDefault(); confirmAdminLogout();">
         <i class='bx bxs-log-out-circle'></i>
         <span class="text">Logout</span>
       </a>
     </li>
+    <form id="logout-form-admin" action="{{ route('logout') }}" method="POST" style="display: none;">
+      @csrf
+    </form>
   </ul>
+
+  <script>
+    function confirmAdminLogout() {
+      if (confirm('Are You Sure Want to Log Out?')) {
+        document.getElementById('logout-form-admin').submit();
+      }
+    }
+  </script>
 </section>

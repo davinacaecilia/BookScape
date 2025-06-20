@@ -26,7 +26,7 @@
 				<div class="left">
 					<h1>Dashboard</h1>
 					<ul class="breadcrumb">
-						<li><a href="#">Dashboard</a></li>
+						<li><a href="{{route('admin.dashboard')}}">Dashboard</a></li>
 					</ul>
 				</div>
 			</div>
@@ -131,7 +131,20 @@
 	<!-- CONTENT -->
 
 
+	<form id="logout-form-admin" action="{{ route('logout') }}" method="POST" style="display: none;">
+		@csrf
+	</form>
+
+	<script>
+		function confirmAdminLogout() {
+			if (confirm('Are You Sure Want to Log Out?')) {
+				document.getElementById('logout-form-admin').submit();
+			}
+		}
+	</script>
+
 	<script src="{{ asset('script/script.js') }}"></script>
 	<script src="{{ asset('script/pagination.js') }}"></script>
 </body>
+
 </html>

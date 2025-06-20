@@ -131,6 +131,18 @@
 <!-- Pagination di paling bawah -->
 	<div id="pagination" class="pagination-container"></div>
 
+	<form id="logout-form-admin" action="{{ route('logout') }}" method="POST" style="display: none;">
+        @csrf
+    </form>
+
+    <script>
+        function confirmAdminLogout() {
+            if (confirm('Are You Sure Want to Log Out?')) {
+                document.getElementById('logout-form-admin').submit();
+            }
+        }
+    </script>
+
 	<script src="{{ asset('script/script.js') }}"></script>
 	<script src="{{ asset('script/pagination.js') }}"></script>
 </body>

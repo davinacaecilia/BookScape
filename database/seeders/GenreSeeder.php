@@ -10,11 +10,14 @@ class GenreSeeder extends Seeder
     public function run()
     {
         DB::table('genres')->insert([
-            ['genre' => 'Fiksi'],
-            ['genre' => 'Non-Fiksi'],
-            ['genre' => 'Petualangan'],
-            ['genre' => 'Romantis'],
-            ['genre' => 'Sejarah'],
+            ['genre' => 'Comedy'],
+            ['genre' => 'Drama'],
+            ['genre' => 'Romance'],
+            ['genre' => 'Horror'],
+            ['genre' => 'Sci-Fi'],
+            ['genre' => 'Fantasy'],
+            ['genre' => 'Thriller'],
+            ['genre' => 'Mystery'],
         ]);
 
     }

@@ -1,0 +1,120 @@
+/* Modal Overlay */
+.address-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: none; /* Hidden by default */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Modal Content */
+.address-modal-content {
+    background-color: var(--white);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    transform: translateY(-50px); /* Initial position for animation */
+    opacity: 0; /* Initial opacity for animation */
+    animation: modalFadeIn 0.3s forwards ease-out;
+}
+
+@keyframes modalFadeIn {
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.address-modal-content h2 {
+    font-size: 1.8rem;
+    color: var(--dark-brown);
+    margin-top: 0;
+    margin-bottom: 25px;
+    text-align: center;
+    border-bottom: 2px solid var(--medium-brown);
+    padding-bottom: 15px;
+}
+
+/* Form Group Styles */
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: var(--text-dark);
+    font-size: 0.95em;
+}
+
+.form-group .required {
+    color: var(--notification-red);
+    margin-left: 5px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="tel"],
+.form-group input[type="email"],
+.form-group textarea {
+    width: calc(100% - 20px); /* Account for padding */
+    padding: 10px;
+    border: 1px solid var(--medium-brown);
+    border-radius: 6px;
+    font-size: 0.9em;
+    color: var(--text-dark);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: var(--accent-brown);
+    box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.2);
+    outline: none;
+}
+
+/* Save Address Button */
+.save-address-btn {
+    background-color: var(--accent-brown);
+    color: var(--text-light);
+    border: none;
+    border-radius: 8px;
+    padding: 12px 25px;
+    font-size: 1.05rem;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 20px;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    font-weight: bold;
+}
+
+.save-address-btn:hover {
+    background-color: var(--darker-accent-brown);
+    transform: translateY(-1px);
+}
+
+/* Close Modal Button */
+.close-modal-btn {
+    background: none;
+    border: none;
+    font-size: 30px;
+    color: #888;
+    cursor: pointer;
+    line-height: 1;
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    transition: color 0.2s ease;
+}
+
+.close-modal-btn:hover {
+    color: #333;
+}

@@ -1,60 +1,63 @@
 <?php
 
-use App\Http\Controllers\LoginController;
-use App\Http\Controllers\RegisterController;
-use App\Http\Controllers\LogoutController;
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\LandingController; // Ditambahkan dari main
-
+use App\Http\Controllers\AdminController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-// Rute Publik / Guest
-Route::get('/', [LandingController::class, 'index'])->name('landing'); // Dari main
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [LoginController::class, 'login']);
-
-Route::get('/register', [RegisterController::class, 'showRegisterForm'])->name('register');
-Route::post('/register', [RegisterController::class, 'register']);
-
-// Grup Rute yang Membutuhkan Otentikasi
-Route::middleware('auth')->group(function () {
-    // Rute Umum User (jika ada, dari main)
-    Route::get('/home', [UserController::class, 'showHome'])->name('home');
-
-    // Rute Admin Views & Fungsionalitas
-    Route::get('/dashboard', [AdminController::class, 'showDashboard'])->name('admin.dashboard');
-    Route::get('/orders', [AdminController::class, 'listOrders'])->name('admin.orders');
-    Route::get('/message', [AdminController::class, 'listMessage'])->name('admin.message'); // Enih dah igun apus yh, soalnya fiturnya ganti jadi ratings
-    
-    // Rute Ratings
-    Route::get('/admin/ratings', [AdminController::class, 'showRatingsAndReviews'])->name('admin.ratings'); // Ratings & Reviews
-    Route::get('/orders/{id}', function ($id) {
-        // nanti di sini bisa ambil data order sesuai $id dari DB kalau sudah backend
-        return view('admin.detail-order', ['orderId' => $id]);
-    })->name('orders.detail'); // Detail Order
-    Route::get('/admin/reply-message', function () {
-        return view('admin.reply-message');
-    })->name('reply.form'); // Reply Message
-    
-    // Product Management (diambil dari main, karena sudah direfaktor ke AdminController)
-    Route::get('/product-management', [AdminController::class, 'listProduct'])->name('product.management');
-    Route::get('/product-management/create', [AdminController::class, 'addProduct'])->name('product.create');
-    Route::post('/product-management/store', [AdminController::class, 'storeProduct'])->name('product.store');
-    Route::get('/product-management/edit/{id}', [AdminController::class, 'editProduct'])->name('product.edit');
-    Route::put('/product-management/update/{id}', [AdminController::class, 'updateProduct'])->name('product.update');
-    Route::delete('/product-management/delete/{id}', [AdminController::class, 'deleteProduct'])->name('product.destroy');
-    
-    // User Management (diambil dari main dan dilengkapi)
-    Route::get('/user-management', [AdminController::class, 'listUsers'])->name('user.management');
-    Route::put('/user-management/update/{id}', [AdminController::class, 'updateUser'])->name('user.update'); // Ditambahkan, karena ada methodnya di AdminController
-    Route::delete('/user-management/delete/{id}', [AdminController::class, 'deleteUser'])->name('user.destroy'); // Ditambahkan, karena ada methodnya di AdminController
-
-    // Logout
-    Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
+//rute semua orang
+Route::get('/', function () {
+    return view('welcome');
 });
 
-// Route untuk list produk di hlmn user (punya jeilta) - di luar middleware auth
-Route::get('/produk', function () {
-    return view('produk');
-})->name('produk');
+//rute user
+Route::middleware(['auth', 'role:1'])->group(function () {
+
+    Route::get('/settings', function () {
+        return view('user.settings');
+    })->name('settings');
+
+    Route::get('/profile', [UserController::class, 'showProfile'])->name('profile');
+    Route::get('/home', [UserController::class, 'showHome'])->name('home');
+    Route::get('/product', [UserController::class, 'showLibrary'])->name('product.library');
+    Route::get('/product/detail/{id}', [UserController::class, 'showDetail'])->name('product.detail');
+    Route::post('/cart/add/{id}', [UserController::class, 'addToCart'])->name('product.addToCart');
+    Route::get('/cart', [UserController::class, 'showCart'])->name('product.cart');
+    Route::post('/cart/update-quantity', [UserController::class, 'updateQuantity'])->name('cart.updateQuantity');
+    Route::post('/cart/delete', [UserController::class, 'deleteCart'])->name('cart.delete');
+    Route::post('/cart/delete-selected', [UserController::class, 'deleteSelectedCart'])->name('cart.deleteSelected');
+    Route::post('/cart/checkout', [UserController::class, 'checkout'])->name('cart.checkout');
+
+    Route::get('/history', [UserController::class, 'showHistory'])->name('order.history');
+});
+
+
+//rute admin
+Route::middleware(['auth', 'role:0'])->prefix('admin')->name('admin.')->group(function () {
+
+    Route::get('/dashboard', [AdminController::class, 'showDashboard'])->name('dashboard');
+    Route::get('/orders', function () {
+        return view('admin.orders');
+    })->name('orders');
+    Route::get('/ratings', function () {
+        return view('admin.ratings');
+    })->name('ratings');
+
+    //rute lain disini
+});
+
+Route::middleware(['auth', 'role:0'])->group(function () {
+
+    Route::get('/product-management', [AdminController::class, 'listProduct'])->name('product.management');
+    Route::get('/user-management', [AdminController::class, 'listUsers'])->name('user.management');
+    Route::get('/product-create', [AdminController::class, 'addProduct'])->name('product.create');
+    Route::post('/products', [AdminController::class, 'storeProduct'])->name('product.store');
+    Route::get('/product-edit/{id}', [AdminController::class, 'editProduct'])->name('product.edit');
+    Route::put('/product-update/{id}', [AdminController::class, 'updateProduct'])->name('product.update');
+    Route::delete('/product-delete/{id}', [AdminController::class, 'deleteProduct'])->name('product.destroy');
+
+    // Jika ada rute lain yang polanya sama, bisa ditambahkan di sini
+});
+
+require __DIR__ . '/auth.php';
