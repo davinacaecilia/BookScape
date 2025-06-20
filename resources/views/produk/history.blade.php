@@ -19,65 +19,53 @@
 @include('produk.navbar2')
 
 <main class="order-history-container">
-  {{-- PASTIKAN DUMMY DATA INI DIHAPUS ATAU DIKOMENTARI SEPENUHNYA --}}
-  {{-- @php
-    $groupedOrders = [
-        // ... dummy data ...
-    ];
-  @endphp --}}
-
-  {{-- Pastikan ini mengiterasi $orderedGroupedOrders dari UserController --}}
-  @foreach($orderedGroupedOrders as $status => $orders)
-    @if($orders->isNotEmpty())
-    <div class="order-card" data-status-group="{{ strtolower($status) }}"> {{-- Tambahkan data-status-group --}}
+  {{-- Loop langsung melalui setiap pesanan --}}
+  @forelse($userOrders as $order)
+     <div class="order-card" data-order-id="{{ $order->id }}" data-order-status="{{ $order->status }}">
       <div class="order-status-header">
-        <button class="status {{ strtolower($status) }}">{{ $status }}</button>
-        @if($status === 'Completed')
-          <a href="#" class="rate-button">Rate</a>
-        @elseif($status === 'Arrived')
-          <button class="confirm-button">Confirm Order</button>
-        @elseif($status === 'Pending')
-          <button class="pending-action-button">Action</button>
-        @endif
+        <button class="status {{ strtolower($order->status) }}">{{ $order->status }}</button>
+        {{-- Tombol aksi yang akan berubah --}}
+        <div class="action-buttons">
+            @if(strtolower($order->status) === 'completed') {{-- <--- UBAH INI --}}
+              <a href="{{ url('rating') }}" class="rate-button">Rate</a>
+            @elseif(strtolower($order->status) === 'arrived') {{-- <--- UBAH INI --}}
+              <button class="confirm-button">Confirm Order</button>
+            @elseif(strtolower($order->status) === 'pending') {{-- <--- UBAH INI --}}
+              <button class="pending-action-button">Action</button>
+            @endif
+        </div>
       </div>
       <div class="order-details-group">
-        @foreach($orders as $order)
-          @php
-            $invoiceTotalPrice = $order->items->sum(fn($item) => $item->price * $item->quantity);
-          @endphp
-
-          {{-- Wrapper ini penting untuk mengikat data order keseluruhan ke tombol invoice --}}
-          <div class="invoice-group-block"
-               data-order-id="{{ $order->id }}"
-               data-invoice-number="INV-{{ $order->id }}" {{-- Contoh nomor invoice --}}
-               data-invoice-date="{{ \Carbon\Carbon::parse($order->created_at)->format('d M Y') }}"
-               data-invoice-total-price="{{ $invoiceTotalPrice }}"
-          >
-            @foreach($order->items as $item) {{-- Iterasi setiap OrderItem di dalam Order --}}
-              <div class="individual-order-item"
-                   data-item-title="{{ $item->buku->judul_buku }}"
-                   data-item-price="{{ $item->price }}" {{-- Harga per unit item --}}
-                   data-item-quantity="{{ $item->quantity }}"
-              >
-                <div class="item-header">
-                  <h3 class="order-title">{{ $item->buku->judul_buku }}</h3>
-                  <p class="order-date">{{ \Carbon\Carbon::parse($order->created_at)->format('d M Y') }}</p>
-                </div>
-                <div class="item-footer">
-                    <p class="order-price">IDR {{ number_format($item->price * $item->quantity, 0, ',', '.') }}</p>
-                    {{-- Container di mana tombol 'Lihat Invoice' akan dirender oleh JS --}}
-                    <div class="invoice-buttons-per-group-container">
-                        {{-- Button will be inserted here by history.js --}}
-                    </div>
-                </div>
-              </div>
-            @endforeach
+        {{-- Loop melalui item-item di dalam satu pesanan --}}
+        @foreach($order->items as $item)
+          <div class="individual-order-item"
+               data-item-title="{{ $item->buku->judul_buku }}"
+               data-item-price="{{ number_format($item->price, 0, ',', '.') }}"
+               data-item-quantity="{{ $item->quantity }}">
+            <div class="item-header">
+              <h3 class="order-title">{{ $item->buku->judul_buku }}</h3>
+              <p class="order-date">{{ \Carbon\Carbon::parse($order->created_at)->format('d M Y') }}</p> {{-- Format tanggal --}}
+            </div>
+            <div class="item-footer">
+                <p class="order-price">Rp {{ number_format($item->price * $item->quantity, 0, ',', '.') }}</p>
+                {{-- Tombol Lihat Invoice akan dirender oleh JS, tapi kita butuh kontainernya --}}
+            </div>
           </div>
         @endforeach
+        {{-- Total Harga dan Tombol Invoice di luar loop item, karena ini per Order --}}
+        <div class="invoice-group-block"
+             data-invoice-number="INV-{{ $order->id }}"
+             data-invoice-date="{{ \Carbon\Carbon::parse($order->created_at)->format('d M Y H:i') }}"
+             data-invoice-total-price="{{ $order->total_price }}">
+            <div class="invoice-buttons-per-group-container">
+                {{-- Tombol Invoice akan di-inject di sini oleh JS --}}
+            </div>
+        </div>
       </div>
     </div>
-    @endif
-  @endforeach
+  @empty
+    <p>Tidak ada riwayat pesanan.</p>
+  @endforelse
 </main>
 
 {{-- Modal Popup untuk konfirmasi pesanan (Arrived -> Completed) --}}

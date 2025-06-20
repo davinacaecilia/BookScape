@@ -5,9 +5,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<!-- Boxicons -->
 	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
-	<!-- My CSS -->
 	<link rel="stylesheet" href="{{ asset('css/style.css') }}" />
 
 	<title>Dashboard</title>
@@ -20,7 +18,6 @@
 	<section id="content">
 		@include('partial.navbar')
 
-		<!-- MAIN -->
 		<main>
 			<div class="head-title">
 				<div class="left">
@@ -35,7 +32,7 @@
 				<li>
 					<i class='bx bxs-calendar-check'></i>
 					<span class="text">
-						<h3>1020</h3>
+						<h3>{{ $orderCount }}</h3> {{-- Tambahkan orderCount di controller --}}
 						<p>Orders</p>
 					</span>
 				</li>
@@ -68,7 +65,7 @@
 								<th>Username</th>
 								<th>Book Orders</th>
 								<th>Total Order</th>
-								<th class="right-text">Shipping Address</th>
+								<th>Shipping Address</th>
 								<th>Order Date</th>
 								<th>Status</th>
 							</tr>
@@ -77,66 +74,37 @@
 							@forelse($orders as $order)
 							<tr>
 								<td>{{ $order->id }}</td>
-								<td>{{ $order->id }}</td>
-								<td>Harry Poteer <br> Romeo Juliet</td>
-								<td>Rp 150.000</td>
-								<td>Jl. Merdeka No. 1, Bandung</td>
-								<td>15-12-2024</td>
-								<td><span class="status pending">Pending</span></td>
+								<td>{{ $order->user->name ?? 'N/A' }}</td> {{-- Mengambil username dari relasi user --}}
+								<td>
+									@if($order->items->isEmpty()) {{-- Cek jika tidak ada items --}}
+										Tidak ada buku
+									@else
+										@foreach($order->items as $item)
+											{{ $item->buku->judul_buku ?? 'Buku Tidak Ditemukan' }} (x{{ $item->quantity }})<br>
+										@endforeach
+									@endif
+								</td>
+								<td>Rp {{ number_format($order->total_price, 0, ',', '.') }}</td> {{-- Mengambil total_price dari order --}}
+								<td>
+									{{-- Alamat pengiriman biasanya disimpan di Order itu sendiri atau relasi terpisah --}}
+									{{-- Jika Anda memiliki kolom 'shipping_address' di tabel 'orders', gunakan: --}}
+									{{ $order->shipping_address ?? 'Alamat tidak tersedia' }}
+									{{-- Jika tidak, Anda perlu menambahkan kolom ini ke tabel orders atau mengambil dari relasi user yang memiliki alamat --}}
+								</td>
+								<td>{{ \Carbon\Carbon::parse($order->created_at)->format('d-m-Y H:i') }}</td> {{-- Mengambil created_at dari order --}}
+								<td><span class="status {{ strtolower($order->status) }}">{{ $order->status }}</span></td> {{-- Mengambil status dari order --}}
 							</tr>
 							@empty
 								<tr>
-									<td colspan="10" style="text-align: center;">Tidak ada order yang ditemukan.</td>
+									<td colspan="7" style="text-align: center;">Tidak ada order yang ditemukan.</td> {{-- Sesuaikan colspan --}}
 								</tr>
-								@endforelse
-							<tr>
-								<td>#ORD002</td>
-								<td>arlo</td>
-								<td>Atomic Habits</td>
-								<td>Rp 120.000</td>
-								<td>Jl. Sudirman No. 10, Jakarta</td>
-								<td>16-12-2024</td>
-								<td><span class="status process">Process</span></td>
-							</tr>
-							<tr>
-								<td>#ORD003</td>
-								<td>anggun_amu</td>
-								<td>The Psychology of Money</td>
-								<td>Rp 180.000</td>
-								<td>Jl. Cinta Abadi No. 7, Yogyakarta</td>
-								<td>17-12-2024</td>
-								<td><span class="status completed">Completed</span></td>
-							</tr>
-							<tr>
-								<td>#ORD004</td>
-								<td>igundw_</td>
-								<td>Start With Why</td>
-								<td>Rp 200.000</td>
-								<td>Jl. Kenangan Lama No. 3, Surabaya</td>
-								<td>18-12-2024</td>
-								<td><span class="status canceled">Canceled</span></td>
-							</tr>
-							<tr>
-                  <td>#ORD005</td>
-                  <td>budi_santoso</td>
-                  <td>Rich Dad Poor Dad</td>
-                  <td>Rp 95.000</td>
-                  <td>Jl. Sejahtera No. 5, Medan</td>
-                  <td>19-12-2024</td>
-                  <td class="status-cell" data-orderid="#ORD005">
-                      <span class="status arrived">Arrived</span>
-                  </td>
-                  <td>
+							@endforelse
 						</tbody>
 					</table>
 				</div>
 			</div>
 		</main>
-		<!-- MAIN -->
-	</section>
-	<!-- CONTENT -->
-
-
+		</section>
 	<form id="logout-form-admin" action="{{ route('logout') }}" method="POST" style="display: none;">
 		@csrf
 	</form>
@@ -150,7 +118,7 @@
 	</script>
 
 	<script src="{{ asset('script/script.js') }}"></script>
-	<script src="{{ asset('script/pagination.js') }}"></script>
+	{{-- <script src="{{ asset('script/pagination.js') }}"></script> --}} {{-- Tidak digunakan di dashboard, hanya di list orders lengkap --}}
 </body>
 
 </html>

@@ -166,6 +166,8 @@ class UserController extends Controller
         $ids = explode(',', $request->selected_cart_ids);
 
         $orderItems = Cart::with('buku')->whereIn('id', $ids)->get();
+        $user = Auth::user();
+        $alamatUser = $user->alamats;
 
         $user = Auth::user();
         $alamatUser = $user->alamats;
@@ -174,13 +176,8 @@ class UserController extends Controller
         $shippingCost = 0.05 * $subtotal;
         $total = $subtotal + $shippingCost;
 
-        return view('produk.order-cart', compact(
-            'orderItems',
-            'subtotal',
-            'shippingCost',
-            'total',
-            'alamatUser'
-        ));
+        return view('produk.order-cart', compact('orderItems', 'subtotal', 'shippingCost', 'total', 'alamatUser'));
+
     }
 
     public function checkoutNow(Request $request)
@@ -210,80 +207,94 @@ class UserController extends Controller
     }
 
     public function placeOrder(Request $request)
-        {
-            $user = auth()->user();
+    {
+        $user = auth()->user();
 
-            // Cek apakah ini mode "Buy Now"
-            if ($request->has('is_buy_now') && $request->input('is_buy_now') == '1') {
-                $request->validate([
-                    'buku_id' => 'required|exists:buku,id',
-                    'quantity' => 'required|integer|min:1'
-                ]);
+        // Cek apakah ini mode "Buy Now"
+        if ($request->has('is_buy_now') && $request->input('is_buy_now') == '1') {
+            $request->validate([
+                'buku_id' => 'required|exists:buku,id',
+                'quantity' => 'required|integer|min:1'
+            ]);
 
-                $buku = Buku::findOrFail($request->buku_id);
-                $quantity = $request->quantity;
+            $buku = Buku::findOrFail($request->buku_id);
+            $quantity = $request->quantity;
 
-                $subtotal = $buku->harga * $quantity;
-                $shipping = round($subtotal * 0.10); // Gunakan konsisten dengan checkoutNow
-                $total = $subtotal + $shipping;
-
-                $order = Order::create([
-                    'user_id' => $user->id,
-                    'total_price' => $total, // Sesuaikan dengan nama kolom di Order.php
-                    'status' => 'pending',
-                    'payment_proof' => null, // Sesuaikan dengan nama kolom di Order.php
-                ]);
-
-                OrderItem::create([
-                    'order_id' => $order->id,
-                    'book_id' => $buku->id, // Sesuaikan dengan nama kolom di OrderItem.php
-                    'quantity' => $quantity,
-                    'price' => $buku->harga // Sesuaikan dengan nama kolom di OrderItem.php
-                ]);
-
-                // Tidak ada item keranjang untuk dihapus di mode Buy Now
-
-            } else {
-                // Ini adalah alur untuk Checkout dari Keranjang (Cart)
-                $request->validate([
-                    'selected_cart_ids' => 'required|string', // contoh: "3,5,6"
-                ]);
-
-                $cartIds = explode(',', $request->selected_cart_ids);
-                $cartItems = Cart::with('buku')->whereIn('id', $cartIds)->get();
-
-                if ($cartItems->isEmpty()) {
-                    // Jangan pakai return back() jika ini yang memicu masalah GET.
-                    // Lebih baik redirect ke halaman cart dengan pesan error.
-                    return redirect()->route('product.cart')->with('error', 'Keranjang tidak valid atau item belum dipilih.');
-                }
-
-                $subtotal = $cartItems->sum(fn($item) => $item->buku->harga * $item->quantity);
-                $shipping = $subtotal * 0.10;
-                $total = $subtotal + $shipping;
-
-                $order = Order::create([
-                    'user_id' => $user->id,
-                    'total_price' => $total, // Sesuaikan dengan nama kolom di Order.php
-                    'status' => 'pending',
-                    'payment_proof' => null, // Sesuaikan dengan nama kolom di Order.php
-                ]);
-
-                foreach ($cartItems as $item) {
-                    OrderItem::create([
-                        'order_id' => $order->id,
-                        'book_id' => $item->buku->id, // Sesuaikan dengan nama kolom di OrderItem.php
-                        'quantity' => $item->quantity,
-                        'price' => $item->buku->harga // Sesuaikan dengan nama kolom di OrderItem.php
-                    ]);
-                }
-
-                Cart::whereIn('id', $cartIds)->delete();
+            if ($buku->stock < $quantity) {
+                return redirect()->back()->with('error', 'Stok buku ' . $buku->judul_buku . ' tidak mencukupi.');
             }
 
-            // Redirect ke halaman pembayaran setelah Order berhasil dibuat (baik dari cart atau buy now)
-            return redirect()->route('order.payment', ['order' => $order->id]);
+            $subtotal = $buku->harga * $quantity;
+            $shipping = round($subtotal * 0.10);
+            $total = $subtotal + $shipping;
+
+            $order = Order::create([
+                'user_id' => $user->id,
+                'total_price' => $total,
+                'status' => 'pending',
+                'payment_proof' => null,
+            ]);
+
+            OrderItem::create([
+                'order_id' => $order->id,
+                'book_id' => $buku->id, // <--- UBAH DARI 'buku_id' MENJADI 'book_id'
+                'quantity' => $quantity,
+                'price' => $buku->harga
+            ]);
+
+            $buku->stock -= $quantity;
+            $buku->save();
+
+        } else {
+            // Ini adalah alur untuk Checkout dari Keranjang (Cart)
+            $request->validate([
+                'selected_cart_ids' => 'required|string',
+            ]);
+
+            $cartIds = explode(',', $request->selected_cart_ids);
+            $cartItems = Cart::with('buku')->whereIn('id', $cartIds)->get();
+
+            if ($cartItems->isEmpty()) {
+                return redirect()->route('product.cart')->with('error', 'Keranjang tidak valid atau item belum dipilih.');
+            }
+
+            foreach ($cartItems as $cartItem) {
+                if ($cartItem->buku->stock < $cartItem->quantity) {
+                    return redirect()->back()->with('error', 'Stok buku ' . $cartItem->buku->judul_buku . ' tidak mencukupi.');
+                }
+            }
+
+            $subtotal = $cartItems->sum(fn($item) => $item->buku->harga * $item->quantity);
+            $shipping = $subtotal * 0.10;
+            $total = $subtotal + $shipping;
+
+            $order = Order::create([
+                'user_id' => $user->id,
+                'total_price' => $total,
+                'status' => 'pending',
+                'payment_proof' => null,
+            ]);
+
+            foreach ($cartItems as $item) {
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'book_id' => $item->buku->id, // <--- UBAH DARI 'buku_id' MENJADI 'book_id'
+                    'quantity' => $item->quantity,
+                    'price' => $item->buku->harga
+                ]);
+
+                $buku = Buku::find($item->buku->id);
+                if ($buku) {
+                    $buku->stock -= $item->quantity;
+                    $buku->save();
+                }
+            }
+
+            Cart::whereIn('id', $cartIds)->delete();
         }
+
+        return redirect()->route('order.payment', ['order' => $order->id]);
+    }
 
     public function showPaymentPage(Order $order)
     {
@@ -339,21 +350,40 @@ class UserController extends Controller
 
     public function showHistory() {
         // Ambil semua order untuk user yang sedang login
+        // Eager load orderItems dan buku terkait untuk setiap order
         $userOrders = Order::with(['items.buku'])
             ->where('user_id', auth()->id())
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'desc') // Urutkan berdasarkan tanggal terbaru
             ->get();
 
-        $groupedOrders = $userOrders->groupBy('status');
-
-        $desiredOrder = ['Completed', 'Arrived', 'Process', 'Pending', 'Canceled'];
-        $orderedGroupedOrders = collect($desiredOrder)->mapWithKeys(function ($status) use ($groupedOrders) {
-            return [$status => $groupedOrders->get($status, collect())];
+        // Filter pesanan yang tidak memiliki item
+        $userOrders = $userOrders->filter(function ($order) {
+            return $order->items->isNotEmpty(); // Hanya simpan order jika memiliki item
         });
 
-        // PASTIKAN INI ADALAH BARIS YANG BENAR
-        dd($orderedGroupedOrders);
-        return view('produk.history', compact('orderedGroupedOrders'));
+        // Kirimkan langsung $userOrders ke view. Tidak perlu pengelompokan di sini lagi.
+        return view('produk.history', compact('userOrders'));
     }
 
+    // Fungsi untuk mengubah status pesanan (diperlukan oleh AJAX dari history.js)
+    public function updateOrderStatus(Request $request)
+    {
+        $request->validate([
+            'order_id' => 'required|exists:orders,id',
+            'status' => 'required|string|in:completed,canceled' // Status yang diizinkan
+        ]);
+
+        $order = Order::where('id', $request->order_id)
+                      ->where('user_id', auth()->id()) // Pastikan hanya owner yang bisa mengubah
+                      ->first();
+
+        if (!$order) {
+            return response()->json(['success' => false, 'message' => 'Pesanan tidak ditemukan atau Anda tidak memiliki akses.'], 404);
+        }
+
+        $order->status = $request->status;
+        $order->save();
+
+        return response()->json(['success' => true, 'new_status' => $order->status, 'message' => 'Status pesanan berhasil diperbarui.']);
+    }
 }

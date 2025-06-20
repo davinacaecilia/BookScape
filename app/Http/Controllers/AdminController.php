@@ -15,22 +15,80 @@ class AdminController extends Controller
     {
         $userCount = User::count();
         $bukuCount = Buku::count();
-        $orders = Order::with(['user', 'orderItems.buku'])
-                        ->orderBy('created_at', 'desc')
-                        ->get();
-        return view('admin.dashboard', compact('userCount', 'bukuCount', 'orders'));
+        $orderCount = Order::count();
+        $query = Order::with(['user', 'items.buku'])
+                        ->orderBy('created_at', 'desc');
+        $orders = $query->paginate(5);
+        return view('admin.dashboard', compact('userCount', 'bukuCount', 'orders', 'orderCount'));
     }
     public function listMessage()
     {
         return view('admin.message');
     }
+    
     public function listOrders()
     {
-        return view('admin.orders');
+        $query = Order::with(['user', 'items.buku'])
+                        ->orderBy('created_at', 'desc');
+        $orders = $query->paginate(10);
+        return view('admin.orders', compact('orders'));
+    }
+    
+    public function orderDetail(Request $request)
+    {
+        $order = Order::findOrFail($request->id);
+        return view('admin.detail-order', compact('order'));
+    }
+
+    public function updateOrderStatus(Request $request, Order $order)
+    {
+        // Validasi input dasar
+        $request->validate([
+            'status' => 'required|string|in:pending,process,arrived,completed,canceled',
+        ]);
+
+        $newStatus = $request->status;
+        $currentStatus = $order->status;
+
+        if ($currentStatus === 'canceled') {
+            return redirect()->back()->with('error', 'Order sudah dibatalkan dan tidak bisa diubah statusnya lagi.');
+        }
+
+        if ($currentStatus === 'completed') {
+            return redirect()->back()->with('error', 'Order sudah selesai dan tidak bisa diubah statusnya lagi.');
+        }
+
+        if ($newStatus === 'completed') {
+            return redirect()->back()->with('error', 'Admin tidak dapat langsung mengubah status menjadi "Completed". Status ini diset oleh pengguna atau sistem.');
+        }
+
+        $allowedTransitions = [
+            'pending'                      => ['process', 'canceled'],
+            'process'                      => ['arrived'],
+            'arrived'                      => ['canceled'],
+        ];
+
+        if (isset($allowedTransitions[$currentStatus]) && !in_array($newStatus, $allowedTransitions[$currentStatus])) {
+            return redirect()->back()->with('error', "Perubahan status dari '{$currentStatus}' ke '{$newStatus}' tidak diizinkan.");
+        }
+
+        if ($newStatus === 'canceled') {
+            if ($order->cancelOrder()) { // Panggilan ke metode di model Order
+                return redirect()->back()->with('success', 'Pesanan berhasil dibatalkan dan stok dikembalikan.');
+            } else {
+                return redirect()->back()->with('error', 'Gagal membatalkan pesanan. Status order tidak valid untuk pembatalan.');
+            }
+        }
+
+        $order->status = $newStatus;
+        $order->save();
+
+        return redirect()->back()->with('success', 'Status order berhasil diperbarui.');
     }
 
     public function listProduct() {
-        $products = Buku::all();
+        $query = Buku::query();
+        $products = $query->paginate(10);
         return view('admin.product-management', [
             'products' => $products
         ]);
@@ -137,7 +195,8 @@ class AdminController extends Controller
 
     public function listUsers()
     {
-        $users = User::all();
+        $query = User::query();
+        $users = $query->paginate(10);
         return view('admin.user-management', compact('users'));
     }
 

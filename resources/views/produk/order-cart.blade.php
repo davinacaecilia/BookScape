@@ -22,7 +22,6 @@
         <div class="left-column">
             <div class="address-section card">
                 <h3>Alamat Pengiriman</h3>
-
                 <div id="addressList" class="address-list">
                     @forelse ($alamatUser as $alamat)
                         <div class="address-item" data-id="{{ $alamat->id }}">

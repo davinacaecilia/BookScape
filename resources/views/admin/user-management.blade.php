@@ -85,6 +85,15 @@
 	<!-- Pagination di paling bawah -->
 	<div id="pagination" class="pagination-container"></div>
 
+    <script>
+        window.paginationData = {
+            currentPage: {{ $users->currentPage() }},
+            lastPage: {{ $users->lastPage() }},
+            baseUrl: "{{ url()->current() }}",
+            query: @json(request()->except('page'))
+        };
+    </script>
+
 	<form id="logout-form-admin" action="{{ route('logout') }}" method="POST" style="display: none;">
 		@csrf
 	</form>
