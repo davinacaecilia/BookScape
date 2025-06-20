@@ -166,12 +166,14 @@ class UserController extends Controller
         $ids = explode(',', $request->selected_cart_ids);
 
         $orderItems = Cart::with('buku')->whereIn('id', $ids)->get();
+        $user = Auth::user();
+        $alamatUser = $user->alamats;
 
         $subtotal = $orderItems->sum(fn($i) => $i->quantity * $i->buku->harga);
         $shippingCost = 0.05 * $subtotal;
         $total = $subtotal + $shippingCost;
 
-        return view('produk.order-cart', compact('orderItems', 'subtotal', 'shippingCost', 'total'));
+        return view('produk.order-cart', compact('orderItems', 'subtotal', 'shippingCost', 'total', 'alamatUser'));
     }
 
     public function checkoutNow(Request $request)

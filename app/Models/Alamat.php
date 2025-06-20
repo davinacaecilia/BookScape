@@ -20,6 +20,7 @@ class Alamat extends Model
         'user_id',
         'phone',
         'address',
+        'is_primary',
     ];
 
     public function user(): BelongsTo

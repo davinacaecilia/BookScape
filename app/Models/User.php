@@ -56,8 +56,13 @@ class User extends Authenticatable
         return $this->hasMany(Order::class);
     }
 
-    public function alamat()
+    public function alamats(): HasMany
     {
-        return $this->hasOne(Alamat::class);
+        return $this->hasMany(Alamat::class);
+    }
+
+    public function primaryAlamat(): HasOne
+    {
+        return $this->hasOne(Alamat::class)->where('is_primary', true);
     }
 }

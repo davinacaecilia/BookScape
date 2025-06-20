@@ -18,8 +18,19 @@
     <div class="left-column">
         <div class="address-section card">
             <h3>Alamat Pengiriman</h3>
-            <div id="displayAddress" class="address-display"> <p class="no-address-text">Belum ada alamat yang terdaftar</p> </div>
-            <button class="btn-create-address">Buat Alamat</button>
+             <div id="addressList" class="address-list">
+                    @forelse ($alamatUser as $alamat)
+                        <div class="address-item" data-id="{{ $alamat->id }}">
+                            <div class="address-item-radio">
+                                <label for="alamat-{{ $alamat->id }}">
+                                    <p>{{ $alamat->address }}</p>
+                                </label>
+                            </div>
+                        </div>
+                    @empty
+                        <p id="noAddressText" class="no-address-text">Anda belum memiliki alamat pengiriman.</p>
+                    @endforelse
+                </div>
         </div>
 
         <div class="detail-order-section card">
