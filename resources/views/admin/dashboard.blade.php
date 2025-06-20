@@ -110,6 +110,17 @@
 								<td>18-12-2024</td>
 								<td><span class="status canceled">Canceled</span></td>
 							</tr>
+							<tr>
+                  <td>#ORD005</td>
+                  <td>budi_santoso</td>
+                  <td>Rich Dad Poor Dad</td>
+                  <td>Rp 95.000</td>
+                  <td>Jl. Sejahtera No. 5, Medan</td>
+                  <td>19-12-2024</td>
+                  <td class="status-cell" data-orderid="#ORD005">
+                      <span class="status arrived">Arrived</span>
+                  </td>
+                  <td>
 						</tbody>
 					</table>
 				</div>
@@ -119,9 +130,6 @@
 	</section>
 	<!-- CONTENT -->
 
-
-	<!-- Pagination di paling bawah -->
-	<div id="pagination" class="pagination-container"></div>
 
 	<form id="logout-form-admin" action="{{ route('logout') }}" method="POST" style="display: none;">
 		@csrf

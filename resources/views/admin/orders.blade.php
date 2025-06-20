@@ -45,7 +45,7 @@
 									<th class="right-text">Shipping Address</th>
 									<th>Order Date</th>
 									<th>Status</th>
-									<th>Detail Order</th> 
+									<th></th> 
 								</tr>
 							</thead>
 							<tbody>
@@ -60,7 +60,7 @@
 										<span class="status pending">Pending</span>
 									</td>
 									<td>
-										<a href="/orders/ORD001" class="btn-detail">Detail Order</a>
+										<a href="/orders/ORD001" class="btn-detail">Detail</a>
 									</td>
 								</tr>
 								<tr>
@@ -74,7 +74,7 @@
 										<span class="status process">Process</span>
 									</td>
 									<td>
-										<a href="/orders/ORD002" class="btn-detail">Detail Order</a>
+										<a href="/orders/ORD002" class="btn-detail">Detail</a>
 									</td>
 								</tr>
 								<tr>
@@ -88,7 +88,7 @@
 										<span class="status completed">Completed</span>
 									</td>
 									<td>
-										<a href="/orders/ORD003" class="btn-detail">Detail Order</a>
+										<a href="/orders/ORD003" class="btn-detail">Detail</a>
 									</td>
 								</tr>
 								<tr>
@@ -102,9 +102,23 @@
 										<span class="status canceled">Canceled</span>
 									</td>
 									<td>
-										<a href="/orders/ORD004" class="btn-detail">Detail Order</a>
+										<a href="/orders/ORD004" class="btn-detail">Detail</a>
 									</td>
 								</tr>
+								<tr>
+                  <td>#ORD005</td>
+                  <td>budi_santoso</td>
+                  <td>Rich Dad Poor Dad</td>
+                  <td>Rp 95.000</td>
+                  <td>Jl. Sejahtera No. 5, Medan</td>
+                  <td>19-12-2024</td>
+                  <td class="status-cell" data-orderid="#ORD005">
+                      <span class="status arrived">Arrived</span>
+                  </td>
+                  <td>
+                      <a href="/orders/ORD005" class="btn-detail">Detail</a>
+                  </td>
+              </tr>
 							</tbody>
 						</table>
 				</div>
