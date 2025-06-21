@@ -30,6 +30,8 @@ Route::middleware(['auth', 'role:1'])->group(function () {
     Route::post('/cart/delete-selected', [UserController::class, 'deleteSelectedCart'])->name('cart.deleteSelected');
     Route::post('/cart/checkout', [UserController::class, 'checkout'])->name('cart.checkout');
 
+    Route::post('/order/update-status', [UserController::class, 'updateOrderStatus']);
+
     Route::post('/order/place', [UserController::class, 'placeOrder'])->name('order.place');
     Route::post('/checkout', [UserController::class, 'checkoutNow'])->name('order.checkout');
     Route::get('/payment/{order}', [UserController::class, 'showPaymentPage'])->name('order.payment');
@@ -72,6 +74,8 @@ Route::middleware(['auth', 'role:0'])->group(function () {
     Route::get('/product-edit/{id}', [AdminController::class, 'editProduct'])->name('product.edit');
     Route::put('/product-update/{id}', [AdminController::class, 'updateProduct'])->name('product.update');
     Route::delete('/product-delete/{id}', [AdminController::class, 'deleteProduct'])->name('product.destroy');
+    Route::delete('/ratings/{rating}', [AdminController::class, 'destroyRating'])->name('ratings.destroy');
+    Route::get('/ratings/{rating}', [AdminController::class, 'showRatingsAndReviews()'])->name('ratings.show');
 
     // Jika ada rute lain yang polanya sama, bisa ditambahkan di sini
 });

@@ -1,12 +1,33 @@
-/* Footer */
+html, body {
+    height: 100%; /* Memastikan html dan body mengambil tinggi penuh viewport */
+    margin: 0; /* Menghilangkan margin default browser */
+    padding: 0; /* Menghilangkan padding default browser */
+    display: flex; /* Mengaktifkan Flexbox pada body */
+    flex-direction: column; /* Mengatur arah item Flexbox menjadi kolom (vertikal) */
+}
+
+#content { /* Ini adalah <section id="content"> Anda yang membungkus navbar dan main */
+    flex-grow: 1; /* Ini sangat penting! #content akan 'tumbuh' dan mengisi ruang vertikal yang tersisa */
+    display: flex; /* Aktifkan Flexbox di #content juga */
+    flex-direction: column; /* Mengatur item di dalam #content juga secara vertikal */
+}
+
+#content main { /* Ini adalah <main> di dalam <section id="content"> */
+    flex-grow: 1; /* Biarkan <main> juga 'tumbuh' untuk mengisi ruang kosong di dalam #content */
+    /* Padding bottom 100px yang sudah ada di Blade Anda (main style="padding-bottom: 100px;") tetap akan berfungsi untuk memberikan ruang di bawah konten. */
+}
+
+/* Footer Anda, sesuai footer.css yang diberikan */
 .home-footer {
   background-color: #683615;
-  color: white;
+    color: white;
   padding: 0.5rem 20px;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 80px;
+  /* Properti tambahan untuk "sticky footer" */
+  margin-top: auto; /* Mendorong footer ke bawah, mengambil sisa ruang di atasnya */
 }
 
 .footer-content {
@@ -44,4 +65,3 @@
 .contact-item:hover {
   color: #d6c490;
 }
-

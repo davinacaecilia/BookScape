@@ -1,14 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
 
     // --- Event Delegation untuk Tombol "Rate" ---
-    document.body.addEventListener('click', function(event) {
-        if (event.target.classList.contains('rate-button')) {
-            event.preventDefault();
-            // Ambil order ID dari kartu terdekat jika rute rating memerlukan ID spesifik
-            // const orderId = event.target.closest('.order-card').dataset.orderId;
-            window.location.href = 'rating'; // Atau `rating/${orderId}` jika diperlukan
-        }
-    });
+
 
     // --- Variabel untuk Modal Konfirmasi (Arrived -> Completed) ---
     const confirmModal = document.getElementById('confirmModal');
@@ -156,13 +149,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Kosongkan dan render ulang tombol aksi
         actionButtonsContainer.innerHTML = '';
-        if (newStatus === 'completed') {
+       if (newStatus === 'completed') {
             const rateButton = document.createElement('a');
-            rateButton.href = 'rating'; // Sesuaikan rute rating
+            const firstBookId = cardElement.dataset.firstBookId; // Ambil ID buku dari data attribute
+            if (firstBookId) {
+                rateButton.href = `rating/${firstBookId}`; // Gunakan ID buku di rute
+            } else {
+                rateButton.href = 'rating'; // Fallback jika tidak ada ID buku (misal: pesanan kosong)
+            }
             rateButton.classList.add('rate-button');
             rateButton.textContent = 'Rate';
             actionButtonsContainer.appendChild(rateButton);
-        } else if (newStatus === 'arrived') {
+        }else if (newStatus === 'arrived') {
             const confirmButton = document.createElement('button');
             confirmButton.classList.add('confirm-button');
             confirmButton.textContent = 'Confirm Order';

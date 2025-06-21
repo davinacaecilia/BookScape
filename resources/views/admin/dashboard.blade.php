@@ -88,7 +88,7 @@
 								<td>
 									{{-- Alamat pengiriman biasanya disimpan di Order itu sendiri atau relasi terpisah --}}
 									{{-- Jika Anda memiliki kolom 'shipping_address' di tabel 'orders', gunakan: --}}
-									{{ $order->shipping_address ?? 'Alamat tidak tersedia' }}
+									{{ $order->alamat->address ?? 'Alamat tidak tersedia' }}
 									{{-- Jika tidak, Anda perlu menambahkan kolom ini ke tabel orders atau mengambil dari relasi user yang memiliki alamat --}}
 								</td>
 								<td>{{ \Carbon\Carbon::parse($order->created_at)->format('d-m-Y H:i') }}</td> {{-- Mengambil created_at dari order --}}

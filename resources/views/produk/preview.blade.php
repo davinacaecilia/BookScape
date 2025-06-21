@@ -49,9 +49,8 @@
             </form>
             <form action="{{ route('order.checkout') }}" method="POST" class="buy-now-form">
                 @csrf
-                <input type="hidden" name="buku_id" value="{{ $products->id }}">
+                <input type="hidden" name="buku_id" value="{{ $buku->id }}">
                 <input type="hidden" name="quantity" id="quantityInputBuyNow" value="1"> 
-                <button type="submit" class="buy-now-button" id="buy-now-button">Buy Now</button>
             </form>
           </div>
         </div>

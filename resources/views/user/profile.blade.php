@@ -23,9 +23,8 @@
         <span>BOOKSCAPE</span>
       </div>
       <div class="nav-links">
-        <a href="{{ route ('home') }}">Home</a>
-        <a href="/browse">Books</a>
-        <a href="/categories">Categories</a>
+        <a href="{{ route('home') }}" class="active">Home</a>
+        <a href="{{ route('product.library') }}">Library</a>
         <a href="/profile" class="active">Profile</a>
       </div>
     </nav>

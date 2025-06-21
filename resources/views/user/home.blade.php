@@ -102,22 +102,22 @@
         <div class="books-grid">
         @foreach ($myCarts as $myCart)
         <div class="book-card book-card-1">
-        <a href="{{ route('product.detail', $myCart->buku->id) }}" style="text-decoration: none;">
-        <img class="book-cover book-cover-1" src="{{ asset('storage/sampul/' . $myCart->buku->gambar_sampul) }}"
-          alt="{{ $myCart->buku->judul_buku }}" class="book-cover">
-        <div class="book-info">
-          <h2 class="book-title">{{ $myCart->buku->judul_buku }}</h2>
-          <p class="book-genre">
-          @foreach($myCart->buku->genres as $genre)
-        {{ $genre->genre }}{{ !$loop->last ? ', ' : '' }}
-        @endforeach
-          </p>
-          <p class="book-price">Rp {{ number_format($myCart->buku->harga, 0, ',', '.') }}
-            <span class="rating">⭐ {{ $myCart->buku->averageRating() }}</span>
-          </p>
-        </div>
-        </a>
-        </div>
+          <a href="{{ route('product.detail', $myCart->buku->id) }}" style="text-decoration: none;">
+          <img class="book-cover book-cover-1" src="{{ asset('storage/sampul/' . $myCart->buku->gambar_sampul) }}"
+            alt="{{ $myCart->buku->judul_buku }}" class="book-cover">
+          <div class="book-info">
+            <h2 class="book-title">{{ $myCart->buku->judul_buku }}</h2>
+            <p class="book-genre">
+            @foreach($myCart->buku->genres as $genre)
+          {{ $genre->genre }}{{ !$loop->last ? ', ' : '' }}
+          @endforeach
+            </p>
+            <p class="book-price">Rp {{ number_format($myCart->buku->harga, 0, ',', '.') }}
+              <span class="rating">⭐ {{ $myCart->buku->averageRating() }}</span>
+            </p>
+          </div>
+          </a>
+          </div>
       @endforeach
         </div>
         <a href="{{ route('product.cart') }}" class="view-all">View All <i class='bx bx-chevron-right'></i></a>
@@ -163,7 +163,7 @@
 
   <!-- Best Seller -->
   <section class="featured-books">
-    <h2>Best Seller</h2>
+    <h2>Top Ratings</h2>
     <div class="books-grid">
       @foreach ($bestSellers as $bestSeller)
       <div class="book-card book-card-1">
@@ -178,7 +178,7 @@
       @endforeach
         </p>
         <p class="book-price">Rp {{ number_format($bestSeller['harga'], 0, ',', '.') }}
-          <span class="rating">⭐ {{ $bestSeller->averageRating() }}</span>
+          <span class="rating">⭐ {{ number_format($bestSeller->average_rating, 1) }}</span>
         </p>
         <form action="{{ route('product.addToCart', $bestSeller->id) }}" method="POST" enctype="multipart/form-data"
           class="cart-form">

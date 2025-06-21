@@ -23,11 +23,21 @@
             <div class="address-section card">
                 <h3>Alamat Pengiriman</h3>
                 <div id="addressList" class="address-list">
+                    {{-- Input radio tersembunyi untuk menyimpan ID alamat yang dipilih --}}
+                    {{-- Ini akan diisi oleh JavaScript --}}
+                    <input type="hidden" name="selected_address_id" id="selectedAddressIdInput" form="checkout-form"> 
+
                     @forelse ($alamatUser as $alamat)
                         <div class="address-item" data-id="{{ $alamat->id }}">
                             <div class="address-item-radio">
+                                {{-- Tambahkan input radio di sini --}}
+                                <input type="radio" id="alamat-{{ $alamat->id }}" name="shipping_address_option" value="{{ $alamat->id }}" class="address-radio">
                                 <label for="alamat-{{ $alamat->id }}">
+                                    {{-- Anda mungkin ingin menampilkan lebih banyak detail alamat di sini --}}
                                     <p>{{ $alamat->address }}</p>
+                                    {{-- Asumsi Alamat memiliki kolom 'nama_penerima' dan 'telepon' --}}
+                                    <p><strong>Penerima:</strong> {{ $alamat->nama_penerima ?? Auth::user()->name }}</p>
+                                    <p><strong>Telepon:</strong> {{ $alamat->phone ?? 'Tidak Tersedia' }}</p>
                                 </label>
                             </div>
                         </div>
@@ -36,10 +46,10 @@
                     @endforelse
                 </div>
 
-                <button class="btn-create-address" data-phone="{{ Auth::user()->primaryAlamat?->phone }}"
+                <!-- <button class="btn-create-address" data-phone="{{ Auth::user()->primaryAlamat?->phone }}"
                     data-address="{{ Auth::user()->primaryAlamat?->address }}">
                     <i class='bx bx-plus'></i> Buat Alamat
-                </button>
+                </button> -->
             </div>
 
             <div class="detail-order-section card">
@@ -67,7 +77,8 @@
             </div>
         </div>
 
-        @include('produk.ringkasan-keranjang')
+        {{-- Pastikan ringkasan-keranjang.blade.php memiliki form id="checkout-form" --}}
+        @include('produk.ringkasan-keranjang') 
     </main>
 
     @include('produk.popup-order')
@@ -75,6 +86,7 @@
     @include('produk.footer')
 
 
+    <script src="{{ asset('produk/js/order-address.js') }}"></script> {{-- Buat file JS baru untuk logika alamat --}}
     <script src="{{ asset('produk/js/popuporder.js') }}"></script>
 </body>
 

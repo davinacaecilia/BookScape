@@ -25,9 +25,11 @@ window.updateCartSummary = function () {
 
 
 document.addEventListener('DOMContentLoaded', () => {
-  const selectAllCheckbox = document.getElementById('selectAllItems');
+   const selectAllCheckbox = document.getElementById('selectAllItems');
   let itemCheckboxes = document.querySelectorAll('.cart-card .item-checkbox');
   const deleteAllSelectedButton = document.querySelector('.delete-selected-btn');
+  const checkoutForm = document.getElementById('checkout-form');
+  const hiddenInput = document.getElementById('selectedCartIds');
 
   function updateDeleteButtonState() {
     const anyItemSelected = Array.from(itemCheckboxes).some(checkbox => checkbox.checked);
@@ -127,6 +129,57 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+    if (checkoutForm) {
+    checkoutForm.addEventListener('submit', function (e) {
+      const selectedIds = [];
+      let stockError = false; // Flag untuk menandai kesalahan stok
+      let errorMessage = '';
+
+      document.querySelectorAll('.cart-card').forEach(card => {
+        const checkbox = card.querySelector('.item-checkbox');
+        if (checkbox && checkbox.checked) {
+          const quantityDisplay = card.querySelector('.quantity-display');
+          const quantity = parseInt(quantityDisplay?.textContent || '1'); // Kuantitas yang diinginkan user
+          
+          // Asumsi Anda sudah menambahkan data-stock="{{ $item->buku->stock }}" di .cart-card
+          const availableStock = parseInt(card.dataset.stock || '0'); 
+          
+          const bookTitle = card.querySelector('h4')?.textContent || 'Buku Tidak Dikenal'; // Ambil judul buku untuk pesan error
+
+          if (availableStock === 0) {
+            stockError = true;
+            errorMessage = `Stok buku "${bookTitle}" sudah habis. Mohon hapus dari keranjang atau kurangi jumlahnya.`;
+          } else if (quantity > availableStock) {
+            stockError = true;
+            errorMessage = `Kuantitas buku "${bookTitle}" (${quantity}) melebihi stok yang tersedia (${availableStock}).`;
+          }
+
+          if (!stockError) { // Hanya tambahkan ke selectedIds jika tidak ada masalah stok
+            selectedIds.push(card.dataset.id);
+          }
+        }
+      });
+
+      if (stockError) {
+        e.preventDefault(); // Gagalkan submit
+        Swal.fire({
+            icon: 'error',
+            title: 'Stok Tidak Cukup!',
+            text: errorMessage,
+            confirmButtonText: 'OK'
+        });
+        return;
+      }
+
+      if (selectedIds.length === 0) {
+        e.preventDefault(); // Gagalkan submit
+        Swal.fire('Oops!', 'Pilih setidaknya satu item untuk checkout.', 'warning');
+        return;
+      }
+
+      hiddenInput.value = selectedIds.join(','); // kirim sebagai string dipisah koma
+    });
+  }
 
   // --- SELECT ALL ---
   if (selectAllCheckbox) {
@@ -149,9 +202,6 @@ document.addEventListener('DOMContentLoaded', () => {
       updateCartSummary();
     });
   });
-  
-  const checkoutForm = document.getElementById('checkout-form');
-  const hiddenInput = document.getElementById('selectedCartIds');
 
   checkoutForm.addEventListener('submit', function (e) {
     const selectedIds = [];
@@ -174,6 +224,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   updateDeleteButtonState();
-  updateCartSummary();
+  window.updateCartSummary(); // Panggil saat halaman dimuat
   displayEmptyCartMessage();
 });

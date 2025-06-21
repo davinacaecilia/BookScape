@@ -46,107 +46,51 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- Data Review Statis --}}
-                            <tr>
-                                <td>The Midnight Library</td>
-                                <td>Matt Haig</td> {{-- Data Author --}}
-                                <td>Alice Wonderland</td>
-                                <td>
-                                    <i class='bx bxs-star'></i>
-                                    <i class='bx bxs-star'></i>
-                                    <i class='bx bxs-star'></i>
-                                    <i class='bx bxs-star'></i>
-                                    <i class='bx bxs-star'></i>
-                                    (5/5)
-                                </td>
-                                <td>Buku ini luar biasa! Ide ceritanya segar dan sangat menggugah pikiran. Benar-benar
-                                    wajib dibaca.</td>
-                                <td>10 June 2025</td>
-                                <td>
-                                    <a href="#" class="btn-delete" style="color: red;"
-                                        onclick="return confirm('Are You Sure Want to Delete This Comment?');">Delete</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Atomic Habits</td>
-                                <td>James Clear</td> {{-- Data Author --}}
-                                <td>Bob The Builder</td>
-                                <td>
-                                    <i class='bx bxs-star'></i>
-                                    <i class='bx bxs-star'></i>
-                                    <i class='bx bxs-star'></i>
-                                    <i class='bx bxs-star'></i>
-                                    <i class='bx bx-star'></i>
-                                    (4/5)
-                                </td>
-                                <td>Sangat praktis dan mudah diaplikasikan. Membantu mengubah kebiasaan kecil menjadi
-                                    lebih baik.</td>
-                                <td>08 June 2025</td>
-                                <td>
-                                    <a href="#" class="btn-delete" style="color: red;"
-                                        onclick="return confirm('Are You Sure Want to Delete This Comment?');">Delete</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Sapiens: A Brief History of Humankind</td>
-                                <td>Yuval Noah Harari</td> {{-- Data Author --}}
-                                <td>Charlie Chaplin</td>
-                                <td>
-                                    <i class='bx bxs-star'></i>
-                                    <i class='bx bxs-star'></i>
-                                    <i class='bx bxs-star'></i>
-                                    <i class='bx bxs-star'></i>
-                                    <i class='bx bx-star'></i>
-                                    (4/5)
-                                </td>
-                                <td>Buku yang sangat informatif dan membuka wawasan. Terkadang agak padat, tapi isinya
-                                    sangat berbobot.</td>
-                                <td>05 June 2025</td>
-                                <td>
-                                    <a href="#" class="btn-delete" style="color: red;"
-                                        onclick="return confirm('Are You Sure Want to Delete This Comment?');">Delete</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>The Psychology of Money</td>
-                                <td>Morgan Housel</td> {{-- Data Author --}}
-                                <td>Diana Prince</td>
-                                <td>
-                                    <i class='bx bxs-star'></i>
-                                    <i class='bx bxs-star'></i>
-                                    <i class='bx bxs-star'></i>
-                                    <i class='bx bxs-star'></i>
-                                    <i class='bx bxs-star'></i>
-                                    (5/5)
-                                </td>
-                                <td>Pendekatan yang unik dan relevan tentang keuangan. Sangat direkomendasikan untuk
-                                    siapa pun.</td>
-                                <td>01 June 2025</td>
-                                <td>
-                                    <a href="#" class="btn-delete" style="color: red;"
-                                        onclick="return confirm('Are You Sure Want to Delete This Comment?');">Delete</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Dune</td>
-                                <td>Frank Herbert</td> {{-- Data Author --}}
-                                <td>Eve Harrington</td>
-                                <td>
-                                    <i class='bx bxs-star'></i>
-                                    <i class='bx bxs-star'></i>
-                                    <i class='bx bxs-star'></i>
-                                    <i class='bx bx-star'></i>
-                                    <i class='bx bx-star'></i>
-                                    (3/5)
-                                </td>
-                                <td>Dunia yang imajinatif, tapi alurnya terkadang lambat dan bahasanya cukup kompleks.
-                                </td>
-                                <td>28 May 2025</td>
-                                <td>
-                                    <a href="#" class="btn-delete" style="color: red;"
-                                        onclick="return confirm('Are You Sure Want to Delete This Comment?');">Delete</a>
-                                </td>
-                            </tr>
+                            @forelse ($ratings as $rating)
+                                <tr>
+                                    {{-- Menampilkan Judul Buku melalui relasi --}}
+                                    <td>{{ $rating->buku->judul_buku }}</td>
+
+                                    {{-- Menampilkan Penulis Buku melalui relasi --}}
+                                    <td>{{ $rating->buku->penulis_buku }}</td>
+
+                                    {{-- Menampilkan Nama User melalui relasi --}}
+                                    <td>{{ $rating->user->name }}</td>
+
+                                    {{-- Menampilkan Bintang Rating --}}
+                                    <td>
+                                        <span style="color: #ffce3d;">
+                                            @for ($i = 1; $i <= $rating->rating; $i++)
+                                                <i class='bx bxs-star'></i>
+                                            @endfor
+                                        </span>
+                                        ({{ $rating->rating }}/5)
+                                    </td>
+
+                                    {{-- Menampilkan Teks Review --}}
+                                    <td>{{ $rating->review ?? 'Tidak ada ulasan teks.' }}</td>
+
+                                    {{-- Menampilkan Tanggal dengan format yang bagus --}}
+                                    <td>{{ $rating->created_at->format('d M Y') }}</td>
+
+                                    {{-- Tombol Aksi (Delete) --}}
+                                    <td>
+                                        {{-- Form untuk HAPUS, ini cara yang benar dan aman --}}
+                                        <form action="{{ route('ratings.destroy', $rating->id) }}" method="POST"
+                                            onsubmit="return confirm('Anda yakin ingin menghapus ulasan ini?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn-delete"
+                                                style="background:none; border:none; color:red; cursor:pointer; padding:0;">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @empty
+                                {{-- Pesan ini akan muncul jika tidak ada rating sama sekali --}}
+                                <tr>
+                                    <td colspan="7" style="text-align: center;">Belum ada ulasan yang masuk.</td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
