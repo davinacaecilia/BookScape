@@ -31,7 +31,7 @@
 
         <div class="cart-items-container">
                 @foreach($items as $item)
-                <div class="cart-card" data-id="{{ $item->id }}">
+                <div class="cart-card" data-id="{{ $item->id }}" data-stock="{{ $item->buku->stock }}">
                     <div class="item-checkbox-container">
                         <input type="checkbox" class="item-checkbox">
                     </div>

@@ -17,7 +17,7 @@ class PaymentMethodSeeder extends Seeder
             'name' => 'BCA',
             'description' => 'Bank Central Asia',
             'account_number' => '0812345678',
-            'account_name' => 'Nama Rekening Anda',
+            'account_name' => 'BookScape',
             'logo_path' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Bank_Central_Asia.svg/1200px-Bank_Central_Asia.svg.png',
         ]);
 
@@ -25,7 +25,7 @@ class PaymentMethodSeeder extends Seeder
             'name' => 'BRIVA',
             'description' => 'BRI Virtual Account',
             'account_number' => '1234567890',
-            'account_name' => 'Nama Rekening BRI Anda',
+            'account_name' => 'BookScape',
             'logo_path' => 'https://developers.bri.co.id/sites/default/files/inline-images/BRIVA-BRI.jpg',
         ]);
 
@@ -33,7 +33,7 @@ class PaymentMethodSeeder extends Seeder
             'name' => 'Mandiri',
             'description' => 'Bank Mandiri',
             'account_number' => '1234567890',
-            'account_name' => 'Nama Rekening Mandiri Anda',
+            'account_name' => 'BookScape',
             'logo_path' => 'https://upload.wikimedia.org/wikipedia/id/thumb/f/fa/Bank_Mandiri_logo.svg/2560px-Bank_Mandiri_logo.svg.png',
         ]);
 
@@ -41,7 +41,7 @@ class PaymentMethodSeeder extends Seeder
             'name' => 'DANA',
             'description' => 'E-wallet DANA',
             'account_number' => '0876543210',
-            'account_name' => 'Nama Akun Dana Anda',
+            'account_name' => 'BookScape',
             'logo_path' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Logo_dana_blue.svg/2560px-Logo_dana_blue.svg.png',
         ]);
     }

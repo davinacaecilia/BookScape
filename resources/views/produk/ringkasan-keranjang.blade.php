@@ -14,7 +14,7 @@
             <span>Rp {{ number_format($total, 0, ',', '.') }}</span>
         </div>
     </div>
-    <form action="{{ route('order.place') }}" method="POST">
+    <form id="checkout-form" action="{{ route('order.place') }}" method="POST"> {{-- PASTIKAN ID="checkout-form" --}}
         @csrf
 
         {{-- Logika untuk membedakan Order Now dan Cart Checkout --}}
@@ -29,6 +29,8 @@
         @else
             <input type="hidden" name="selected_cart_ids" value="{{ implode(',', $orderItems->pluck('id')->toArray()) }}">
         @endif
+        
+        {{-- input hidden untuk selected_address_id sudah di order-cart.blade.php dan akan diisi JS --}}
 
         <button class="btn-pay-now" type="submit">Lanjutkan Pembayaran</button>
     </form>

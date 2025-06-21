@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\Rating;
 use App\Models\User;
 use App\Models\Buku;
 use App\Models\Genre;
@@ -16,11 +17,12 @@ class AdminController extends Controller
         $userCount = User::count();
         $bukuCount = Buku::count();
         $orderCount = Order::count();
-        $query = Order::with(['user', 'items.buku'])
+        $query = Order::with(['user', 'items.buku', 'alamat'])
                         ->orderBy('created_at', 'desc');
         $orders = $query->paginate(5);
         return view('admin.dashboard', compact('userCount', 'bukuCount', 'orders', 'orderCount'));
     }
+
     public function listMessage()
     {
         return view('admin.message');
@@ -28,7 +30,7 @@ class AdminController extends Controller
     
     public function listOrders()
     {
-        $query = Order::with(['user', 'items.buku'])
+        $query = Order::with(['user', 'items.buku', 'alamat'])
                         ->orderBy('created_at', 'desc');
         $orders = $query->paginate(10);
         return view('admin.orders', compact('orders'));
@@ -64,8 +66,8 @@ class AdminController extends Controller
 
         $allowedTransitions = [
             'pending'                      => ['process', 'canceled'],
-            'process'                      => ['arrived'],
-            'arrived'                      => ['canceled'],
+            'process'                      => ['arrived', 'canceled'], // Tambahkan 'canceled'
+            'arrived'                      => ['completed', 'canceled'], // Tambahkan 'completed' jika admin bisa mengubahnya (sesuai kebutuhan Anda)
         ];
 
         if (isset($allowedTransitions[$currentStatus]) && !in_array($newStatus, $allowedTransitions[$currentStatus])) {
@@ -88,7 +90,7 @@ class AdminController extends Controller
 
     public function listProduct() {
         $query = Buku::query();
-        $products = $query->paginate(10);
+        $products = $query->paginate(8);
         return view('admin.product-management', [
             'products' => $products
         ]);
@@ -214,7 +216,17 @@ class AdminController extends Controller
     }
 
     public function showRatingsAndReviews()
-{
-    return view('admin.ratings');
-}
+    {
+
+        $ratings = Rating::with('user', 'buku')->latest()->get();
+
+        return view('admin.ratings', compact('ratings'));
+    }
+
+    public function destroyRating(Rating $rating)
+    {
+        $rating->delete();
+
+        return back()->with('success', 'Ulasan berhasil dihapus.');
+    }
 }

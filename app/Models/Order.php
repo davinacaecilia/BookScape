@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     protected $table = 'orders';
-    protected $fillable = ['user_id', 'total_price', 'status', 'payment_proof'];
+    protected $fillable = ['user_id', 'total_price', 'status', 'payment_proof', 'alamat_id'];
     public $timestamps = true;
     
     public function user() {
@@ -17,6 +17,11 @@ class Order extends Model
 
     public function items() {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function alamat()
+    {
+        return $this->belongsTo(Alamat::class);
     }
 
     public function paymentMethod()

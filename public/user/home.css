@@ -173,17 +173,50 @@ body {
 padding: 40px;
 }
 
-.book-card {
+/* .book-card {
   background: var(--gray);
   border-radius: 12px;
   overflow: hidden;
   transition: all 0.2s ease;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+} */
+
+.book-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .book-card:hover {
   transform: translateY(-5px);
 }
+
+.book-cover {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  border-bottom: 1px solid #eee;
+  flex-shrink: 0;
+}
+
+.book-info {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.book-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
 
 .book-card img {
   width: 100%;
@@ -191,8 +224,10 @@ padding: 40px;
   object-fit: cover;
 }
 
-.book-info {
-  padding: 16px;
+.book-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
 }
 
 /* .book-info h3 {
@@ -232,7 +267,7 @@ padding: 40px;
 
 .add-to-cart-button {
   display: inline-block;
-  margin-top: 5px;
+  margin-top: auto;
   padding: 6px 12px;
   background-color: #007bff;
   color: white;
@@ -592,6 +627,7 @@ padding: 40px;
 /* Book card styles */
 .book-card {
   position: relative;
+  height: relative;
   background: white;
   border-radius: 8px;
   overflow: hidden;
@@ -1137,4 +1173,37 @@ padding: 40px;
   height: 1px;
   background-color: #eee;
   margin: 5px 0;
+}
+
+.book-info .book-title { /* Selector yang lebih spesifik untuk judul buku */
+    display: -webkit-box; /* Wajib untuk -webkit-line-clamp */
+    -webkit-line-clamp: 2; /* Batasi teks menjadi 2 baris */
+    -webkit-box-orient: vertical; /* Arah vertikal untuk pemotongan baris */
+    overflow: hidden; /* Sembunyikan teks yang melampaui batas */
+    text-overflow: ellipsis; /* Tambahkan elipsis (...) */
+    white-space: normal; /* Pastikan teks membungkus */
+
+    /* Opsional: Sesuaikan tinggi baris dan tinggi maksimum untuk konsistensi */
+    line-height: 1.2em; /* Sesuaikan ini dengan ukuran font Anda. Misalnya, jika font-size 16px, line-height bisa 1.2em atau 1.5em. */
+    max-height: 2.4em; /* (line-height * jumlah baris) -> 1.2em * 2 = 2.4em */
+
+    /* Atribut font yang sudah ada */
+    font-size: 16px; /* Dari kode Anda */
+    font-weight: 600; /* Dari kode Anda */
+    margin-bottom: 6px; /* Dari kode Anda */
+}
+
+.book-card img.book-cover {
+    height: 200px; /* Dari kode Anda */
+    object-fit: cover;
+    flex-shrink: 0; /* Penting agar gambar tidak menyusut dan judul punya ruang */
+}
+
+.book-card .book-info {
+    padding: 15px; /* Dari kode Anda */
+    flex-grow: 1; /* Biarkan book-info mengambil sisa ruang */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Konten dimulai dari atas */
+    /* overflow: hidden; */ /* Jika ada elemen lain di book-info yang juga perlu dipotong */
 }

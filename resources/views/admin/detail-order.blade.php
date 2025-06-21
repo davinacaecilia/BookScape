@@ -117,11 +117,11 @@
     </div>
     <div>
         <label>Phone:</label>
-        <input type="text" value="{{ $order->user->phone ?? '+62 [Nomor Telepon Tidak Tersedia]' }}" readonly> {{-- Asumsi ada kolom 'phone' di tabel users --}}
+        <input type="text" value="{{ $order->alamat->phone ?? '+62 [Nomor Telepon Tidak Tersedia]' }}" readonly> {{-- Asumsi ada kolom 'phone' di tabel users --}}
     </div>
     <div>
         <label>Shipping Address:</label>
-        <textarea readonly>{{ $order->shipping_address ?? 'Alamat tidak tersedia. (Pastikan kolom ada di tabel orders)' }}</textarea> {{-- Asumsi ada kolom 'shipping_address' di tabel orders --}}
+        <textarea readonly>{{ $order->alamat->address ?? 'Alamat tidak tersedia. (Pastikan kolom ada di tabel orders)' }}</textarea> {{-- Asumsi ada kolom 'shipping_address' di tabel orders --}}
     </div>
     <div>
         <label>Payment Method:</label>
@@ -152,18 +152,30 @@
     </div>
     {{-- Tambahan status dropdown --}}
     <div>
-        <label>Status:</label>
-        <select name="status" id="status-select" style="width: 100%; padding: 0.5rem; border: 1px solid var(--brown-light); border-radius: 4px; font-size: 0.9rem;">
-            {{-- Loop untuk status agar dinamis --}}
-            @php
-                $statuses = ['pending', 'process', 'arrived', 'canceled', 'completed'];
-            @endphp
-            @foreach($statuses as $statusOption)
-                <option value="{{ $statusOption }}" {{ strtolower($order->status) === $statusOption ? 'selected' : '' }}>
-                    {{ ucwords(str_replace('_', ' ', $statusOption)) }}
-                </option>
-            @endforeach
-        </select>
+        <div>
+    <label>Status:</label>
+    @php
+        $currentOrderStatus = strtolower($order->status);
+        $disableStatusChange = in_array($currentOrderStatus, ['arrived', 'completed', 'canceled']); // Status-status yang tidak bisa diubah lagi oleh admin
+    @endphp
+    <select name="status" id="status-select"
+            style="width: 100%; padding: 0.5rem; border: 1px solid var(--brown-light); border-radius: 4px; font-size: 0.9rem;"
+            {{ $disableStatusChange ? 'disabled' : '' }}> {{-- Tambahkan atribut disabled di sini --}}
+        {{-- Loop untuk status agar dinamis --}}
+        @php
+            $statuses = ['pending', 'process', 'arrived', 'canceled', 'completed'];
+        @endphp
+        @foreach($statuses as $statusOption)
+            <option value="{{ $statusOption }}" {{ $currentOrderStatus === $statusOption ? 'selected' : '' }}>
+                {{ ucwords(str_replace('_', ' ', $statusOption)) }}
+            </option>
+        @endforeach
+    </select>
+    @if ($disableStatusChange)
+        <p style="color: red; font-size: 0.85em; margin-top: 0.5em;">Status order tidak dapat diubah lagi.</p>
+    @endif
+</div>
+
     </div>
 
     <div style="margin-top: 1rem;">
@@ -175,7 +187,12 @@
         @endif
     </div>
 
+   {{-- Juga tambahkan kondisi untuk tombol submit --}}
+@if (!$disableStatusChange)
     <button type="submit" style="margin-top: 1.5rem; padding: 0.7rem 1.2rem; background-color: var(--brown-dark); color: white; border: none; border-radius: 5px; cursor: pointer;">Update Status Order</button>
+@else
+    <button type="button" disabled style="margin-top: 1.5rem; padding: 0.7rem 1.2rem; background-color: #cccccc; color: #666666; border: none; border-radius: 5px; cursor: not-allowed;">Status Order Tidak Dapat Diubah</button>
+@endif
 </form> {{-- Penutup form --}}
 
 @endsection

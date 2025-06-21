@@ -21,18 +21,15 @@
 <main class="order-history-container">
   {{-- Loop langsung melalui setiap pesanan --}}
   @forelse($userOrders as $order)
-     <div class="order-card" data-order-id="{{ $order->id }}" data-order-status="{{ $order->status }}">
+     <div class="order-card"
+     data-order-id="{{ $order->id }}"
+     data-order-status="{{ $order->status }}"
+     data-first-book-id="{{ $order->items->isNotEmpty() ? $order->items->first()->buku->id : '' }}">
       <div class="order-status-header">
         <button class="status {{ strtolower($order->status) }}">{{ $order->status }}</button>
         {{-- Tombol aksi yang akan berubah --}}
         <div class="action-buttons">
-            @if(strtolower($order->status) === 'completed') {{-- <--- UBAH INI --}}
-              <a href="{{ url('rating') }}" class="rate-button">Rate</a>
-            @elseif(strtolower($order->status) === 'arrived') {{-- <--- UBAH INI --}}
-              <button class="confirm-button">Confirm Order</button>
-            @elseif(strtolower($order->status) === 'pending') {{-- <--- UBAH INI --}}
-              <button class="pending-action-button">Action</button>
-            @endif
+            {{-- Tombol aksi akan dirender di sini oleh history.js --}}
         </div>
       </div>
       <div class="order-details-group">

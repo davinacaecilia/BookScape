@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Alamat;
 use App\Models\Buku;
 use App\Models\Cart;
 use App\Models\Genre;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\PaymentMethod;
+use App\Models\Rating;
+use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -18,10 +22,40 @@ class UserController extends Controller
     {
         $myCarts = Cart::with('buku')
             ->where('user_id', auth()->user()->id)
+            ->paginate(6);
+        $newArrivals = Buku::orderBy('updated_at', 'desc')->paginate(6);
+        $bestSellers = Buku::with('genres')
+            ->select(
+                'buku.id', // Harus disertakan di GROUP BY
+                'buku.judul_buku', // Harus disertakan di GROUP BY
+                'buku.penulis_buku', // Harus disertakan di GROUP BY
+                'buku.gambar_sampul', // Harus disertakan di GROUP BY
+                'buku.harga', // Harus disertakan di GROUP BY
+                'buku.sinopsis', // Harus disertakan di GROUP BY
+                'buku.stock', // Harus disertakan di GROUP BY
+                'buku.created_at', // Harus disertakan di GROUP BY
+                'buku.updated_at', // Harus disertakan di GROUP BY
+                // Tambahkan semua kolom lain dari tabel 'buku' yang Anda pilih dengan 'buku.*'
+                DB::raw('AVG(ratings.rating) as average_rating') // Ini adalah fungsi agregasi, tidak perlu di GROUP BY
+            )
+            ->join('ratings', 'buku.id', '=', 'ratings.buku_id')
+            ->groupBy(
+                'buku.id', // Wajib
+                'buku.judul_buku', // Wajib
+                'buku.penulis_buku', // Wajib
+                'buku.gambar_sampul', // Wajib
+                'buku.harga', // Wajib
+                'buku.sinopsis', // Wajib
+                'buku.stock', // Wajib
+                'buku.created_at', // Wajib
+                'buku.updated_at' // Wajib
+                // Tambahkan semua kolom lain dari tabel 'buku' yang Anda pilih di SELECT ke sini
+            )
+            ->havingRaw('COUNT(ratings.rating) >= ?', [1]) // Contoh: minimal 1 ulasan
+            ->orderByDesc('average_rating')
+            ->limit(6)
             ->get();
-        $newArrivals = Buku::orderBy('updated_at', 'desc')->get();
-        $bestSellers = Buku::all();
-        $libraries = Buku::all();
+        $libraries = Buku::query()->paginate(6);
         return view('user.home', compact('newArrivals', 'bestSellers', 'libraries', 'myCarts'));
     }
 
@@ -168,17 +202,13 @@ class UserController extends Controller
 
         $orderItems = Cart::with('buku')->whereIn('id', $ids)->get();
         $user = Auth::user();
-        $alamatUser = $user->alamats;
-
-        $user = Auth::user();
-        $alamatUser = $user->alamats;
+        $alamatUser = $user->alamats()->where('is_primary', 1)->get();
 
         $subtotal = $orderItems->sum(fn($i) => $i->quantity * $i->buku->harga);
         $shippingCost = 0.05 * $subtotal;
         $total = $subtotal + $shippingCost;
 
         return view('produk.order-cart', compact('orderItems', 'subtotal', 'shippingCost', 'total', 'alamatUser'));
-
     }
 
     public function checkoutNow(Request $request)
@@ -192,24 +222,32 @@ class UserController extends Controller
 
         $quantity = $request->quantity;
         $subtotal = $buku->harga * $quantity;
-        $shippingCost = round($subtotal * 0.10);
+        $shippingCost = round($subtotal * 0.10); // Biaya pengiriman 10%
         $total = $subtotal + $shippingCost;
+
+        // Ambil alamat user yang terdaftar
+        $alamatUser = Alamat::where('user_id', Auth::id())->get(); //
 
         return view('produk.order-now', [
             'orderItems' => collect([ (object)[
-                'id' => null,
+                'id' => null, // Ini adalah flag untuk "Buy Now"
                 'buku' => $buku,
                 'quantity' => $quantity
             ]]),
             'subtotal' => $subtotal,
             'shippingCost' => $shippingCost,
-            'total' => $total
+            'total' => $total,
+            'alamatUser' => $alamatUser, // <<< Kirimkan alamat ke view
         ]);
     }
 
     public function placeOrder(Request $request)
     {
         $user = auth()->user();
+
+        $request->validate([
+            'selected_address_id' => 'required|exists:alamats,id', // Validasi alamat yang dipilih
+        ]);
 
         // Cek apakah ini mode "Buy Now"
         if ($request->has('is_buy_now') && $request->input('is_buy_now') == '1') {
@@ -234,11 +272,13 @@ class UserController extends Controller
                 'total_price' => $total,
                 'status' => 'pending',
                 'payment_proof' => null,
+                'pending_at' => Carbon::now(),
+                'alamat_id' => $request->selected_address_id, // <<< SIMPAN ALAMAT ID UNTUK BUY NOW
             ]);
 
             OrderItem::create([
                 'order_id' => $order->id,
-                'book_id' => $buku->id, // <--- UBAH DARI 'buku_id' MENJADI 'book_id'
+                'book_id' => $buku->id,
                 'quantity' => $quantity,
                 'price' => $buku->harga
             ]);
@@ -247,7 +287,6 @@ class UserController extends Controller
             $buku->save();
 
         } else {
-            // Ini adalah alur untuk Checkout dari Keranjang (Cart)
             $request->validate([
                 'selected_cart_ids' => 'required|string',
             ]);
@@ -256,12 +295,19 @@ class UserController extends Controller
             $cartItems = Cart::with('buku')->whereIn('id', $cartIds)->get();
 
             if ($cartItems->isEmpty()) {
-                return redirect()->route('product.cart')->with('error', 'Keranjang tidak valid atau item belum dipilih.');
+                return redirect()->route('product.cart')->with('error', 'Tidak ada item terpilih di keranjang.');
             }
 
+            // Validasi stok untuk setiap item di keranjang SEBELUM MEMBUAT ORDER
             foreach ($cartItems as $cartItem) {
-                if ($cartItem->buku->stock < $cartItem->quantity) {
-                    return redirect()->back()->with('error', 'Stok buku ' . $cartItem->buku->judul_buku . ' tidak mencukupi.');
+                if (!$cartItem->buku) { // Cek jika buku tidak ditemukan (misal: sudah dihapus)
+                    return redirect()->back()->with('error', 'Beberapa item di keranjang tidak valid.');
+                }
+                if ($cartItem->buku->stock === 0) {
+                    return redirect()->back()->with('error', 'Stok buku "' . $cartItem->buku->judul_buku . '" sudah habis. Mohon hapus dari keranjang atau kurangi jumlahnya.');
+                }
+                if ($cartItem->quantity > $cartItem->buku->stock) {
+                    return redirect()->back()->with('error', 'Kuantitas buku "' . $cartItem->buku->judul_buku . '" melebihi stok yang tersedia. Stok: ' . $cartItem->buku->stock);
                 }
             }
 
@@ -274,16 +320,19 @@ class UserController extends Controller
                 'total_price' => $total,
                 'status' => 'pending',
                 'payment_proof' => null,
+                'pending_at' => Carbon::now(),
+                'alamat_id' => $request->selected_address_id,
             ]);
 
             foreach ($cartItems as $item) {
                 OrderItem::create([
                     'order_id' => $order->id,
-                    'book_id' => $item->buku->id, // <--- UBAH DARI 'buku_id' MENJADI 'book_id'
+                    'book_id' => $item->buku->id,
                     'quantity' => $item->quantity,
                     'price' => $item->buku->harga
                 ]);
 
+                // Kurangi stok setelah order item dibuat
                 $buku = Buku::find($item->buku->id);
                 if ($buku) {
                     $buku->stock -= $item->quantity;
@@ -291,6 +340,7 @@ class UserController extends Controller
                 }
             }
 
+            // Hapus item dari keranjang setelah order dibuat
             Cart::whereIn('id', $cartIds)->delete();
         }
 
@@ -324,13 +374,12 @@ class UserController extends Controller
             if ($request->hasFile('payment_proof')) {
                 $image = $request->file('payment_proof');
                 $imageName = time() . '_' . $image->getClientOriginalName();
-                $path = 'public/bukti';
 
-                $image->storeAs($path, $imageName);
+                $image->storeAs('bukti', $imageName, 'public');
 
                 $order->payment_proof = $imageName;
                 $order->payment_method_id = $request->payment_method_id; // Simpan ID metode pembayaran
-                $order->status = 'process';
+                $order->status = 'pending';
                 $order->save();
 
                 return response()->json([
