@@ -117,6 +117,58 @@ class AdminController extends Controller
         ]);
     }
 
+     public function addProduct() {
+        $genres = Genre::all();
+        return view('admin.product-create', [
+            'genres' => $genres
+        ]); 
+    }
+
+    public function editProduct(Request $request)
+    {
+        $products = Buku::find($request->id);
+        $genres = Genre::all();
+        return view('admin.product-edit', [
+            'products' => $products,
+            'genres' => $genres
+        ]);
+    }
+
+    public function storeProduct(Request $request)
+    {
+        $validated = $request->validate([
+            'judul_buku' => 'required|string|max:255',
+            'penulis_buku' => 'required|string|max:255',
+            'harga' => 'required|numeric',
+            'gambar_sampul' => 'nullable|image|mimes:jpg,jpeg,png|max:6048',
+            'genres' => 'array',
+            'sinopsis' => 'nullable|string',
+            'stock' => 'required|integer'
+        ]);
+
+        if ($request->hasFile('gambar_sampul')) {
+            $file = $request->file('gambar_sampul');
+            $filename = $file->hashName();
+            $file->storeAs('sampul', $filename, 'public');
+        } else {
+            $filename = null;
+        }
+
+        $buku = Buku::create([
+            'judul_buku' => $validated['judul_buku'],
+            'penulis_buku' => $validated['penulis_buku'],
+            'harga' => $validated['harga'],
+            'gambar_sampul' => $filename,
+            'sinopsis' => $validated['sinopsis'],
+            'stock' => $validated['stock'],
+        ]);
+
+        $genreIds = $validated['genres'] ?? [];
+        $buku->genres()->sync($genreIds);
+
+        return redirect()->route('product.management')->with('success', 'Buku berhasil ditambahkan!');
+    }
+
 
     public function updateProduct(Request $request, $id)
     {

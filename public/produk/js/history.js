@@ -197,7 +197,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             if (currentOrderIdToAct) {
-                window.location.href = `{{ url('payment') }}/${currentOrderIdToAct}`;
+                window.location.href = `/payment/${currentOrderIdToAct}`;
             } else {
                 Swal.fire('Error!', 'Order ID tidak ditemukan untuk pembayaran.', 'error');
             }
@@ -250,9 +250,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     rateButton = document.createElement('a');
                     const bookId = itemElement.dataset.bookId;
                     if (bookId) {
-                        rateButton.href = `{{ url('/rating') }}/${bookId}`; // Gunakan ID buku
+                        rateButton.href = `/rating/${bookId}`; // Gunakan ID buku
                     } else {
-                        rateButton.href = `{{ route('rating') }}`; // Fallback jika ID buku tidak ada
+                        rateButton.href = `'rating/${bookId}`; // Fallback jika ID buku tidak ada
                     }
                     rateButton.classList.add('rate-button'); // <<< GUNAKAN KELAS CSS YANG ANDA INGINKAN
                     rateButton.textContent = 'Rate'; // Teks tombol

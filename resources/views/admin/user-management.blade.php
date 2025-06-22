@@ -38,8 +38,7 @@
 						<tr style="background-color: #f2f2f2;">
 							<th style="padding: 10px; border: 1px solid #ccc;">ID</th>
 							<th style="padding: 10px; border: 1px solid #ccc;">Name</th>
-							<th style="padding: 10px; border: 1px solid #ccc;">Email</th>
-							<th style="padding: 10px; border: 1px solid #ccc;">Hash Password</th>
+							<th style="padding: 10px; border: 1px solid #ccc;">Email</th>					
 							<th style="padding: 10px; border: 1px solid #ccc;">User Level</th>
 							<th style="padding: 10px; border: 1px solid #ccc;">Registered At</th>
 						</tr>
@@ -50,10 +49,13 @@
 								<td style="padding: 10px; border: 1px solid #ccc;">{{ $user->id }}</td>
 								<td style="padding: 10px; border: 1px solid #ccc;">{{ $user->name }}</td>
 								<td style="padding: 10px; border: 1px solid #ccc;">{{ $user->email }}</td>
-								<td style="padding: 10px; border: 1px solid #ccc; font-family: monospace; font-size: 0.85rem;">
-									{{ $user->password }}
+								<td style="padding: 10px; border: 1px solid #ccc;">
+								@if ($user-> role == 0)
+									Admin
+								@elseif ($user-> role == 1)
+									User
+								@endif
 								</td>
-								<td style="padding: 10px; border: 1px solid #ccc;">{{ $user->role}}</td>
 								<td style="padding: 10px; border: 1px solid #ccc;">{{ $user->created_at }}
 								</td>
 							</tr>

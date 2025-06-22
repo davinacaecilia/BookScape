@@ -103,6 +103,13 @@ class UserController extends Controller
         }
 
         $buku = Buku::with('genres', 'ratings.user')->findOrFail($request->id); // Tambahkan eager loading untuk relasi yang dibutuhkan di Blade
+
+        $totalSold = OrderItem::where('book_id', $buku->id) // Filter untuk buku ini
+                              ->join('orders', 'order_items.order_id', '=', 'orders.id') // Gabungkan dengan tabel orders
+                              ->where('orders.status', 'completed') // Hanya order yang completed
+                              ->sum('order_items.quantity');
+        
+        $buku->total_sold = $totalSold;
         $previousBuku = Buku::where('id', '<', $request->id)->orderBy('id', 'desc')->first();
         $nextBuku = Buku::where('id', '>', $request->id)->orderBy('id', 'asc')->first();
 
