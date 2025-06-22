@@ -53,7 +53,7 @@
 								<td style="padding: 10px; border: 1px solid #ccc; font-family: monospace; font-size: 0.85rem;">
 									{{ $user->password }}
 								</td>
-								<td style="padding: 10px; border: 1px solid #ccc;">{{ $user->user_level}}</td>
+								<td style="padding: 10px; border: 1px solid #ccc;">{{ $user->role}}</td>
 								<td style="padding: 10px; border: 1px solid #ccc;">{{ $user->created_at }}
 								</td>
 							</tr>

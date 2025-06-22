@@ -72,6 +72,7 @@
 						</thead>
 						<tbody>
 							@forelse($orders as $order)
+							@if (!$order->items->isEmpty())
 							<tr>
 								<td>{{ $order->id }}</td>
 								<td>{{ $order->user->name ?? 'N/A' }}</td> {{-- Mengambil username dari relasi user --}}
@@ -94,11 +95,13 @@
 								<td>{{ \Carbon\Carbon::parse($order->created_at)->format('d-m-Y H:i') }}</td> {{-- Mengambil created_at dari order --}}
 								<td><span class="status {{ strtolower($order->status) }}">{{ $order->status }}</span></td> {{-- Mengambil status dari order --}}
 							</tr>
+							@endif
 							@empty
 								<tr>
 									<td colspan="7" style="text-align: center;">Tidak ada order yang ditemukan.</td> {{-- Sesuaikan colspan --}}
 								</tr>
 							@endforelse
+							
 						</tbody>
 					</table>
 				</div>

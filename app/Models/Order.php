@@ -44,10 +44,13 @@ class Order extends Model
             $this->save();
 
             // Kembalikan stok untuk setiap item dalam order ini
-            foreach ($this->orderItems as $orderItem) {
-                $buku = $orderItem->buku; // Dapatkan buku terkait melalui relasi orderItem
+             foreach ($this->items as $orderItem) {
+                $buku = $orderItem->buku;
                 if ($buku) {
-                    $buku->stock += $orderItem->quantity; // Tambahkan stok kembali
+                    $buku->stock += $orderItem->quantity;
+                    // Opsional: kurangi total_sales jika Anda menggunakannya
+                    // $buku->total_sales -= $orderItem->quantity;
+                    // if ($buku->total_sales < 0) $buku->total_sales = 0;
                     $buku->save();
                 }
             }
