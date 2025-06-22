@@ -87,10 +87,9 @@ Selanjutnya, Anda perlu membuat symbolic link (tautan simbolis) dari direktori s
 
     php artisan storage:link
     
-Jika setelha melakukan link Anda tidak menemukan folder sampul dan folder bukti dalam folder storage/app/public Anda, silahkan buat folder tersebut secara manual. Langkah ini penting agar Anda dapat mengupload file ke direktori tersebut saat proses menambah buku dan memasukkan bukti pembayaran.
+Jika setelah melakukan link Anda tidak menemukan folder sampul dan folder bukti dalam folder storage/app/public Anda, silahkan buat folder tersebut secara manual. Langkah ini penting agar Anda dapat mengupload file ke direktori tersebut saat proses menambah buku dan memasukkan bukti pembayaran.
 
 Untuk mengakses halaman pengguna, silahkan Sign Up terlebih dahulu dengan mengisi form registrasi yang tersedia. Setelah melakukan Sign Up, Anda dapat seterusnya melakukan Sign In untuk mengakses halaman pengguna dengan akun yang sama.
-
 
 Untuk mengakses halaman admin, silahkan jalankan perintah berikut di terminal
 
