@@ -31,13 +31,13 @@
         <span class="book-detail-genre">{{ $genre->genre }}</span>
       @endforeach
           </div>
-
           <div class="book-detail-rating">
             <i class="fas fa-star"></i>
             <span>{{ $buku->averageRating() }} (dari {{ $buku->ratingCount() }} ulasan)</span>
           </div>
         </div>
         <p class="book-detail-description">{{ $buku->sinopsis }}</p>
+        <span class="book-detail-author">Sold : {{ $buku->total_sold ?? 0 }}</span>
         <div class="price-actions-wrapper">
           <p class="book-detail-price">Rp {{ number_format($buku['harga'], 0, ',', '.') }}</p>
           <div class="book-detail-actions">
