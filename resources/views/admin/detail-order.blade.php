@@ -88,6 +88,25 @@
 
 <h1>Detail Order</h1>
 
+@if (session('success'))
+        <div style="background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; padding: 10px; margin-bottom: 15px; border-radius: 5px;">
+            {{ session('success') }}
+        </div>
+    @endif
+    @if (session('error'))
+        <div style="background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; padding: 10px; margin-bottom: 15px; border-radius: 5px;">
+            <ul>
+                @if ($errors->any())
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                @else
+                    <li>{{ session('error') }}</li>
+                @endif
+            </ul>
+        </div>
+    @endif
+
 {{-- Form untuk update status order. Action dan method akan diisi oleh JavaScript --}}
 {{-- Anda bisa membuat endpoint API terpisah untuk update status jika tidak mau submit form full --}}
 <form id="updateOrderStatusForm" action="{{ route('admin.orders.updateStatus', $order->id) }}" method="POST">
@@ -154,26 +173,26 @@
     <div>
         <div>
     <label>Status:</label>
-    @php
-        $currentOrderStatus = strtolower($order->status);
-        $disableStatusChange = in_array($currentOrderStatus, ['arrived', 'completed', 'canceled']); // Status-status yang tidak bisa diubah lagi oleh admin
-    @endphp
-    <select name="status" id="status-select"
-            style="width: 100%; padding: 0.5rem; border: 1px solid var(--brown-light); border-radius: 4px; font-size: 0.9rem;"
-            {{ $disableStatusChange ? 'disabled' : '' }}> {{-- Tambahkan atribut disabled di sini --}}
-        {{-- Loop untuk status agar dinamis --}}
-        @php
-            $statuses = ['pending', 'process', 'arrived', 'canceled', 'completed'];
-        @endphp
-        @foreach($statuses as $statusOption)
-            <option value="{{ $statusOption }}" {{ $currentOrderStatus === $statusOption ? 'selected' : '' }}>
-                {{ ucwords(str_replace('_', ' ', $statusOption)) }}
-            </option>
-        @endforeach
-    </select>
-    @if ($disableStatusChange)
-        <p style="color: red; font-size: 0.85em; margin-top: 0.5em;">Status order tidak dapat diubah lagi.</p>
-    @endif
+             @php
+                $currentOrderStatus = strtolower($order->status);
+                // Admin tidak bisa mengubah order yang sudah completed atau canceled
+                $disableStatusChange = in_array($currentOrderStatus, ['completed', 'canceled']);
+            @endphp
+            <select name="status" id="status-select"
+                    style="width: 100%; padding: 0.5rem; border: 1px solid var(--brown-light); border-radius: 4px; font-size: 0.9rem;"
+                    {{ $disableStatusChange ? 'disabled' : '' }}>
+                @php
+                    $statuses = ['pending', 'process', 'arrived', 'completed', 'canceled']; // Daftar status di dropdown
+                @endphp
+                @foreach($statuses as $statusOption)
+                    <option value="{{ $statusOption }}" {{ $currentOrderStatus === $statusOption ? 'selected' : '' }}>
+                        {{ ucwords(str_replace('_', ' ', $statusOption)) }}
+                    </option>
+                @endforeach
+            </select>
+            @if ($disableStatusChange)
+                <p style="color: red; font-size: 0.85em; margin-top: 0.5em;">Status order tidak dapat diubah lagi.</p>
+            @endif
 </div>
 
     </div>
@@ -189,10 +208,10 @@
 
    {{-- Juga tambahkan kondisi untuk tombol submit --}}
 @if (!$disableStatusChange)
-    <button type="submit" style="margin-top: 1.5rem; padding: 0.7rem 1.2rem; background-color: var(--brown-dark); color: white; border: none; border-radius: 5px; cursor: pointer;">Update Status Order</button>
-@else
-    <button type="button" disabled style="margin-top: 1.5rem; padding: 0.7rem 1.2rem; background-color: #cccccc; color: #666666; border: none; border-radius: 5px; cursor: not-allowed;">Status Order Tidak Dapat Diubah</button>
-@endif
+            <button type="submit" style="margin-top: 1.5rem; padding: 0.7rem 1.2rem; background-color: var(--brown-dark); color: white; border: none; border-radius: 5px; cursor: pointer;">Update Status Order</button>
+        @else
+            <button type="button" disabled style="margin-top: 1.5rem; padding: 0.7rem 1.2rem; background-color: #cccccc; color: #666666; border: none; border-radius: 5px; cursor: not-allowed;">Status Order Tidak Dapat Diubah</button>
+        @endif
 </form> {{-- Penutup form --}}
 
 @endsection

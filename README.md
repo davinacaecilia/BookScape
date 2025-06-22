@@ -80,9 +80,17 @@ Jalankan server
 
     php artisan serve
 
+
 ### Running Website
 
+Selanjutnya, Anda perlu membuat symbolic link (tautan simbolis) dari direktori storage/app/public ke direktori public/storage. Ini memungkinkan file yang disimpan di direktori storage/app/public dapat diakses secara publik melalui URL.
+
+    php artisan storage:link
+    
+Jika setelha melakukan link Anda tidak menemukan folder sampul dan folder bukti dalam folder storage/app/public Anda, silahkan buat folder tersebut secara manual. Langkah ini penting agar Anda dapat mengupload file ke direktori tersebut saat proses menambah buku dan memasukkan bukti pembayaran.
+
 Untuk mengakses halaman pengguna, silahkan Sign Up terlebih dahulu dengan mengisi form registrasi yang tersedia. Setelah melakukan Sign Up, Anda dapat seterusnya melakukan Sign In untuk mengakses halaman pengguna dengan akun yang sama.
+
 
 Untuk mengakses halaman admin, silahkan jalankan perintah berikut di terminal
 

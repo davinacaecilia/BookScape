@@ -17,6 +17,11 @@ class Buku extends Model
         return $this->belongsToMany(Genre::class, 'buku_genre', 'buku_id', 'genre_id');
     }
 
+    public function carts()
+    {
+        return $this->hasMany(Cart::class, 'buku_id'); // Pastikan 'buku_id' adalah foreign key di Cart
+    }
+
     public function ratings() {
         return $this->hasMany(Rating::class);
     }

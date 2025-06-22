@@ -1,13 +1,10 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-    // --- Event Delegation untuk Tombol "Rate" ---
-
-
     // --- Variabel untuk Modal Konfirmasi (Arrived -> Completed) ---
     const confirmModal = document.getElementById('confirmModal');
     const cancelConfirmButton = confirmModal ? confirmModal.querySelector('#cancelConfirm') : null;
     const confirmOrderButton = confirmModal ? confirmModal.querySelector('#confirmOrder') : null;
-    let currentOrderCard = null; // Ini akan menyimpan kartu pesanan yang sedang diinteraksi
+    let currentOrderCard = null; // Ini akan menyimpan kartu pesanan (div.order-card) yang sedang diinteraksi
     let currentOrderIdToAct = null; // Menyimpan ID order yang akan dikonfirmasi/dibatalkan
 
     // --- Variabel untuk Modal Aksi Pending (Pending -> Payment / Canceled) ---
@@ -19,7 +16,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const invoiceModal = document.getElementById('invoiceModal');
     const invoiceDetailsDisplay = invoiceModal ? invoiceModal.querySelector('#invoiceDetailsDisplay') : null;
 
-
     // --- Fungsionalitas Modal Konfirmasi (Arrived -> Completed) ---
     // Gunakan event delegation untuk tombol confirm-button karena mereka dinamis
     document.body.addEventListener('click', function(event) {
@@ -27,6 +23,19 @@ document.addEventListener('DOMContentLoaded', function() {
             event.preventDefault();
             currentOrderCard = event.target.closest('.order-card');
             currentOrderIdToAct = currentOrderCard.dataset.orderId;
+
+            // Validasi di frontend: Hanya bisa konfirmasi dari 'arrived'
+            const currentStatus = currentOrderCard.dataset.orderStatus.toLowerCase();
+            if (currentStatus !== 'arrived') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Aksi Tidak Diizinkan',
+                    text: 'Pesanan hanya bisa dikonfirmasi jika statusnya "Arrived".',
+                    confirmButtonText: 'OK'
+                });
+                return; // Hentikan proses jika validasi gagal
+            }
+
             if (confirmModal) confirmModal.classList.add('show');
         }
     });
@@ -42,81 +51,132 @@ document.addEventListener('DOMContentLoaded', function() {
     if (confirmOrderButton) {
         confirmOrderButton.addEventListener('click', () => {
             if (currentOrderIdToAct) {
-                fetch('/order/update-status', { // Ganti dengan rute API Anda
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                    },
-                    body: JSON.stringify({
-                        order_id: currentOrderIdToAct,
-                        status: 'completed'
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        Swal.fire('Berhasil!', 'Pesanan berhasil dikonfirmasi.', 'success').then(() => {
-                            // Perbarui UI pada kartu spesifik tanpa reload
-                            updateOrderCardUI(currentOrderCard, data.new_status);
-                            if (confirmModal) confirmModal.classList.remove('show');
-                            currentOrderIdToAct = null;
-                            currentOrderCard = null;
+                Swal.fire({
+                    title: 'Konfirmasi Penerimaan Order?',
+                    text: 'Status order akan diubah menjadi "Completed".',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, Konfirmasi!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch('order/update-status', { // Menggunakan url() helper untuk rute
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                            },
+                            body: JSON.stringify({
+                                order_id: currentOrderIdToAct,
+                                status: 'completed'
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire('Berhasil!', data.message, 'success').then(() => {
+                                    updateOrderCardUI(currentOrderCard, data.new_status);
+                                    if (confirmModal) closeModal(confirmModal);
+                                    currentOrderIdToAct = null;
+                                    currentOrderCard = null;
+                                });
+                            } else {
+                                Swal.fire('Error!', data.message || 'Gagal mengkonfirmasi pesanan.', 'error');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            Swal.fire('Error!', 'Terjadi kesalahan saat berkomunikasi dengan server.', 'error');
                         });
-                    } else {
-                        Swal.fire('Error!', data.message || 'Gagal mengkonfirmasi pesanan.', 'error');
                     }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    Swal.fire('Error!', 'Terjadi kesalahan saat berkomunikasi dengan server.', 'error');
                 });
             }
         });
     }
 
     // --- Fungsionalitas Modal Aksi Pending (Pending -> Payment / Canceled) ---
-    // Gunakan event delegation untuk tombol pending-action-button
     document.body.addEventListener('click', function(event) {
         if (event.target.classList.contains('pending-action-button')) {
             event.preventDefault();
             currentOrderCard = event.target.closest('.order-card');
             currentOrderIdToAct = currentOrderCard.dataset.orderId;
-            if (pendingActionModal) pendingActionModal.classList.add('show');
+
+            const currentStatus = currentOrderCard.dataset.orderStatus.toLowerCase();
+
+            // Tampilkan modal jika statusnya pending, jika tidak, langsung tampilkan error
+            if (currentStatus === 'pending') {
+                if (pendingActionModal) pendingActionModal.classList.add('show');
+            } else {
+                // Pesan error di frontend jika mencoba aksi 'Action' dari status selain pending
+                 Swal.fire({
+                    icon: 'error',
+                    title: 'Aksi Tidak Diizinkan',
+                    text: 'Aksi hanya bisa dilakukan jika status pesanan "Pending".',
+                    confirmButtonText: 'OK'
+                });
+            }
         }
     });
 
     if (cancelPendingOrderButton) {
         cancelPendingOrderButton.addEventListener('click', () => {
+            const currentStatus = currentOrderCard ? currentOrderCard.dataset.orderStatus.toLowerCase() : '';
+
+            // Validasi di frontend: Hanya bisa cancel jika statusnya 'pending'
+            if (currentStatus !== 'pending') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Aksi Tidak Diizinkan',
+                    text: 'Pesanan hanya bisa dibatalkan jika statusnya "Pending".',
+                    confirmButtonText: 'OK'
+                });
+                if (pendingActionModal) closeModal(pendingActionModal);
+                return;
+            }
+
             if (currentOrderIdToAct) {
-                fetch('/order/update-status', { // Ganti dengan rute API Anda
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                    },
-                    body: JSON.stringify({
-                        order_id: currentOrderIdToAct,
-                        status: 'canceled'
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        Swal.fire('Berhasil!', 'Pesanan berhasil dibatalkan.', 'success').then(() => {
-                            // Perbarui UI pada kartu spesifik tanpa reload
-                            updateOrderCardUI(currentOrderCard, data.new_status);
-                            if (pendingActionModal) pendingActionModal.classList.remove('show');
-                            currentOrderIdToAct = null;
-                            currentOrderCard = null;
+                Swal.fire({
+                    title: 'Batalkan Pesanan Ini?',
+                    text: 'Pesanan ini akan dibatalkan dan stok buku akan dikembalikan.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: 'gray',
+                    confirmButtonText: 'Ya, Batalkan!',
+                    cancelButtonText: 'Tidak'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch('order/update-status', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                            },
+                            body: JSON.stringify({
+                                order_id: currentOrderIdToAct,
+                                status: 'canceled'
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire('Berhasil!', data.message, 'success').then(() => {
+                                    updateOrderCardUI(currentOrderCard, data.new_status);
+                                    if (pendingActionModal) closeModal(pendingActionModal);
+                                    currentOrderIdToAct = null;
+                                    currentOrderCard = null;
+                                });
+                            } else {
+                                Swal.fire('Error!', data.message || 'Gagal membatalkan pesanan.', 'error');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            Swal.fire('Error!', 'Terjadi kesalahan saat berkomunikasi dengan server.', 'error');
                         });
-                    } else {
-                        Swal.fire('Error!', data.message || 'Gagal membatalkan pesanan.', 'error');
                     }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    Swal.fire('Error!', 'Terjadi kesalahan saat berkomunikasi dengan server.', 'error');
                 });
             }
         });
@@ -124,62 +184,96 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (proceedToPaymentButton) {
         proceedToPaymentButton.addEventListener('click', () => {
+            const currentStatus = currentOrderCard ? currentOrderCard.dataset.orderStatus.toLowerCase() : '';
+            // Pembayaran hanya bisa dilanjutkan jika statusnya 'pending'
+            if (currentStatus !== 'pending') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Aksi Tidak Diizinkan',
+                    text: 'Pembayaran hanya bisa dilanjutkan jika statusnya "Pending".',
+                    confirmButtonText: 'OK'
+                });
+                if (pendingActionModal) closeModal(pendingActionModal);
+                return;
+            }
             if (currentOrderIdToAct) {
-                window.location.href = `/payment/${currentOrderIdToAct}`; // Ganti dengan rute Anda
+                window.location.href = `{{ url('payment') }}/${currentOrderIdToAct}`;
             } else {
                 Swal.fire('Error!', 'Order ID tidak ditemukan untuk pembayaran.', 'error');
             }
-            if (pendingActionModal) pendingActionModal.classList.remove('show');
+            if (pendingActionModal) closeModal(pendingActionModal);
             currentOrderIdToAct = null;
             currentOrderCard = null;
         });
     }
 
-    // --- FUNGSI BARU: MEMPERBARUI UI KARTU PESANAN ---
+    // --- FUNGSI UTAMA: MEMPERBARUI UI KARTU PESANAN ---
+    // Fungsi ini dipanggil saat DOM dimuat dan saat status berubah
     function updateOrderCardUI(cardElement, newStatus) {
         const statusButton = cardElement.querySelector('.order-status-header .status');
         const actionButtonsContainer = cardElement.querySelector('.order-status-header .action-buttons');
 
         // Update status text dan class
-        statusButton.textContent = newStatus.charAt(0).toUpperCase() + newStatus.slice(1);
-        statusButton.className = `status ${newStatus}`; // Hapus kelas lama, tambahkan kelas baru
+        statusButton.textContent = newStatus.charAt(0).toUpperCase() + newStatus.slice(1).replace(/_/g, ' ');
+        statusButton.className = `status ${newStatus}`;
 
         // Update data-order-status atribut pada kartu
         cardElement.dataset.orderStatus = newStatus;
 
-        // Kosongkan dan render ulang tombol aksi
-        actionButtonsContainer.innerHTML = '';
-       if (newStatus === 'completed') {
-            const rateButton = document.createElement('a');
-            const firstBookId = cardElement.dataset.firstBookId; // Ambil ID buku dari data attribute
-            if (firstBookId) {
-                rateButton.href = `rating/${firstBookId}`; // Gunakan ID buku di rute
-            } else {
-                rateButton.href = 'rating'; // Fallback jika tidak ada ID buku (misal: pesanan kosong)
+        // Kosongkan dan render ulang tombol aksi (per ORDER)
+        if (actionButtonsContainer) {
+            actionButtonsContainer.innerHTML = '';
+
+            if (newStatus === 'arrived') {
+                const confirmButton = document.createElement('button');
+                confirmButton.classList.add('confirm-button');
+                confirmButton.textContent = 'Confirm Order';
+                actionButtonsContainer.appendChild(confirmButton);
+            } else if (newStatus === 'pending') {
+                const pendingButton = document.createElement('button');
+                pendingButton.classList.add('pending-action-button');
+                pendingButton.textContent = 'Action';
+                actionButtonsContainer.appendChild(pendingButton);
             }
-            rateButton.classList.add('rate-button');
-            rateButton.textContent = 'Rate';
-            actionButtonsContainer.appendChild(rateButton);
-        }else if (newStatus === 'arrived') {
-            const confirmButton = document.createElement('button');
-            confirmButton.classList.add('confirm-button');
-            confirmButton.textContent = 'Confirm Order';
-            actionButtonsContainer.appendChild(confirmButton);
-        } else if (newStatus === 'pending') {
-            const pendingButton = document.createElement('button');
-            pendingButton.classList.add('pending-action-button');
-            pendingButton.textContent = 'Action';
-            actionButtonsContainer.appendChild(pendingButton);
+            // Untuk 'completed', 'process', 'canceled' tidak ada tombol aksi per order di sini
         }
 
-        // Periksa apakah tombol invoice perlu dirender ulang (jika status berubah menjadi yang bisa di-invoice)
+        cardElement.querySelectorAll('.individual-order-item').forEach(itemElement => {
+            // Kita akan mencari elemen yang akan menjadi kontainer tombol "Rate"
+            const itemFooter = itemElement.querySelector('.item-footer');
+            if (!itemFooter) return; // Pastikan item-footer ada
+
+            let rateButton = itemFooter.querySelector('.rate-button'); // Cari tombol Rate yang mungkin sudah ada
+
+            if (newStatus === 'completed') {
+                if (!rateButton) { // Jika belum ada, buat
+                    rateButton = document.createElement('a');
+                    const bookId = itemElement.dataset.bookId;
+                    if (bookId) {
+                        rateButton.href = `{{ url('/rating') }}/${bookId}`; // Gunakan ID buku
+                    } else {
+                        rateButton.href = `{{ route('rating') }}`; // Fallback jika ID buku tidak ada
+                    }
+                    rateButton.classList.add('rate-button'); // <<< GUNAKAN KELAS CSS YANG ANDA INGINKAN
+                    rateButton.textContent = 'Rate'; // Teks tombol
+                    itemFooter.appendChild(rateButton);
+                }
+                // Jika sudah ada, tidak perlu melakukan apa-apa karena sudah benar
+            } else {
+                if (rateButton) { // Jika ada, hapus karena status bukan 'completed'
+                    rateButton.remove();
+                }
+            }
+        });
+
+
+        // Periksa apakah tombol invoice perlu dirender ulang
         if (['completed', 'arrived', 'process'].includes(newStatus)) {
             const invoiceBlock = cardElement.querySelector('.invoice-group-block');
             if (invoiceBlock) {
                 renderInvoiceButtonForInvoiceBlock(invoiceBlock);
             }
         } else {
-             // Jika status tidak lagi bisa di-invoice, hapus tombol invoice
             const invoiceButtonsContainer = cardElement.querySelector('.invoice-buttons-per-group-container');
             if(invoiceButtonsContainer) {
                 invoiceButtonsContainer.innerHTML = '';
@@ -189,7 +283,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     // --- FUNGSI UTAMA: MERENDER ULANG TOMBOL INVOICE UNTUK SEBUAH BLOK INVOICE ---
-    // Fungsi ini dipanggil saat DOM dimuat dan saat status berubah
     function renderInvoiceButtonForInvoiceBlock(invoiceGroupBlockElement) {
         const invoiceButtonsContainer = invoiceGroupBlockElement.querySelector('.invoice-buttons-per-group-container');
         if (!invoiceButtonsContainer) {
@@ -201,40 +294,40 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const invoiceNumber = invoiceGroupBlockElement.dataset.invoiceNumber;
         const invoiceDate = invoiceGroupBlockElement.dataset.invoiceDate;
-        const invoiceTotalPrice = invoiceGroupBlockElement.dataset.invoiceTotalPrice; // Ambil total harga dari data attribute
+        const invoiceTotalPrice = invoiceGroupBlockElement.dataset.invoiceTotalPrice;
         const items = [];
 
         // Ambil data dari individual-order-item di dalam order-card yang sama
-        // Kita perlu mencari .individual-order-item dalam parent dari invoiceGroupBlockElement (yaitu .order-details-group)
-        invoiceGroupBlockElement.closest('.order-details-group').querySelectorAll('.individual-order-item').forEach(itemElement => {
-            const title = itemElement.dataset.itemTitle;
-            const price = itemElement.dataset.itemPrice;
-            const quantity = itemElement.dataset.itemQuantity; // Ambil kuantitas
-            items.push({ title, price, quantity });
-        });
+        const orderDetailsGroup = invoiceGroupBlockElement.closest('.order-details-group');
+        if (orderDetailsGroup) {
+            orderDetailsGroup.querySelectorAll('.individual-order-item').forEach(itemElement => {
+                const title = itemElement.dataset.itemTitle;
+                const price = itemElement.dataset.itemPrice;
+                const quantity = itemElement.dataset.itemQuantity;
+                items.push({ title, price, quantity });
+            });
+        }
+
 
         const button = document.createElement('button');
         button.classList.add('view-invoice-button');
         button.textContent = `Invoice`;
 
-        // Simpan semua data invoice ke dalam atribut data tombol
         button.dataset.invoiceNumber = invoiceNumber;
         button.dataset.invoiceDate = invoiceDate;
         button.dataset.invoiceItems = JSON.stringify(items);
         button.dataset.invoiceTotalPrice = invoiceTotalPrice;
 
         invoiceButtonsContainer.appendChild(button);
-        attachInvoiceButtonListeners(); // Lampirkan event listener
+        attachInvoiceButtonListeners();
     }
 
     // --- Fungsionalitas Modal Invoice ---
     function attachInvoiceButtonListeners() {
-        // Hapus listener lama untuk menghindari duplikasi saat renderInvoiceButtonForInvoiceBlock dipanggil berkali-kali
         document.querySelectorAll('.view-invoice-button').forEach(button => {
             button.removeEventListener('click', handleInvoiceButtonClick);
         });
 
-        // Dapatkan semua tombol invoice yang ada di DOM saat ini dan tambahkan listener baru
         const currentViewInvoiceButtons = document.querySelectorAll('.view-invoice-button');
         currentViewInvoiceButtons.forEach(button => {
             button.addEventListener('click', handleInvoiceButtonClick);
@@ -247,7 +340,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const invoiceItems = JSON.parse(event.target.dataset.invoiceItems);
         const invoiceTotalPrice = event.target.dataset.invoiceTotalPrice;
 
-        if (invoiceDetailsDisplay) invoiceDetailsDisplay.innerHTML = ''; // Clear previous details
+        if (invoiceDetailsDisplay) invoiceDetailsDisplay.innerHTML = '';
 
         const invoiceHeader = document.createElement('h3');
         invoiceHeader.textContent = `Detail Invoice ${invoiceNumber}`;
@@ -288,25 +381,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (invoiceModal) invoiceModal.classList.add('show');
     }
 
-    // --- Initial Rendering of Invoice Buttons on Page Load ---
-   // --- Initial Rendering of Invoice Buttons and Action Buttons on Page Load ---
-    // Panggil fungsi ini untuk setiap order card saat halaman dimuat
-    document.querySelectorAll('.order-card').forEach(card => {
-        const invoiceBlock = card.querySelector('.invoice-group-block');
-        const currentStatus = card.dataset.orderStatus; // Ini akan mengambil status seperti 'Pending', 'process', 'Arrived', dll.
-
-        // Memanggil updateOrderCardUI untuk merender tombol aksi dan status
-        // Ini akan memastikan tombol 'Action' untuk 'Pending' muncul jika data-order-statusnya 'Pending' atau 'pending'
-        updateOrderCardUI(card, currentStatus.toLowerCase()); // Kirim status dalam huruf kecil ke fungsi
-
-        // Hanya render tombol invoice jika statusnya memungkinkan
-        if (['completed', 'arrived', 'process'].includes(currentStatus.toLowerCase())) { // Pastikan perbandingan juga lowerCase
-            if (invoiceBlock) {
-                renderInvoiceButtonForInvoiceBlock(invoiceBlock);
-            }
-        }
-    });
-
     // --- Generic Modal Closer Function ---\
     function closeModal(modalElement) {
         if (modalElement) {
@@ -335,6 +409,20 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         if (event.target === invoiceModal) {
             closeModal(invoiceModal);
+        }
+    });
+
+    // --- Initial Rendering of Invoice Buttons and Action Buttons on Page Load ---
+    document.querySelectorAll('.order-card').forEach(card => {
+        const invoiceBlock = card.querySelector('.invoice-group-block');
+        const currentStatus = card.dataset.orderStatus;
+
+        updateOrderCardUI(card, currentStatus.toLowerCase());
+
+        if (['completed', 'arrived', 'process'].includes(currentStatus.toLowerCase())) {
+            if (invoiceBlock) {
+                renderInvoiceButtonForInvoiceBlock(invoiceBlock);
+            }
         }
     });
 });

@@ -50,6 +50,7 @@
 							</thead>
 							<tbody>
 								@forelse($orders as $order)
+								@if (!$order->items->isEmpty())
 							<tr>
 								<td>{{ $order->id }}</td>
 								<td>{{ $order->user->name ?? 'N/A' }}</td> {{-- Mengambil username dari relasi user --}}
@@ -75,6 +76,7 @@
 									<a href="{{ route('admin.orders.detail', $order->id) }}" class="btn-detail">Detail</a>
 								</td>
 							</tr>
+							@endif
 							@empty
 								<tr>
 									<td colspan="7" style="text-align: center;">Tidak ada order yang ditemukan.</td> {{-- Sesuaikan colspan --}}

@@ -19,33 +19,34 @@
 @include('produk.navbar2')
 
 <main class="order-history-container">
-  {{-- Loop langsung melalui setiap pesanan --}}
   @forelse($userOrders as $order)
      <div class="order-card"
      data-order-id="{{ $order->id }}"
-     data-order-status="{{ $order->status }}"
-     data-first-book-id="{{ $order->items->isNotEmpty() ? $order->items->first()->buku->id : '' }}">
+     data-order-status="{{ $order->status }}"> {{-- Hapus data-first-book-id dari sini --}}
       <div class="order-status-header">
         <button class="status {{ strtolower($order->status) }}">{{ $order->status }}</button>
-        {{-- Tombol aksi yang akan berubah --}}
+        {{-- Tombol aksi per order (Confirm, Action) tetap di sini --}}
         <div class="action-buttons">
-            {{-- Tombol aksi akan dirender di sini oleh history.js --}}
+            {{-- Tombol aksi akan dirender di sini oleh history.js (Confirm Order, Action) --}}
         </div>
       </div>
       <div class="order-details-group">
-        {{-- Loop melalui item-item di dalam satu pesanan --}}
         @foreach($order->items as $item)
           <div class="individual-order-item"
                data-item-title="{{ $item->buku->judul_buku }}"
                data-item-price="{{ number_format($item->price, 0, ',', '.') }}"
-               data-item-quantity="{{ $item->quantity }}">
+               data-item-quantity="{{ $item->quantity }}"
+               data-book-id="{{ $item->buku->id }}"> {{-- <<< TAMBAHKAN data-book-id DI SINI --}}
             <div class="item-header">
               <h3 class="order-title">{{ $item->buku->judul_buku }}</h3>
-              <p class="order-date">{{ \Carbon\Carbon::parse($order->created_at)->format('d M Y') }}</p> {{-- Format tanggal --}}
+              <p class="order-date">{{ \Carbon\Carbon::parse($order->created_at)->format('d M Y') }}</p>
             </div>
             <div class="item-footer">
                 <p class="order-price">Rp {{ number_format($item->price * $item->quantity, 0, ',', '.') }}</p>
-                {{-- Tombol Lihat Invoice akan dirender oleh JS, tapi kita butuh kontainernya --}}
+                {{-- Tombol Rate untuk item ini (jika order completed) --}}
+                @if (strtolower($order->status) === 'completed')
+                    <a href="{{ route('rating.create', $item->buku->id) }}" class="rate-button">Rate</a> {{-- <<< TOMBOL RATE PER ITEM --}}
+                @endif
             </div>
           </div>
         @endforeach
