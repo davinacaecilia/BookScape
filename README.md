@@ -3,8 +3,8 @@
 Kelompok 5 :
 - **Putri Sahara Tampubolon** - 241402015 - *Frontend Landing Page, Halaman Login, Halaman Registrasi, Halaman Home User*
 - **Anggun Dwikasih Mahrani** - 241402018 - *Frontend Halaman Admin*
-- **Dhaifina Raiqa Zahira** - 241402036 - *Backend Auth User*
-- **Davina Caecilia Marpaung** - 241402076 - *Backend CRUD Product Buku*
+- **Dhaifina Raiqa Zahira** - 241402036 - *Backend Auth User dan Admin (Alur Login/Register dan Logout), Proses Rating dan Review Buku oleh User, Rating dan Review Management Admin, Edit Profil User (Nama, Email, No. HP, Alamat)*
+- **Davina Caecilia Marpaung** - 241402076 - *Backend CRUD Product Buku, Alur Pemesanan User (Add to Cart, Checkout, Payment, Histori Order), Order Management Admin*
 - **Jelita Amy Syafira Rangkuti** - 241402114 - *Frontend User Halaman List Buku, Preview Buku, History Pemesanan, Cart, Payment*
 
 ## About BookScape
